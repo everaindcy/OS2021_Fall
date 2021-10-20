@@ -90,7 +90,7 @@ bazel-bin/q0 |grep [OUTPUT] > format.out && bazel-bin/format
 
 The workload of the company comes as `Instruction`s with `order` and `payload` fields. Both fields are integers. In this project, the `Instruction.order` is either 0, 1 or 2, indicating the task of "init", "update" or "recommend". The workflow of different task types are different as described bellow.
 
-- For **“init”**, you should first create a new embedding. The payload is a list of existing embedding indeces in the input matrix (`EmbeddingHolder`) that are used for cold  start (downstream applications may use them for interest probing). You should add this new  embedding into the `EmbeddingHolder` using `append`. Then you need to call `cold_start`  for each of the embedding indeces. Note that after `cold_start`, **only user embeddings are updated** (see `q0.cc` for example).
+- For **“init”**, you should first create a new embedding. The payload is a list of existing embedding indices in the input matrix (`EmbeddingHolder`) that are used for cold  start (downstream applications may use them for interest probing). You should add this new  embedding into the `EmbeddingHolder` using `append`. Then you need to call `cold_start`  for each of the embedding indices. Note that after `cold_start`, **only user embeddings are updated** (see `q0.cc` for example).
 
 - For **“update”**, the payload is `[user_idx, item_idx, label, (iter_idx)]`. You should invoke the `calc_gradient` on these two embedding vectors from `lib/model.h` and then call `update_embedding` from `lib/embedding.h` **on both the user and the items** (see`project/embedding.cc:run_q0` for example). The `iter_idx` indicates the epoch number of current update, see Task-3 for information.
 
