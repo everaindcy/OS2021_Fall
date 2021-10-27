@@ -19,9 +19,10 @@ namespace proj1 {
             case INIT_EMB: {
                 // We need to init the embedding
                 int length = users->get_emb_length();
-                users->lock();
                 Embedding* new_user = new Embedding(length);
+                users->lock();
                 int user_idx = users->append(new_user);
+                users->unlock();
                 for (int item_index: inst.payloads) {
                     Embedding* item_emb = items->get_embedding(item_index);
                     item_emb->lock();
@@ -31,7 +32,6 @@ namespace proj1 {
                     delete gradient;
                     item_emb->unlock();
                 }
-                users->unlock();
                 break;
             }
             case UPDATE_EMB: {

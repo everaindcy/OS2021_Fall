@@ -23,7 +23,7 @@ Embedding::Embedding(int length, double* data) {
 }
 
 Embedding::Embedding(Embedding* origin) {
-    std::lock_guard(origin->mux);
+    std::lock_guard<std::mutex> lock(origin->mux);
 	int length = origin->get_length();
     embbedingAssert(length > 0, "Non-positive length encountered!", NON_POSITIVE_LEN);
     double* oldData = origin->get_data();
@@ -34,7 +34,7 @@ Embedding::Embedding(Embedding* origin) {
 }
 
 Embedding::Embedding(Embedding& origin) {
-    std::lock_guard(origin.mux);
+    std::lock_guard<std::mutex> lock(origin.mux);
 	int length = origin.get_length();
     embbedingAssert(length > 0, "Non-positive length encountered!", NON_POSITIVE_LEN);
     double* oldData = origin.get_data();
