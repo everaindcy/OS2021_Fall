@@ -20,17 +20,13 @@ namespace proj1 {
                 // We need to init the embedding
                 int length = users->get_emb_length();
                 Embedding* new_user = new Embedding(length);
-                users->lock();
                 int user_idx = users->append(new_user);
-                users->unlock();
                 for (int item_index: inst.payloads) {
                     Embedding* item_emb = items->get_embedding(item_index);
-                    item_emb->lock();
                     // Call cold start for downstream applications, slow
                     EmbeddingGradient* gradient = cold_start(new_user, item_emb);
                     users->update_embedding(user_idx, gradient, 0.01);
                     delete gradient;
-                    item_emb->unlock();
                 }
                 break;
             }
@@ -46,22 +42,17 @@ namespace proj1 {
                 //}
                 Embedding* user = users->get_embedding(user_idx);
                 Embedding* item = items->get_embedding(item_idx);
-                user->lock();
-                item->lock();
                 EmbeddingGradient* gradient = calc_gradient(user, item, label);
                 users->update_embedding(user_idx, gradient, 0.01);
                 delete gradient;
                 gradient = calc_gradient(item, user, label);
                 items->update_embedding(item_idx, gradient, 0.001);
                 delete gradient;
-                user->unlock();
-                item->unlock();
                 break;
             }
             case RECOMMEND: {
                 int user_idx = inst.payloads[0];
                 Embedding* user = users->get_embedding(user_idx);
-                user->lock();
                 std::vector<Embedding*> item_pool;
                 int iter_idx = inst.payloads[1];
                 for (unsigned int i = 2; i < inst.payloads.size(); ++i) {
@@ -70,7 +61,6 @@ namespace proj1 {
                 }
                 Embedding* recommendation = recommend(user, item_pool);
                 recommendation->write_to_stdout();
-                user->unlock();
                 break;
             }
         }
@@ -85,11 +75,11 @@ int main(int argc, char *argv[]) {
     proj1::EmbeddingHolder* items = new proj1::EmbeddingHolder("data/q1.in");
     proj1::Instructions instructions = proj1::read_instructrions("data/q1_instruction.tsv");
     {
-        proj1::AutoTimer timer("q0");  // using this to print out timing of the block
+        proj1::AutoTimer timer("q1");  // using this to print out timing of the block
         // Run all the instructions
         for (proj1::Instruction inst: instructions) {
-            std::thread t(proj1::run_one_instruction,inst, users, items);
-            threads.push_back(&t);
+            std::thread* t = new std::thread(proj1::run_one_instruction, inst, users, items);
+            threads.push_back(t);
         }
         for (std::thread* t: threads) {
             t->join();

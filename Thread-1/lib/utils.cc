@@ -8,7 +8,9 @@
 namespace proj1 {
 
 void a_slow_function(int seconds) {
-    //std::this_thread::sleep_for(std::chrono::seconds(seconds));
+    if (slow_function) {
+        std::this_thread::sleep_for(std::chrono::timescale(seconds));
+    }
 }
 
 double sigmoid(double x) {

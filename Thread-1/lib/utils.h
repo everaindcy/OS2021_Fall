@@ -6,6 +6,10 @@
 #include <iostream>
 #include <chrono>  // for AutoTimer function
 
+// slow_function
+#define slow_function true
+#define timescale seconds
+
 // For colored outputs in terminal
 #define RST  "\x1B[0m"
 #define KRED  "\x1B[31m"
