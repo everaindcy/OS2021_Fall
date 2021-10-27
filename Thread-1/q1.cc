@@ -83,6 +83,7 @@ int main(int argc, char *argv[]) {
         }
         for (std::thread* t: threads) {
             t->join();
+            delete t;
         }
     }
 
