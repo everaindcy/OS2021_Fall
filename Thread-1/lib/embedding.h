@@ -27,15 +27,15 @@ public:
     std::string to_string();
     void write_to_stdout();
     // Operators
-    Embedding operator+(const Embedding&);
+    Embedding operator+(Embedding&);
     Embedding operator+(const double);
-    Embedding operator-(const Embedding&);
+    Embedding operator-(Embedding&);
     Embedding operator-(const double);
-    Embedding operator*(const Embedding&);
+    Embedding operator*(Embedding&);
     Embedding operator*(const double);
-    Embedding operator/(const Embedding&);
+    Embedding operator/(Embedding&);
     Embedding operator/(const double);
-    bool operator==(const Embedding&);
+    bool operator==(Embedding&);
     //lock&unlock
     void lock() {this->mux.lock();}
     void unlock() {this->mux.unlock();}
@@ -64,7 +64,7 @@ public:
     int get_emb_length() {
         return this->emb_matx.empty()? 0: this->get_embedding(0)->get_length();
     }
-    bool operator==(const EmbeddingHolder&);
+    bool operator==(EmbeddingHolder&);
     // lock&unlock
     void lock() {this->mux.lock();}
     void unlock() {this->mux.unlock();}
