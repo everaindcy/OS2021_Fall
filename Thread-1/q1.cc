@@ -69,7 +69,7 @@ namespace proj1 {
 } // namespace proj1
 
 int main(int argc, char *argv[]) {
-    std::vector<std::thread> threads;
+    std::vector<std::thread*> threads;
 
     proj1::EmbeddingHolder* users = new proj1::EmbeddingHolder("data/q1.in");
     proj1::EmbeddingHolder* items = new proj1::EmbeddingHolder("data/q1.in");
@@ -79,10 +79,10 @@ int main(int argc, char *argv[]) {
         // Run all the instructions
         for (proj1::Instruction inst: instructions) {
             std::thread t(proj1::run_one_instruction,inst, users, items);
-            threads.push_back(t);
+            threads.push_back(&t);
         }
-        for (std::thread t: threads) {
-            t.join();
+        for (std::thread* t: threads) {
+            t->join();
         }
     }
 

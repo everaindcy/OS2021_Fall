@@ -3,6 +3,7 @@
 
 #include <string>
 #include <vector>
+#include <mutex>
 
 namespace proj1 {
 
@@ -34,9 +35,14 @@ public:
     Embedding operator/(const Embedding&);
     Embedding operator/(const double);
     bool operator==(const Embedding&);
+    //lock&unlock
+    void lock() {this->mux.lock();}
+    void unlock() {this->mux.unlock();}
+
 private:
     int length;
     double* data;
+    std::mutex mux;
 };
 
 using EmbeddingMatrix = std::vector<Embedding*>;

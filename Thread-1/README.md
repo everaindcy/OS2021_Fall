@@ -116,7 +116,7 @@ To test whether your `.diff` works, clone a new repo and call `git apply ${STUDE
 
 ## Task-0: Play with bazel build, the code and sanity check
 
-In this task, you need to understand the project structure, read the `q0.cc` code and the `project/BUILD` files, install bazel, build and run the provided sample program and tests. This task is not included for grading.  Just provided as an example for you to read.  If you need more information on the Bazel build system, please refer to [](https://docs.bazel.build/versions/main/tutorial/cpp.html)
+In this task, you need to understand the project structure, read the `q0.cc` code and the `project/BUILD` files, install bazel, build and run the provided sample program and tests. This task is not included for grading.  Just provided as an example for you to read.  If you need more information on the Bazel build system, please refer to [https://docs.bazel.build/versions/main/tutorial/cpp.html]()
 
 > **_NOTE:_** You can take this task's code as an example and benchmark for following tasks, but do not copy and paste this unoptimized code! Otherwise you will get penalized. Task-0 is not included in the final grading.
 
