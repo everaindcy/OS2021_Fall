@@ -19,6 +19,7 @@ public:
     Embedding(int, double*);
     Embedding(int, std::string);
     Embedding(Embedding*);
+    Embedding(Embedding&);
     ~Embedding() { delete []this->data; }
     double* get_data() { return this->data; }
     int get_length() { return this->length; }
@@ -64,8 +65,13 @@ public:
         return this->emb_matx.empty()? 0: this->get_embedding(0)->get_length();
     }
     bool operator==(const EmbeddingHolder&);
+    // lock&unlock
+    void lock() {this->mux.lock();}
+    void unlock() {this->mux.unlock();}
+
 private:
     EmbeddingMatrix emb_matx;
+    std::mutex mux;
 };
 
 } // namespace proj1
