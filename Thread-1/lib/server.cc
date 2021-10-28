@@ -8,7 +8,7 @@
 #include "model.h"
 #include "utils.h"
 
-#define TIMER(s) proj1::AutoTimer timer(s)
+#define TIMER(s) // proj1::AutoTimer timer(s)
 
 namespace proj1 {
 

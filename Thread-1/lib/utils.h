@@ -8,7 +8,7 @@
 
 // slow_function
 #define slow_function true
-#define timescale milliseconds
+#define timescale seconds
 
 // For colored outputs in terminal
 #define RST  "\x1B[0m"
