@@ -1,0 +1,3564 @@
+diff --git a/README.md b/README.md
+index 858054e..b3acba7 100644
+--- a/README.md
++++ b/README.md
+@@ -1,12 +1,12 @@
+-# Operating System 2021 Fall
+-
+-This public repository holds the projects of this semester. See the `README`
+-in each project for details.
+-
+-## Note
+-
+-1. submit方法调整：每组提交一个diff文件到网络学堂，diff文件命名方式为学号1_学号2.diff，diff的生成方式见文档
+-2. 答疑文档：关于project 1的相关问题请大家更新到[共享文档](https://docs.qq.com/doc/DQkpGelpuTlZJaWRB)，我们会定期解答文档上的问题
+-3. 关于slow_function：在最终版本的提交中请大家打开utils中的slow_function，以保证通过所有的library test。（IMPORTANT：在library test中因为没有打开slow_function导致测试fail将被扣除50%的项目分数）
+-4. 关于item更新：为了简单我们在之前的实现中省略了对item的更新（实际系统中item和user的更新频率和方式都有差异），然而这样隐式地移除了大部分数据间依赖，因此我们要求在更新时同时更新user和item的embedding，最后输出两个EmbeddingHolder，先user后item（注意输出也需要thread-safety）。
++# Operating System 2021 Fall
++
++This public repository holds the projects of this semester. See the `README`
++in each project for details.
++
++## Note
++
++1. submit方法调整：每组提交一个diff文件到网络学堂，diff文件命名方式为学号1_学号2.diff，diff的生成方式见文档
++2. 答疑文档：关于project 1的相关问题请大家更新到[共享文档](https://docs.qq.com/doc/DQkpGelpuTlZJaWRB)，我们会定期解答文档上的问题
++3. 关于slow_function：在最终版本的提交中请大家打开utils中的slow_function，以保证通过所有的library test。（IMPORTANT：在library test中因为没有打开slow_function导致测试fail将被扣除50%的项目分数）
++4. 关于item更新：为了简单我们在之前的实现中省略了对item的更新（实际系统中item和user的更新频率和方式都有差异），然而这样隐式地移除了大部分数据间依赖，因此我们要求在更新时同时更新user和item的embedding，最后输出两个EmbeddingHolder，先user后item（注意输出也需要thread-safety）。
+ 5. 关于大家在project 1中问的比较多的问题，我们这里统一回复一下：一是前两题的正确性，由于q1 q2指令之间没有执行依赖，因此最后的答案可能有多种，大家只要在保证thread safty的前提下得出任意一种答案即可通过测试；二是关于efficiency，我们会统计所有人的完成时间，排名后30%且慢于我们的参考实现（基础的并行实现，运行时间不公开）的提交我们会酌情扣分；三是关于test case，我们在这个project中不会提供auto test和benchmark，请大家自行设计case来验证代码的正确性
+\ No newline at end of file
+diff --git a/Thread-1/.bazeliskrc b/Thread-1/.bazeliskrc
+index f81d3f7..2159662 100644
+--- a/Thread-1/.bazeliskrc
++++ b/Thread-1/.bazeliskrc
+@@ -1 +1 @@
+-USE_BAZEL_VERSION=4.2.1
++USE_BAZEL_VERSION=4.2.1
+diff --git a/Thread-1/.gitignore b/Thread-1/.gitignore
+new file mode 100644
+index 0000000..772258b
+--- /dev/null
++++ b/Thread-1/.gitignore
+@@ -0,0 +1,6 @@
++bazel-bin
++bazel-out
++bazel-testlogs
++bazel-Thread-1
++
++*.txt
+diff --git a/Thread-1/.vscode/settings.json b/Thread-1/.vscode/settings.json
+new file mode 100644
+index 0000000..431dd9e
+--- /dev/null
++++ b/Thread-1/.vscode/settings.json
+@@ -0,0 +1,78 @@
++{
++    "files.associations": {
++        "array": "cpp",
++        "vector": "cpp",
++        "xstring": "cpp",
++        "xutility": "cpp",
++        "cmath": "cpp",
++        "algorithm": "cpp",
++        "atomic": "cpp",
++        "bit": "cpp",
++        "cctype": "cpp",
++        "charconv": "cpp",
++        "chrono": "cpp",
++        "clocale": "cpp",
++        "compare": "cpp",
++        "concepts": "cpp",
++        "cstddef": "cpp",
++        "cstdint": "cpp",
++        "cstdio": "cpp",
++        "cstdlib": "cpp",
++        "cstring": "cpp",
++        "ctime": "cpp",
++        "cwchar": "cpp",
++        "exception": "cpp",
++        "format": "cpp",
++        "forward_list": "cpp",
++        "fstream": "cpp",
++        "initializer_list": "cpp",
++        "iomanip": "cpp",
++        "ios": "cpp",
++        "iosfwd": "cpp",
++        "iostream": "cpp",
++        "istream": "cpp",
++        "iterator": "cpp",
++        "limits": "cpp",
++        "locale": "cpp",
++        "map": "cpp",
++        "memory": "cpp",
++        "mutex": "cpp",
++        "new": "cpp",
++        "optional": "cpp",
++        "ostream": "cpp",
++        "ratio": "cpp",
++        "sstream": "cpp",
++        "stdexcept": "cpp",
++        "stop_token": "cpp",
++        "streambuf": "cpp",
++        "string": "cpp",
++        "system_error": "cpp",
++        "thread": "cpp",
++        "tuple": "cpp",
++        "type_traits": "cpp",
++        "typeinfo": "cpp",
++        "utility": "cpp",
++        "xfacet": "cpp",
++        "xiosbase": "cpp",
++        "xlocale": "cpp",
++        "xlocbuf": "cpp",
++        "xlocinfo": "cpp",
++        "xlocmes": "cpp",
++        "xlocmon": "cpp",
++        "xlocnum": "cpp",
++        "xloctime": "cpp",
++        "xmemory": "cpp",
++        "xstddef": "cpp",
++        "xtr1common": "cpp",
++        "xtree": "cpp",
++        "cinttypes": "cpp",
++        "condition_variable": "cpp",
++        "functional": "cpp",
++        "list": "cpp",
++        "regex": "cpp",
++        "set": "cpp",
++        "unordered_map": "cpp",
++        "unordered_set": "cpp",
++        "xhash": "cpp"
++    }
++}
+\ No newline at end of file
+diff --git a/Thread-1/BUILD b/Thread-1/BUILD
+index 28f4114..0c662a8 100644
+--- a/Thread-1/BUILD
++++ b/Thread-1/BUILD
+@@ -1,5 +1,21 @@
+ ##load("@rules_cc//cc:defs.bzl", "cc_test")  #load the test target
+ 
++cc_binary(
++    name = "q0_my",
++    srcs = [
++        "q0_my.cc"
++            ],
++    deps = [
++        "//lib:instruction_lib",
++        "//lib:utils_lib",
++        "//lib:server_lib"
++    ],
++    copts = [
++        "-std=c++11",
++    ],
++    data = glob(["data/q0*"]),
++)
++
+ cc_binary(
+     name = "q0",
+     srcs = [
+@@ -29,6 +45,15 @@ cc_binary(
+     srcs = [
+         "q1.cc"
+             ],
++    deps = [
++        "//lib:instruction_lib",
++        "//lib:utils_lib",
++        "//lib:server_lib"
++    ],
++    copts = [
++        "-std=c++11",
++    ],
++    data = glob(["data/q1*"]),
+ )
+ 
+ cc_binary(
+@@ -36,6 +61,15 @@ cc_binary(
+     srcs = [
+         "q2.cc"
+             ],
++    deps = [
++        "//lib:instruction_lib",
++        "//lib:utils_lib",
++        "//lib:server_lib"
++    ],
++    copts = [
++        "-std=c++11",
++    ],
++    data = glob(["data/q2*"]),
+ )
+ 
+ cc_binary(
+@@ -43,6 +77,31 @@ cc_binary(
+     srcs = [
+         "q3.cc"
+             ],
++    deps = [
++        "//lib:instruction_lib",
++        "//lib:utils_lib",
++        "//lib:server_lib"
++    ],
++    copts = [
++        "-std=c++11",
++    ],
++    data = glob(["data/q3*"]),
++)
++
++cc_binary(
++    name = "q4",
++    srcs = [
++        "q4.cc"
++            ],
++    deps = [
++        "//lib:instruction_lib",
++        "//lib:utils_lib",
++        "//lib:server_lib"
++    ],
++    copts = [
++        "-std=c++11",
++    ],
++    data = glob(["data/q4*"]),
+ )
+ 
+ cc_test(
+diff --git a/Thread-1/README.md b/Thread-1/README.md
+index 52f2b01..7790bf8 100644
+--- a/Thread-1/README.md
++++ b/Thread-1/README.md
+@@ -1,257 +1,181 @@
+-# Project 1: Multi-thread Programming
+-
+-This project uses a (oversimplified) machine learning inference system to allow
+-you to put some basic OS concepts into practice and learn how system-level
+-optimizations help improve performance. 
+-
+-Suppose you are hired by a company to improve the efficiency of the optimization
+-process of a recommender system. This recommender system represents the users
+-and items (i.e. goods offered by the E-commerce platform) as vectors, and uses
+-these embedding vectors to calculate the semantic similarities between
+-user-user, user-item and item-item pairs. Since you are a system expert, the
+-company hopes you can improve the efficiency of the embedding maintenance of
+-the recommender system.
+-
+-## Introduction
+-
+-The AI algorithm engineers of the company explain the basics of the setup to
+-you, as follows.
+-
+-### Embedding Vectors
+-
+-Embedding vectors represent the entities (either a user or an item). These
+-vectors are stored as rows in an embedding matrix. These embedding vectors have
+-a property that the product of two embedding vectors (maybe after some
+-processing) indicates the similarity of the two corresponding entities.
+-
+-```bash
+-...
+-# The following line illustrates the i-th row of the embedding matrix
+--0.6365,-0.1280,-0.7883,0.9397,0.2103,0.3158,0.9385,-0.0953,-0.4800,-0.7988
+-...
+-```
+-
+-### Operations on Embedding Vectors
+-
+-Three important operations on the embedding vectors are
+-
+-1. Initializing (`init_embedding`) the vectors on cold start (`cold_start`) ;
+-2. Updating the vectors after observing user activities (`update`).
+-3. Recommend an item to a user from a list of items.
+-
+-The embedding initialization is difficult, as there is few information about a
+-new entity. For a new user, a simple method is to randomly initialize the
+-embedding and run some cold start procedure (e.g. recommending some popular
+-item) to probe the user's interest. For a new item, we may expose them to highly
+-active users.
+-
+-After observing some user activities, we gather information about the users'
+-interest and items' popularity. To encode this information into the embeddings,
+-we need to update the embedding vectors with some optimization method (e.g.
+-gradient descent) where we pull in the distance between similar entities and
+-push away those dissimilar entities.
+-
+-## Embedding Holder
+-
+-In this project, we utilize `EmbeddingHolder` (a collection of embeddings) as the database to store 
+-and update the company's data. Initially, we read data from `*.in` to create two basic `EmbeddingHolder` for **users**
+-and **items** respectively; our task is to update this database according to the incoming `Instruction`s.
+-
+-### Codebase
+-
+-The project directory looks like this:
+-
+-```tree
+-.
+-├── benchmark.cc
+-├── BUILD
+-├── format.cc
+-├── lib
+-│   ├── BUILD
+-│   ├── embedding.cc
+-│   ├── embedding.h
+-│   ├── embedding_test.cc
+-│   ├── instruction.cc
+-│   ├── instruction.h
+-│   ├── model.cc
+-│   ├── model.h
+-│   ├── model_test.cc
+-│   ├── utils.cc
+-│   ├── utils.h
+-│   └── util_test.cc
+-├── q0.cc
+-├── q1.cc
+-├── q2.cc
+-├── q3.cc
+-├── README.md
+-└── WORKSPACE
+-
+-```
+-
+-The source files in `lib/` implements the basic interfaces of the system. The
+-`lib/embedding.h` contains the main interface of the embedding matrix data
+-holder. The mentioned operations on the embedding matrix are implemented in
+-`lib/model.h`. `Instruction` is in `lib/instruction.h`. The utilities are in `lib/utils.h`.
+-You find these files belongs to the AI team and you should not 
+-modify them, and do your optimization all from the system level. 
+-
+-The entrance of the program is in `q*.cc`.
+-You can modify everything in this project, except those tests in `lib`.
+-You should ensure that after your modification, it still passes the tests in `lib`.
+-
+-The project builds with the bazel build system, as we discussed in the
+-discussion session. You should install bazel following the online documents and
+-read the BUILD and WORKSPACE files carefully to understand the dependencies and
+-code structure. 
+-
+-### Unit testing
+-
+-Writing unit tests is an essential way to build and optimize system programs
+-and thus we would require that you include unit tests for all major functions
+-you write for your code. 
+-
+-We have provided test cases in the libraries for you as examples. Please do not
+-modify these unit tests.  You can modify library code, and add your own test cases
+-to the library test, but make sure that after your modification, our provided test cases still pass.
+-
+-### Format Checking
+-
+- In this project we test the standard output stream for final grading, so make sure that you output the correct answer as you expect. We provide a format checking script in `format.cc`. You can modify it to test all output results of your submission. Run the format checking script after building it like this:
+-
+-```bash
+-bazel-bin/q0 |grep [OUTPUT] > format.out && bazel-bin/format
+-```
+-
+-### Instruction Files
+-
+-The workload of the company comes as `Instruction`s with `order` and `payload`
+-fields. Both fields are integers. In this project, the `Instruction.order` is
+-either 0, 1 or 2, indicating the task of "init", "update" or "recommend". The workflow
+-of different task types are different as described bellow.
+-
+-- For **“init”**, you should first create a new embedding. The payload is a
+-  list of existing embedding indeces in the input matrix (`EmbeddingHolder`) that
+-  are used for cold  start (downstream applications may use them for interest
+-  probing). You should add this new  embedding into the `EmbeddingHolder` using
+-  `append`. Then you need to call `cold_start`  for each of the embedding
+-  indeces. Note that after `cold_start`, **only user embeddings are updated**
+-  (see `q0.cc` for example).
+-
+-- For **“update”**, the payload is `[user_idx, item_idx, label, (iter_idx)]`. You should invoke
+-  the `calc_gradient` on these two embedding vectors from `lib/model.h` and then
+-  call `update_embedding` from `lib/embedding.h` **on both the user and the items**
+-  (see`project/embedding.cc:run_q0` for example). The `iter_idx` indicates the
+-  epoch number of current update, see Task-3 for information.
+-- For **"recommend"**, the the payload is `[user_idx, iter_idx, item_idx1, item_idx2, item_idx3, item_idx4, ...]`. You should invoke the `recommend` on these embedding vectors from `lib/model.h` and then output the result. 
+-
+-Note that NO provided functions are thread safe on their own.
+-
+-### Other coding instructions
+-
+-For the following tasks, you should minimize duplicate code.  If there are code sharing among the following tasks, you should extract as much shared code as possible into separate `.h` and `.cc` library files, but not put everything into a single `.cc` file.  You should create your own `_test.cc` file for your library code.  20% of this project grade are reserved for good coding style (including the completeness of your own test cases).  
+-
+-We recommend you to use the standard C++11 Threading to implement multi-threading.  However, please feel free to use any other
+-C++ threading library (such as `pthread`, or Intel's TBB to do the following task).  If you need external libraries, please include them in the `WORKSPACE` file and make them to install and build automatically.  The TAs are not obliged to manually install any libraries on the grading machine. 
+-
+-## Submission instructions
+-
+-You should create a `.diff` file of your latest commit from the latest commit of the main project on learn.tsinghua, as follows:
+-
+-```bash
+-git diff YOUR_COMMIT_SHA1 MAIN_REPO_COMMIT_SHA1 > ${STUDENT_ID_1}_${STUDENT_ID_2}.diff
+-```
+-
+-To test whether your `.diff` works, clone a new repo and call `git apply ${STUDENT_ID_1}_${STUDENT_ID_2}.diff` and see if your code still works.
+-
+-## Task-0: Play with bazel build, the code and sanity check
+-
+-In this task, you need to understand the project structure, read the `q0.cc` code and 
+-the `project/BUILD` files, install bazel, build and run the provided sample program and tests. 
+-This task is not included for grading.  Just provided as an example for you to read.  If you need more information
+-on the Bazel build system, please refer to
+-https://docs.bazel.build/versions/main/tutorial/cpp.html
+-
+-
+-> **_NOTE:_** You can take this task's code as an example and benchmark for following tasks, 
+-but do not copy and paste this unoptimized code! Otherwise you will get penalized. Task-0 is not included in the final grading.
+-
+-> **_NOTE:_** Your code is not required to output exactly the same answer as `q0.cc`. You just need to guarantee your code is thread-safe.
+-
+-## Task-1: Supporting concurrent users
+-
+-At the beginning, the recommender system is new and has very few items or users.
+-Fortunately, the company attracts more and more users.  Thus, we need to modify the system
+-so that when multiple users come in at the same time, and send `Instruction`s concurrently
+-the system could behave correctly and efficiently. 
+-
+-**ToDo:**
+-
+-In this task, your job is to process an `Instruction` set of "init" and "update". Considering that 
+-`cal_gradient`  is time-consuming (10s of seconds running time, mostly waiting for I/O), 
+-you should think of handling multiple `Instruction`s concurrently. Design 
+-a synchronization mechanism using locks to guarantee that your codes are thread-safe.  Output your final 
+-`EmbeddingHolder` of **1) users and 2) items** using the provided `EmbeddingHolder::write_to_stdout()`.
+-
+-Again, note that NO provided functions are thread safe on their own. Feel free to modify these functions
+-in the `lib/` directory, but do not modify existing test cases there (you can add your own test cases).
+-
+-**Grading:**
+-
+-You will be graded by both the correctness and efficiency of your calculation 
+-under heavy and arbitrary mixtures of incoming `Instruction`s.
+-
+-> **_NOTE:_** In this task, a single `Instruction` only runs in a single thread (i.e. no internal parallelism within an `Instruction`). 
+-
+-> **_NOTE:_** The correctness means thread-safety. We allow any order of updates, as long as it is thread-safe.
+-
+-## Task-2: Accelerate "Init" task through concurrency
+-
+-Now the engineers find that it is still too slow to conduct each "init" task, as each of the task need to read multiple 
+-embeddings to perform the init.  
+-They hope to read and use these embeddings concurrently so shorten the time required to call a single "init".
+-We can further speed up the process by building an internally-concurrent "init" function.
+-
+-**ToDo:**
+-
+-In this task, your job is to process an `Instruction` set of "init" and "update". You can start with your codes in Task-1. Try to conduct multiple `cold_start`  in parallel and update the newly initialized embedding collectively without violating **thread-safety**.  Output your final `EmbeddingHolder` of **1) users and 2) items** using the provided `EmbeddingHolder::write_to_stdout()` function.  Note that you still need to support multiple concurrent users. 
+-
+-**Grading:**
+-
+-You will be graded by the correctness and efficiency of your calculation.
+-
+-## Task-3: Supporting incremental embedding updates
+-
+-Now the recommender system has many users and items. Everyday, the system
+-observes user activities and use them to update the embedding matrix for better
+-recommendation performance. In this task, you will need to implement the
+-updating process of the embedding matrix. The algorithm engineers of the company come up with a "genius" optimization
+-algorithm. This algorithm requires the optimizer to update the embeddings iteratively, and they call each iteration an *epoch*. This innovative epoch-based optimization differs from existing methods in that the calculation of later epochs depends on the results of earlier epochs. In this task, your job is to support this epoch-based update.
+-
+-**ToDo:**
+-
+-In this task, you should deal with the data dependency among `Instruction` s. The input `Instruction`  set contains both "init" and "update" tasks. The `iter_idx`s are in ascending order, and takes nonnegative integer values starting from 0. One `update` instruction should be executed only after all `update` instructions with smaller `iter_idx`s are completed to guarantee the dependency correctness (using data from the last iteration as input).  You can start with your codes in Task-2 and try to make all update execution parallel and thread-safety. Output your final `EmbeddingHolder` of **1) users and 2) items** using `EmbeddingHolder::write_to_stdout()`.
+-
+-**Grading:**
+-
+-You will be graded by the correctness and efficiency of your calculation.
+-
+-## Task-4: Doing recommendation while updating the embedding
+-
+-Except the maintenance of the recommender system, the company also needs  to generate recommendations for each user using the 
+-existing database. The recommendation should depend on the current version of data and not disturb the maintenance of the 
+-recommender system.  Note that when an embedding update is going on, you can not at the same time read the embedding, as the 
+-embedding update is not an atomic operation.  As the embedding update can take a long time, and can be quite frequent, 
+-you need to figure out a way to allow recommendation to execute without getting blocked by the updates, and at the same time
+-allowing the update to happen, and being able to use some quite recent updated embedding values for recommendation.  
+-
+-**ToDo:**
+-
+-In this task, the input `Instruction`  set contains all three types of tasks: "init", "update", and "recommend". Note that the "recommend" instruction contains an `iter_idx`, and you should use the embeddings after the updates with index `iter_idx` finish. A recommend instruction with `iter_idx=-1` can be scheduled before any updates. You can start with your codes in Task-3. You should output the recommend result as soon as you get it by calling the provided `Embedding::write_to_stdout()` (we accept all possible order of correct outputs). The delay of recommender response will impact your final score.  There is no need to output the final `EmbeddingHolder` in this tasks.
+-
+-> **_NOTE:_** You should output your recommend results in a thread-safe manner, too.
+-
+-> **_NOTE:_** In this task, update instructions still have `iter_idx` constraints. Recommend instructions can be executed after update instructions with larger `iter_idx`.
+-
+-**Grading:**
+-
+-You will be graded by the correctness and delay of your recommendation (from the programs' start to recommend result output), as well as being able to read the updated embedding after a relatively short period of time.
++# Project 1: Multi-thread Programming
++
++This project uses a (oversimplified) machine learning inference system to allow you to put some basic OS concepts into practice and learn how system-level optimizations help improve performance.
++
++Suppose you are hired by a company to improve the efficiency of the optimization  process of a recommender system. This recommender system represents the users and items (i.e. goods offered by the E-commerce platform) as vectors, and uses these embedding vectors to calculate the semantic similarities between user-user, user-item and item-item pairs. Since you are a system expert, the company hopes you can improve the efficiency of the embedding maintenance of the recommender system.
++
++## Introduction
++
++The AI algorithm engineers of the company explain the basics of the setup to you, as follows.
++
++### Embedding Vectors
++
++Embedding vectors represent the entities (either a user or an item). These vectors are stored as rows in an embedding matrix. These embedding vectors have a property that the product of two embedding vectors (maybe after some processing) indicates the similarity of the two corresponding entities.
++
++```bash
++...
++# The following line illustrates the i-th row of the embedding matrix
++-0.6365,-0.1280,-0.7883,0.9397,0.2103,0.3158,0.9385,-0.0953,-0.4800,-0.7988
++...
++```
++
++### Operations on Embedding Vectors
++
++Three important operations on the embedding vectors are
++
++1. Initializing (`init_embedding`) the vectors on cold start (`cold_start`) ;
++2. Updating the vectors after observing user activities (`update`).
++3. Recommend an item to a user from a list of items.
++
++The embedding initialization is difficult, as there is few information about a new entity. For a new user, a simple method is to randomly initialize the embedding and run some cold start procedure (e.g. recommending some popular item) to probe the user's interest. For a new item, we may expose them to highly active users.
++
++After observing some user activities, we gather information about the users' interest and items' popularity. To encode this information into the embeddings, we need to update the embedding vectors with some optimization method (e.g. gradient descent) where we pull in the distance between similar entities and push away those dissimilar entities.
++
++## Embedding Holder
++
++In this project, we utilize `EmbeddingHolder` (a collection of embeddings) as the database to store and update the company's data. Initially, we read data from `*.in` to create two basic `EmbeddingHolder` for **users** and **items** respectively; our task is to update this database according to the incoming `Instruction`s.
++
++### Codebase
++
++The project directory looks like this:
++
++```tree
++.
++├── benchmark.cc
++├── BUILD
++├── format.cc
++├── lib
++│   ├── BUILD
++│   ├── embedding.cc
++│   ├── embedding.h
++│   ├── embedding_test.cc
++│   ├── instruction.cc
++│   ├── instruction.h
++│   ├── model.cc
++│   ├── model.h
++│   ├── model_test.cc
++│   ├── utils.cc
++│   ├── utils.h
++│   └── util_test.cc
++├── q0.cc
++├── q1.cc
++├── q2.cc
++├── q3.cc
++├── README.md
++└── WORKSPACE
++
++```
++
++The source files in `lib/` implements the basic interfaces of the system. The `lib/embedding.h` contains the main interface of the embedding matrix data holder. The mentioned operations on the embedding matrix are implemented in `lib/model.h`. `Instruction` is in `lib/instruction.h`. The utilities are in `lib/utils.h`. You find these files belongs to the AI team and you should not modify them, and do your optimization all from the system level.
++
++The entrance of the program is in `q*.cc`. You can modify everything in this project, except those tests in `lib`. You should ensure that after your modification, it still passes the tests in `lib`.
++
++The project builds with the bazel build system, as we discussed in the discussion session. You should install bazel following the online documents and read the BUILD and WORKSPACE files carefully to understand the dependencies and code structure.
++
++### Unit testing
++
++Writing unit tests is an essential way to build and optimize system programs and thus we would require that you include unit tests for all major functions you write for your code.
++
++We have provided test cases in the libraries for you as examples. Please do not modify these unit tests.  You can modify library code, and add your own test cases to the library test, but make sure that after your modification, our provided test cases still pass.
++
++### Format Checking
++
++In this project we test the standard output stream for final grading, so make sure that you output the correct answer as you expect. We provide a format checking script in `format.cc`. You can modify it to test all output results of your submission. Run the format checking script after building it like this:
++
++```bash
++bazel-bin/q0 |grep [OUTPUT] > format.out && bazel-bin/format
++```
++
++### Instruction Files
++
++The workload of the company comes as `Instruction`s with `order` and `payload` fields. Both fields are integers. In this project, the `Instruction.order` is either 0, 1 or 2, indicating the task of "init", "update" or "recommend". The workflow of different task types are different as described bellow.
++
++- For **“init”**, you should first create a new embedding. The payload is a list of existing embedding indices in the input matrix (`EmbeddingHolder`) that are used for cold  start (downstream applications may use them for interest probing). You should add this new  embedding into the `EmbeddingHolder` using `append`. Then you need to call `cold_start`  for each of the embedding indices. Note that after `cold_start`, **only user embeddings are updated** (see `q0.cc` for example).
++
++- For **“update”**, the payload is `[user_idx, item_idx, label, (iter_idx)]`. You should invoke the `calc_gradient` on these two embedding vectors from `lib/model.h` and then call `update_embedding` from `lib/embedding.h` **on both the user and the items** (see`project/embedding.cc:run_q0` for example). The `iter_idx` indicates the epoch number of current update, see Task-3 for information.
++
++- For **"recommend"**, the the payload is `[user_idx, iter_idx, item_idx1, item_idx2, item_idx3, item_idx4, ...]`. You should invoke the `recommend` on these embedding vectors from `lib/model.h` and then output the result.
++
++Note that NO provided functions are thread safe on their own.
++
++### Other coding instructions
++
++For the following tasks, you should minimize duplicate code.  If there are code sharing among the following tasks, you should extract as much shared code as possible into separate `.h` and `.cc` library files, but not put everything into a single `.cc` file.  You should create your own `_test.cc` file for your library code.  20% of this project grade are reserved for good coding style (including the completeness of your own test cases).  
++
++We recommend you to use the standard C++11 Threading to implement multi-threading.  However, please feel free to use any other C++ threading library (such as `pthread`, or Intel's TBB to do the following task).  If you need external libraries, please include them in the `WORKSPACE` file and make them to install and build automatically.  The TAs are not obliged to manually install any libraries on the grading machine.
++
++## Submission instructions
++
++You should create a `.diff` file of your latest commit from the latest commit of the main project on learn.tsinghua, as follows:
++
++```bash
++git diff YOUR_COMMIT_SHA1 MAIN_REPO_COMMIT_SHA1 > ${STUDENT_ID_1}_${STUDENT_ID_2}.diff
++```
++
++To test whether your `.diff` works, clone a new repo and call `git apply ${STUDENT_ID_1}_${STUDENT_ID_2}.diff` and see if your code still works.
++
++## Task-0: Play with bazel build, the code and sanity check
++
++In this task, you need to understand the project structure, read the `q0.cc` code and the `project/BUILD` files, install bazel, build and run the provided sample program and tests. This task is not included for grading.  Just provided as an example for you to read.  If you need more information on the Bazel build system, please refer to [https://docs.bazel.build/versions/main/tutorial/cpp.html]()
++
++> **_NOTE:_** You can take this task's code as an example and benchmark for following tasks, but do not copy and paste this unoptimized code! Otherwise you will get penalized. Task-0 is not included in the final grading.
++
++> **_NOTE:_** Your code is not required to output exactly the same answer as `q0.cc`. You just need to guarantee your code is thread-safe.
++
++## Task-1: Supporting concurrent users
++
++At the beginning, the recommender system is new and has very few items or users. Fortunately, the company attracts more and more users.  Thus, we need to modify the system so that when multiple users come in at the same time, and send `Instruction`s concurrently the system could behave correctly and efficiently.
++
++**ToDo:**
++
++In this task, your job is to process an `Instruction` set of "init" and "update". Considering that `cal_gradient`  is time-consuming (10s of seconds running time, mostly waiting for I/O), you should think of handling multiple `Instruction`s concurrently. Design a synchronization mechanism using locks to guarantee that your codes are thread-safe.  Output your final `EmbeddingHolder` of **1) users and 2) items** using the provided `EmbeddingHolder::write_to_stdout()`.
++
++Again, note that NO provided functions are thread safe on their own. Feel free to modify these functions in the `lib/` directory, but do not modify existing test cases there (you can add your own test cases).
++
++**Grading:**
++
++You will be graded by both the correctness and efficiency of your calculation under heavy and arbitrary mixtures of incoming `Instruction`s.
++
++> **_NOTE:_** In this task, a single `Instruction` only runs in a single thread (i.e. no internal parallelism within an `Instruction`).
++
++> **_NOTE:_** The correctness means thread-safety. We allow any order of updates, as long as it is thread-safe.
++
++## Task-2: Accelerate "Init" task through concurrency
++
++Now the engineers find that it is still too slow to conduct each "init" task, as each of the task need to read multiple embeddings to perform the init. They hope to read and use these embeddings concurrently so shorten the time required to call a single "init". We can further speed up the process by building an internally-concurrent "init" function.
++
++**ToDo:**
++
++In this task, your job is to process an `Instruction` set of "init" and "update". You can start with your codes in Task-1. Try to conduct multiple `cold_start`  in parallel and update the newly initialized embedding collectively without violating **thread-safety**.  Output your final `EmbeddingHolder` of **1) users and 2) items** using the provided `EmbeddingHolder::write_to_stdout()` function.  Note that you still need to support multiple concurrent users.
++
++**Grading:**
++
++You will be graded by the correctness and efficiency of your calculation.
++
++## Task-3: Supporting incremental embedding updates
++
++Now the recommender system has many users and items. Everyday, the system observes user activities and use them to update the embedding matrix for better recommendation performance. In this task, you will need to implement the updating process of the embedding matrix. The algorithm engineers of the company come up with a "genius" optimization algorithm. This algorithm requires the optimizer to update the embeddings iteratively, and they call each iteration an *epoch*. This innovative epoch-based optimization differs from existing methods in that the calculation of later epochs depends on the results of earlier epochs. In this task, your job is to support this epoch-based update.
++
++**ToDo:**
++
++In this task, you should deal with the data dependency among `Instruction` s. The input `Instruction`  set contains both "init" and "update" tasks. The `iter_idx`s are in ascending order, and takes nonnegative integer values starting from 0. One `update` instruction should be executed only after all `update` instructions with smaller `iter_idx`s are completed to guarantee the dependency correctness (using data from the last iteration as input).  You can start with your codes in Task-2 and try to make all update execution parallel and thread-safety. Output your final `EmbeddingHolder` of **1) users and 2) items** using `EmbeddingHolder::write_to_stdout()`.
++
++**Grading:**
++
++You will be graded by the correctness and efficiency of your calculation.
++
++## Task-4: Doing recommendation while updating the embedding
++
++Except the maintenance of the recommender system, the company also needs  to generate recommendations for each user using the existing database. The recommendation should depend on the current version of data and not disturb the maintenance of the recommender system.  Note that when an embedding update is going on, you can not at the same time read the embedding, as the embedding update is not an atomic operation.  As the embedding update can take a long time, and can be quite frequent, you need to figure out a way to allow recommendation to execute without getting blocked by the updates, and at the same time allowing the update to happen, and being able to use some quite recent updated embedding values for recommendation.  
++
++**ToDo:**
++
++In this task, the input `Instruction`  set contains all three types of tasks: "init", "update", and "recommend". Note that the "recommend" instruction contains an `iter_idx`, and you should use the embeddings after the updates with index `iter_idx` finish. A recommend instruction with `iter_idx=-1` can be scheduled before any updates. You can start with your codes in Task-3. You should output the recommend result as soon as you get it by calling the provided `Embedding::write_to_stdout()` (we accept all possible order of correct outputs). The delay of recommender response will impact your final score.  There is no need to output the final `EmbeddingHolder` in this tasks.
++
++> **_NOTE:_** You should output your recommend results in a thread-safe manner, too.
++
++> **_NOTE:_** In this task, update instructions still have `iter_idx` constraints. Recommend instructions can be executed after update instructions with larger `iter_idx`.
++
++**Grading:**
++
++You will be graded by the correctness and delay of your recommendation (from the programs' start to recommend result output), as well as being able to read the updated embedding after a relatively short period of time.
+diff --git a/Thread-1/README.pdf b/Thread-1/README.pdf
+new file mode 100644
+index 0000000..f66b59f
+--- /dev/null
++++ b/Thread-1/README.pdf
+@@ -0,0 +1,284 @@
++Project 1: Multi-thread Programming
++
++This project uses a (oversimplified) machine learning inference system to allow you to put some
++basic OS concepts into practice and learn how system-level optimizations help improve
++performance.
++
++Suppose you are hired by a company to improve the efficiency of the optimization process of a
++recommender system. This recommender system represents the users and items (i.e. goods
++offered by the E-commerce platform) as vectors, and uses these embedding vectors to calculate
++the semantic similarities between user-user, user-item and item-item pairs. Since you are a
++system expert, the company hopes you can improve the efficiency of the embedding
++maintenance of the recommender system.
++
++Introduction
++
++The AI algorithm engineers of the company explain the basics of the setup to you, as follows.
++
++Embedding Vectors
++
++Embedding vectors represent the entities (either a user or an item). These vectors are stored as
++rows in an embedding matrix. These embedding vectors have a property that the product of two
++embedding vectors (maybe after some processing) indicates the similarity of the two
++corresponding entities.
++
++   1 ...
++   2 # The following line illustrates the i-th row of the embedding matrix
++   3 -0.6365,-0.1280,-0.7883,0.9397,0.2103,0.3158,0.9385,-0.0953,-0.4800,-0.7988
++   4 ...
++
++Operations on Embedding Vectors
++
++Three important operations on the embedding vectors are
++
++   1. Initializing ( init_embedding ) the vectors on cold start ( cold_start ) ;
++   2. Updating the vectors after observing user activities ( update ).
++   3. Recommend an item to a user from a list of items.
++
++The embedding initialization is difficult, as there is few information about a new entity. For a new
++user, a simple method is to randomly initialize the embedding and run some cold start procedure
++(e.g. recommending some popular item) to probe the user's interest. For a new item, we may
++expose them to highly active users.
++
++After observing some user activities, we gather information about the users' interest and items'
++popularity. To encode this information into the embeddings, we need to update the embedding
++vectors with some optimization method (e.g. gradient descent) where we pull in the distance
++between similar entities and push away those dissimilar entities.
++
++Embedding Holder
++In this project, we utilize EmbeddingHolder (a collection of embeddings) as the database to store
++and update the company's data. Initially, we read data from *.in to create two basic
++EmbeddingHolder for users and items respectively; our task is to update this database according
++to the incoming Instruction s.
++
++Codebase
++
++The project directory looks like this:
++
++     1.
++     2 ├── benchmark.cc
++     3 ├── BUILD
++     4 ├── format.cc
++     5 ├── lib
++     6 │ ├── BUILD
++     7 │ ├── embedding.cc
++     8 │ ├── embedding.h
++     9 │ ├── embedding_test.cc
++   10 │ ├── instruction.cc
++   11 │ ├── instruction.h
++   12 │ ├── model.cc
++   13 │ ├── model.h
++   14 │ ├── model_test.cc
++   15 │ ├── utils.cc
++   16 │ ├── utils.h
++   17 │ └── util_test.cc
++   18 ├── q0.cc
++   19 ├── q1.cc
++   20 ├── q2.cc
++   21 ├── q3.cc
++   22 ├── README.md
++   23 └── WORKSPACE
++   24
++
++The source files in lib/ implements the basic interfaces of the system. The lib/embedding.h
++contains the main interface of the embedding matrix data holder. The mentioned operations on
++the embedding matrix are implemented in lib/model.h . Instruction is in
++lib/instruction.h . The utilities are in lib/utils.h . You find these files belongs to the AI team
++and you should not modify them, and do your optimization all from the system level.
++
++The entrance of the program is in q*.cc . You can modify everything in this project, except those
++tests in lib . You should ensure that after your modification, it still passes the tests in lib .
++
++The project builds with the bazel build system, as we discussed in the discussion session. You
++should install bazel following the online documents and read the BUILD and WORKSPACE files
++carefully to understand the dependencies and code structure.
++
++Unit testing
++
++Writing unit tests is an essential way to build and optimize system programs and thus we would
++require that you include unit tests for all major functions you write for your code.
++
++We have provided test cases in the libraries for you as examples. Please do not modify these unit
++tests. You can modify library code, and add your own test cases to the library test, but make sure
++that after your modification, our provided test cases still pass.
++Format Checking
++
++In this project we test the standard output stream for final grading, so make sure that you output
++the correct answer as you expect. We provide a format checking script in format.cc . You can
++modify it to test all output results of your submission. Run the format checking script after
++building it like this:
++
++   1 bazel-bin/q0 |grep [OUTPUT] > format.out && bazel-bin/format
++
++Instruction Files
++
++The workload of the company comes as Instruction s with order and payload fields. Both
++fields are integers. In this project, the Instruction.order is either 0, 1 or 2, indicating the task of
++"init", "update" or "recommend". The workflow of different task types are different as described
++bellow.
++
++      For “init”, you should first create a new embedding. The payload is a list of existing
++      embedding indices in the input matrix ( EmbeddingHolder ) that are used for cold start
++      (downstream applications may use them for interest probing). You should add this new
++      embedding into the EmbeddingHolder using append . Then you need to call cold_start for
++      each of the embedding indices. Note that after cold_start , only user embeddings are
++      updated (see q0.cc for example).
++      For “update”, the payload is [user_idx, item_idx, label, (iter_idx)] . You should
++      invoke the calc_gradient on these two embedding vectors from lib/model.h and then
++      call update_embedding from lib/embedding.h on both the user and the items
++      (see project/embedding.cc:run_q0 for example). The iter_idx indicates the epoch
++      number of current update, see Task-3 for information.
++      For "recommend", the the payload is [user_idx, iter_idx, item_idx1, item_idx2,
++      item_idx3, item_idx4, ...] . You should invoke the recommend on these embedding
++      vectors from lib/model.h and then output the result.
++
++Note that NO provided functions are thread safe on their own.
++
++Other coding instructions
++
++For the following tasks, you should minimize duplicate code. If there are code sharing among the
++following tasks, you should extract as much shared code as possible into separate .h and .cc
++library files, but not put everything into a single .cc file. You should create your own _test.cc
++file for your library code. 20% of this project grade are reserved for good coding style (including
++the completeness of your own test cases).
++
++We recommend you to use the standard C++11 Threading to implement multi-threading.
++However, please feel free to use any other C++ threading library (such as pthread , or Intel's TBB
++to do the following task). If you need external libraries, please include them in the WORKSPACE file
++and make them to install and build automatically. The TAs are not obliged to manually install any
++libraries on the grading machine.
++
++Submission instructions
++
++You should create a .diff file of your latest commit from the latest commit of the main project
++on learn.tsinghua, as follows:
++   1 git diff YOUR_COMMIT_SHA1 MAIN_REPO_COMMIT_SHA1 >
++         ${STUDENT_ID_1}_${STUDENT_ID_2}.diff
++
++To test whether your .diff works, clone a new repo and call git apply
++${STUDENT_ID_1}_${STUDENT_ID_2}.diff and see if your code still works.
++
++Task-0: Play with bazel build, the code and sanity
++check
++
++In this task, you need to understand the project structure, read the q0.cc code and the
++project/BUILD files, install bazel, build and run the provided sample program and tests. This
++task is not included for grading. Just provided as an example for you to read. If you need more
++information on the Bazel build system, please refer to
++
++    NOTE: You can take this task's code as an example and benchmark for following tasks, but
++    do not copy and paste this unoptimized code! Otherwise you will get penalized. Task-0 is not
++    included in the final grading.
++
++    NOTE: Your code is not required to output exactly the same answer as q0.cc . You just need
++    to guarantee your code is thread-safe.
++
++Task-1: Supporting concurrent users
++
++At the beginning, the recommender system is new and has very few items or users. Fortunately,
++the company attracts more and more users. Thus, we need to modify the system so that when
++multiple users come in at the same time, and send Instruction s concurrently the system could
++behave correctly and efficiently.
++
++ToDo:
++
++In this task, your job is to process an Instruction set of "init" and "update". Considering that
++cal_gradient is time-consuming (10s of seconds running time, mostly waiting for I/O), you
++should think of handling multiple Instruction s concurrently. Design a synchronization
++mechanism using locks to guarantee that your codes are thread-safe. Output your final
++EmbeddingHolder of 1) users and 2) items using the provided
++EmbeddingHolder::write_to_stdout() .
++
++Again, note that NO provided functions are thread safe on their own. Feel free to modify these
++functions in the lib/ directory, but do not modify existing test cases there (you can add your
++own test cases).
++
++Grading:
++
++You will be graded by both the correctness and efficiency of your calculation under heavy and
++arbitrary mixtures of incoming Instruction s.
++
++    NOTE: In this task, a single Instruction only runs in a single thread (i.e. no internal
++    parallelism within an Instruction ).
++
++    NOTE: The correctness means thread-safety. We allow any order of updates, as long as it is
++    thread-safe.
++
++Task-2: Accelerate "Init" task through concurrency
++Now the engineers find that it is still too slow to conduct each "init" task, as each of the task need
++to read multiple embeddings to perform the init. They hope to read and use these embeddings
++concurrently so shorten the time required to call a single "init". We can further speed up the
++process by building an internally-concurrent "init" function.
++
++ToDo:
++
++In this task, your job is to process an Instruction set of "init" and "update". You can start with
++your codes in Task-1. Try to conduct multiple cold_start in parallel and update the newly
++initialized embedding collectively without violating thread-safety. Output your final
++EmbeddingHolder of 1) users and 2) items using the provided
++EmbeddingHolder::write_to_stdout() function. Note that you still need to support multiple
++concurrent users.
++
++Grading:
++
++You will be graded by the correctness and efficiency of your calculation.
++
++Task-3: Supporting incremental embedding updates
++
++Now the recommender system has many users and items. Everyday, the system observes user
++activities and use them to update the embedding matrix for better recommendation
++performance. In this task, you will need to implement the updating process of the embedding
++matrix. The algorithm engineers of the company come up with a "genius" optimization algorithm.
++This algorithm requires the optimizer to update the embeddings iteratively, and they call each
++iteration an epoch. This innovative epoch-based optimization differs from existing methods in that
++the calculation of later epochs depends on the results of earlier epochs. In this task, your job is to
++support this epoch-based update.
++
++ToDo:
++
++In this task, you should deal with the data dependency among Instruction s. The input
++Instruction set contains both "init" and "update" tasks. The iter_idx s are in ascending order,
++and takes nonnegative integer values starting from 0. One update instruction should be
++executed only after all update instructions with smaller iter_idx s are completed to guarantee
++the dependency correctness (using data from the last iteration as input). You can start with your
++codes in Task-2 and try to make all update execution parallel and thread-safety. Output your final
++EmbeddingHolder of 1) users and 2) items using EmbeddingHolder::write_to_stdout() .
++
++Grading:
++
++You will be graded by the correctness and efficiency of your calculation.
++
++Task-4: Doing recommendation while updating the
++embedding
++
++Except the maintenance of the recommender system, the company also needs to generate
++recommendations for each user using the existing database. The recommendation should
++depend on the current version of data and not disturb the maintenance of the recommender
++system. Note that when an embedding update is going on, you can not at the same time read the
++embedding, as the embedding update is not an atomic operation. As the embedding update can
++take a long time, and can be quite frequent, you need to figure out a way to allow
++recommendation to execute without getting blocked by the updates, and at the same time
++allowing the update to happen, and being able to use some quite recent updated embedding
++values for recommendation.
++ToDo:
++
++In this task, the input Instruction set contains all three types of tasks: "init", "update", and
++"recommend". Note that the "recommend" instruction contains an iter_idx , and you should use
++the embeddings after the updates with index iter_idx finish. A recommend instruction with
++iter_idx=-1 can be scheduled before any updates. You can start with your codes in Task-3. You
++should output the recommend result as soon as you get it by calling the provided
++Embedding::write_to_stdout() (we accept all possible order of correct outputs). The delay of
++recommender response will impact your final score. There is no need to output the final
++EmbeddingHolder in this tasks.
++
++    NOTE: You should output your recommend results in a thread-safe manner, too.
++
++    NOTE: In this task, update instructions still have iter_idx constraints. Recommend
++    instructions can be executed after update instructions with larger iter_idx .
++
++Grading:
++
++You will be graded by the correctness and delay of your recommendation (from the programs'
++start to recommend result output), as well as being able to read the updated embedding after a
++relatively short period of time.
++
+\ No newline at end of file
+diff --git a/Thread-1/WORKSPACE b/Thread-1/WORKSPACE
+index 6760453..6d24ab2 100644
+--- a/Thread-1/WORKSPACE
++++ b/Thread-1/WORKSPACE
+@@ -1,15 +1,15 @@
+-load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
+-
+-## google test dependency
+-http_archive(
+-  name = "gtest",
+-  urls = ["https://github.com.cnpmjs.org/google/googletest/archive/refs/tags/release-1.11.0.zip"],
+-  strip_prefix = "googletest-release-1.11.0",
+-)
+-## google benchmark dependency
+-http_archive(
+-  name = "gbench",
+-  urls = ["https://github.com.cnpmjs.org/google/benchmark/archive/refs/tags/v1.6.0.zip"],
+-  strip_prefix = "benchmark-1.6.0",
+-  sha256 = "3da225763533aa179af8438e994842be5ca72e4a7fed4d7976dc66c8c4502f58"
+-)
++load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
++
++## google test dependency
++http_archive(
++  name = "gtest",
++  urls = ["https://github.com.cnpmjs.org/google/googletest/archive/refs/tags/release-1.11.0.zip"],
++  strip_prefix = "googletest-release-1.11.0",
++)
++## google benchmark dependency
++http_archive(
++  name = "gbench",
++  urls = ["https://github.com.cnpmjs.org/google/benchmark/archive/refs/tags/v1.6.0.zip"],
++  strip_prefix = "benchmark-1.6.0",
++  sha256 = "3da225763533aa179af8438e994842be5ca72e4a7fed4d7976dc66c8c4502f58"
++)
+diff --git a/Thread-1/benchmark.cc b/Thread-1/benchmark.cc
+index 43b1f43..2c5fc84 100644
+--- a/Thread-1/benchmark.cc
++++ b/Thread-1/benchmark.cc
+@@ -1,23 +1,23 @@
+-/*
+- * This file provides an example of how to do automatic benchmark.  Feel free
+- * to modify and use this tool.
+- */
+-
+-#include <benchmark/benchmark.h>
+-
+-static void BM_StringCreation(benchmark::State& state) {
+-  for (auto _ : state)
+-    std::string empty_string;
+-}
+-// Register the function as a benchmark
+-BENCHMARK(BM_StringCreation);
+-
+-// Define another benchmark
+-static void BM_StringCopy(benchmark::State& state) {
+-  std::string x = "hello";
+-  for (auto _ : state)
+-    std::string copy(x);
+-}
+-BENCHMARK(BM_StringCopy);
+-
++/*
++ * This file provides an example of how to do automatic benchmark.  Feel free
++ * to modify and use this tool.
++ */
++
++#include <benchmark/benchmark.h>
++
++static void BM_StringCreation(benchmark::State& state) {
++  for (auto _ : state)
++    std::string empty_string;
++}
++// Register the function as a benchmark
++BENCHMARK(BM_StringCreation);
++
++// Define another benchmark
++static void BM_StringCopy(benchmark::State& state) {
++  std::string x = "hello";
++  for (auto _ : state)
++    std::string copy(x);
++}
++BENCHMARK(BM_StringCopy);
++
+ BENCHMARK_MAIN();
+\ No newline at end of file
+diff --git a/Thread-1/data/q0.in b/Thread-1/data/q0.in
+index a7e4563..f9a8604 100644
+--- a/Thread-1/data/q0.in
++++ b/Thread-1/data/q0.in
+@@ -1,20 +1,20 @@
+--0.9166718150866153,0.43829227278389205,-0.6129205231425989,0.7738693110376684,-0.04456069156634124,0.8807831166061564,-0.8206278700342509,0.5013513447020947,0.8570578529268591,0.3906799520892723,0.6558968505921785,0.0011654760044317314,0.3008835791217257,-0.15983430198414705,-0.0693333837225647,-0.6526558237637923
+-0.9210598583969818,0.42579710374854174,0.4036360259825613,0.030714658443632636,-0.885772459758438,-0.24727514094877123,0.7355606108008894,0.10546495518591437,-0.8023562184533268,-0.49625645997262624,-0.9207327565798142,-0.5815206606673406,0.9351907452001367,0.3172382122419557,0.003001769800845988,-0.922981014248552
+--0.5965568413505009,0.09650184318674637,0.6008404234282114,-0.36476902674868983,-0.010850908242431956,0.764068687448312,0.07574350440340671,0.17571450752937356,-0.8171966361630094,0.9651584811421219,-0.3418701780268467,0.9853471761319244,-0.12550940725520165,0.4589100006311786,0.43815748442548386,0.9705357673477955
+-0.993889214450193,-0.8189165981690414,0.04917164289121412,-0.7530365630876577,-0.5538830208217513,0.7583652630943165,0.5543977049957343,-0.6234411607408261,-0.2594219505869344,0.0167988118252671,-0.9217323318156883,-0.375213018259823,0.14784668217470842,-0.4692513166767862,0.46235112775477427,0.12296988932525932
+--0.8793341414217637,-0.6402283188497377,0.8392493288060314,0.023482332116210758,-0.5409383253499991,0.8026327950872136,-0.6065373556670386,0.6888084300076232,-0.6283940592555368,0.10147943389628145,0.4827634350786061,-0.13302981763357224,-0.8807152975057908,-0.6541439052369178,-0.7731928918072759,0.6164384986356892
+-0.9848390793791464,0.2336479492878787,-0.03581470862613423,-0.8796023192670523,0.5757823579359684,0.4491579106812056,-0.43149525961566915,0.14167627382710624,0.34228128171791594,-0.2656195346653807,0.7945511727589767,-0.7664247140996134,-0.5167707200070257,0.6757407501481238,-0.5685784054255085,-0.3597641456495462
+--0.013661589999800272,-0.3281489497763481,0.6389047534972294,0.1308792365227054,0.6332312852857147,-0.389048890374591,-0.3305466717642904,-0.5076957991101425,-0.15749182415532226,0.06288417881265196,0.253734952831729,0.8002038247377463,0.7459378274158079,0.14471765507189738,-0.23974711356596567,0.7190494207848193
+--0.6587322596474383,0.8188365658683667,0.42662072473113843,0.5901480016293985,0.6997960743722469,-0.5835849054098734,-0.0546100350906209,0.5148383481529748,-0.12147445994822359,-0.8878647172685175,0.1736021960155516,-0.9482031277658456,-0.6706006901814101,0.02039879794445243,0.17722047160627552,-0.5494459255600357
+-0.9944516034519038,-0.3667188868126192,0.8558822460007307,-0.11788994189674207,0.4133418160765052,0.6792171996618557,-0.39354826424460554,-0.6382183058167172,-0.01935460173085035,0.6440893996546722,0.3983825520058324,0.32435721973088016,0.8086605772838129,-0.9865423205310249,0.7685581047510504,0.3649709247610369
+-0.9645480139613929,0.007196954322446603,0.3849464304311927,-0.41534968585835896,0.6183302711548755,0.7512952065856064,0.977605872321677,-0.5219496942098161,-0.6065793782427835,0.6395091775321222,-0.7753491496848779,-0.31947902475201295,0.8310764785432989,-0.24086418179731117,0.6548171271848247,-0.7181518576226569
+-0.10392572926221488,-0.9960228458666913,0.24329774396832815,-0.007218902680639516,-0.46195227850059095,-0.22775292095809907,0.5170986426079844,-0.7688755830562746,0.6197879642909672,-0.717524054421105,-0.6467295750993614,-0.40342368981638144,-0.7557089006225057,-0.9128424548604341,0.06240545314310686,0.920623279292037
+-0.5322136506908903,0.23456943299825506,0.18432121230114462,-0.7046448159652592,0.023340437548953652,0.786530595546846,0.5679613131398791,-0.28283023164734433,-0.3681440982708415,-0.9011465943870665,0.473634360349672,-0.2639152637035911,-0.43369123809007704,-0.6889606734993332,-0.815371507078462,-0.9454666540836327
+-0.7652343420138252,-0.2013918947613924,-0.0005331899975180576,0.7748728133468059,0.458158934313285,-0.7951029735775395,-0.0008126921912403606,0.686312638422669,-0.3770741710608334,-0.5294596394231117,-0.005926822002298104,0.24279879316979835,0.9164519844007226,-0.5078482312789123,-0.36721418512784276,0.9432087887762335
+-0.7222771339189791,-0.005454696303068385,-0.2915134501204564,-0.7750734383650992,0.11723817845525897,0.5938360682630202,-0.010768256677477828,0.707408394316926,-0.5112327016133762,-0.7811099248727826,0.009951608581912241,-0.9732203623144933,0.5584545603101057,0.1105202142888062,-0.5694403298492954,-0.5994379771008778
+-0.16162361494760624,-0.38704335280463753,-0.24854788977398545,0.30634162979715196,-0.9589719891404087,-0.28267606687891167,0.3221538699420512,-0.14910428273091658,0.9826883395419368,0.8508936334056303,0.6357584934988769,-0.5769135998104313,0.09376796925103226,-0.7821970510219409,-0.4663891893964558,-0.831632538112201
+-0.6781753267827875,0.33905137367641647,0.8568353804544486,-0.8044271187219234,0.8877682037516639,-0.42203276645299903,0.3018591966647832,0.4258736457862886,0.2516337015828114,-0.07738276731259952,0.27310534966390354,0.7807176102748643,0.898884317161128,0.6441762343991813,0.6359073989739275,-0.11625956839410301
+--0.07355380841233794,-0.5991475894981364,0.48881631753298627,0.8946664818555352,-0.371995389237056,-0.8401918579894088,-0.591993878817975,0.15712232369874823,0.450549308287469,-0.8996673112741782,-0.8791981995418927,-0.03761206035791265,-0.5700742657864488,-0.9387493444567108,-0.8726216475381954,-0.7551117821103108
+-0.735759638534258,0.5266432943362018,-0.8262895940291652,0.6882150373152043,-0.7506471583585688,-0.04982341472396001,-0.7949918517940822,-0.44235127186122525,-0.9882223934879146,-0.4441028983344111,0.5519251325075518,0.6516444941449673,-0.3163693937495182,0.6633576579373552,-0.14305762257033017,-0.917498174903457
+-0.689026547247694,0.8862140749559642,-0.45937080150886866,-0.13100395155291333,0.3676584062185373,0.2613141202862099,-0.12666968197987072,-0.41039307001428993,0.5753567913599895,-0.5411831823678792,0.7960685297548984,-0.16290877512290147,-0.12264052078463594,0.8722752925535249,-0.5794202635727537,-0.5970693001492524
+--0.02170263409045292,0.697648704435414,-0.11226839738443095,-0.8622529689920502,0.7835929345134811,0.1860181129625269,0.4094767632543719,0.44077211442817377,-0.695785490796218,-0.6610229471283056,0.38672965984834384,-0.1503230719293971,0.09955025998329337,0.895028592696677,0.7080541552493977,-0.30929665194905875
++-0.9166718150866153,0.43829227278389205,-0.6129205231425989,0.7738693110376684,-0.04456069156634124,0.8807831166061564,-0.8206278700342509,0.5013513447020947,0.8570578529268591,0.3906799520892723,0.6558968505921785,0.0011654760044317314,0.3008835791217257,-0.15983430198414705,-0.0693333837225647,-0.6526558237637923
++0.9210598583969818,0.42579710374854174,0.4036360259825613,0.030714658443632636,-0.885772459758438,-0.24727514094877123,0.7355606108008894,0.10546495518591437,-0.8023562184533268,-0.49625645997262624,-0.9207327565798142,-0.5815206606673406,0.9351907452001367,0.3172382122419557,0.003001769800845988,-0.922981014248552
++-0.5965568413505009,0.09650184318674637,0.6008404234282114,-0.36476902674868983,-0.010850908242431956,0.764068687448312,0.07574350440340671,0.17571450752937356,-0.8171966361630094,0.9651584811421219,-0.3418701780268467,0.9853471761319244,-0.12550940725520165,0.4589100006311786,0.43815748442548386,0.9705357673477955
++0.993889214450193,-0.8189165981690414,0.04917164289121412,-0.7530365630876577,-0.5538830208217513,0.7583652630943165,0.5543977049957343,-0.6234411607408261,-0.2594219505869344,0.0167988118252671,-0.9217323318156883,-0.375213018259823,0.14784668217470842,-0.4692513166767862,0.46235112775477427,0.12296988932525932
++-0.8793341414217637,-0.6402283188497377,0.8392493288060314,0.023482332116210758,-0.5409383253499991,0.8026327950872136,-0.6065373556670386,0.6888084300076232,-0.6283940592555368,0.10147943389628145,0.4827634350786061,-0.13302981763357224,-0.8807152975057908,-0.6541439052369178,-0.7731928918072759,0.6164384986356892
++0.9848390793791464,0.2336479492878787,-0.03581470862613423,-0.8796023192670523,0.5757823579359684,0.4491579106812056,-0.43149525961566915,0.14167627382710624,0.34228128171791594,-0.2656195346653807,0.7945511727589767,-0.7664247140996134,-0.5167707200070257,0.6757407501481238,-0.5685784054255085,-0.3597641456495462
++-0.013661589999800272,-0.3281489497763481,0.6389047534972294,0.1308792365227054,0.6332312852857147,-0.389048890374591,-0.3305466717642904,-0.5076957991101425,-0.15749182415532226,0.06288417881265196,0.253734952831729,0.8002038247377463,0.7459378274158079,0.14471765507189738,-0.23974711356596567,0.7190494207848193
++-0.6587322596474383,0.8188365658683667,0.42662072473113843,0.5901480016293985,0.6997960743722469,-0.5835849054098734,-0.0546100350906209,0.5148383481529748,-0.12147445994822359,-0.8878647172685175,0.1736021960155516,-0.9482031277658456,-0.6706006901814101,0.02039879794445243,0.17722047160627552,-0.5494459255600357
++0.9944516034519038,-0.3667188868126192,0.8558822460007307,-0.11788994189674207,0.4133418160765052,0.6792171996618557,-0.39354826424460554,-0.6382183058167172,-0.01935460173085035,0.6440893996546722,0.3983825520058324,0.32435721973088016,0.8086605772838129,-0.9865423205310249,0.7685581047510504,0.3649709247610369
++0.9645480139613929,0.007196954322446603,0.3849464304311927,-0.41534968585835896,0.6183302711548755,0.7512952065856064,0.977605872321677,-0.5219496942098161,-0.6065793782427835,0.6395091775321222,-0.7753491496848779,-0.31947902475201295,0.8310764785432989,-0.24086418179731117,0.6548171271848247,-0.7181518576226569
++0.10392572926221488,-0.9960228458666913,0.24329774396832815,-0.007218902680639516,-0.46195227850059095,-0.22775292095809907,0.5170986426079844,-0.7688755830562746,0.6197879642909672,-0.717524054421105,-0.6467295750993614,-0.40342368981638144,-0.7557089006225057,-0.9128424548604341,0.06240545314310686,0.920623279292037
++0.5322136506908903,0.23456943299825506,0.18432121230114462,-0.7046448159652592,0.023340437548953652,0.786530595546846,0.5679613131398791,-0.28283023164734433,-0.3681440982708415,-0.9011465943870665,0.473634360349672,-0.2639152637035911,-0.43369123809007704,-0.6889606734993332,-0.815371507078462,-0.9454666540836327
++0.7652343420138252,-0.2013918947613924,-0.0005331899975180576,0.7748728133468059,0.458158934313285,-0.7951029735775395,-0.0008126921912403606,0.686312638422669,-0.3770741710608334,-0.5294596394231117,-0.005926822002298104,0.24279879316979835,0.9164519844007226,-0.5078482312789123,-0.36721418512784276,0.9432087887762335
++0.7222771339189791,-0.005454696303068385,-0.2915134501204564,-0.7750734383650992,0.11723817845525897,0.5938360682630202,-0.010768256677477828,0.707408394316926,-0.5112327016133762,-0.7811099248727826,0.009951608581912241,-0.9732203623144933,0.5584545603101057,0.1105202142888062,-0.5694403298492954,-0.5994379771008778
++0.16162361494760624,-0.38704335280463753,-0.24854788977398545,0.30634162979715196,-0.9589719891404087,-0.28267606687891167,0.3221538699420512,-0.14910428273091658,0.9826883395419368,0.8508936334056303,0.6357584934988769,-0.5769135998104313,0.09376796925103226,-0.7821970510219409,-0.4663891893964558,-0.831632538112201
++0.6781753267827875,0.33905137367641647,0.8568353804544486,-0.8044271187219234,0.8877682037516639,-0.42203276645299903,0.3018591966647832,0.4258736457862886,0.2516337015828114,-0.07738276731259952,0.27310534966390354,0.7807176102748643,0.898884317161128,0.6441762343991813,0.6359073989739275,-0.11625956839410301
++-0.07355380841233794,-0.5991475894981364,0.48881631753298627,0.8946664818555352,-0.371995389237056,-0.8401918579894088,-0.591993878817975,0.15712232369874823,0.450549308287469,-0.8996673112741782,-0.8791981995418927,-0.03761206035791265,-0.5700742657864488,-0.9387493444567108,-0.8726216475381954,-0.7551117821103108
++0.735759638534258,0.5266432943362018,-0.8262895940291652,0.6882150373152043,-0.7506471583585688,-0.04982341472396001,-0.7949918517940822,-0.44235127186122525,-0.9882223934879146,-0.4441028983344111,0.5519251325075518,0.6516444941449673,-0.3163693937495182,0.6633576579373552,-0.14305762257033017,-0.917498174903457
++0.689026547247694,0.8862140749559642,-0.45937080150886866,-0.13100395155291333,0.3676584062185373,0.2613141202862099,-0.12666968197987072,-0.41039307001428993,0.5753567913599895,-0.5411831823678792,0.7960685297548984,-0.16290877512290147,-0.12264052078463594,0.8722752925535249,-0.5794202635727537,-0.5970693001492524
++-0.02170263409045292,0.697648704435414,-0.11226839738443095,-0.8622529689920502,0.7835929345134811,0.1860181129625269,0.4094767632543719,0.44077211442817377,-0.695785490796218,-0.6610229471283056,0.38672965984834384,-0.1503230719293971,0.09955025998329337,0.895028592696677,0.7080541552493977,-0.30929665194905875
+diff --git a/Thread-1/data/q0_instruction.tsv b/Thread-1/data/q0_instruction.tsv
+index 7447456..65e950a 100644
+--- a/Thread-1/data/q0_instruction.tsv
++++ b/Thread-1/data/q0_instruction.tsv
+@@ -1,20 +1,20 @@
+-1 3 5 1
+-1 1 2 0
+-1 7 5 0
+-1 2 9 1
+-0 0 1 2 3 4 5 6 7 8
+-0 7 3 5 9
+-1 1 2 0
+-1 0 6 1
+-2 7 -1 1 5 6
+-1 4 5 0
+-1 3 8 1
+-0 5 6 2 9
+-0 1 2 3 5 7 8 9
+-1 3 7 1
+-1 8 9 0
+-2 8 -1 3 2 4 6
+-2 3 -1 1 7 8 9
+-1 1 3 1
+-1 2 4 0
++1 3 5 1
++1 1 2 0
++1 7 5 0
++1 2 9 1
++0 0 1 2 3 4 5 6 7 8
++0 7 3 5 9
++1 1 2 0
++1 0 6 1
++2 7 -1 1 5 6
++1 4 5 0
++1 3 8 1
++0 5 6 2 9
++0 1 2 3 5 7 8 9
++1 3 7 1
++1 8 9 0
++2 8 -1 3 2 4 6
++2 3 -1 1 7 8 9
++1 1 3 1
++1 2 4 0
+ 2 2 -1 4 5 6 3 7 9
+\ No newline at end of file
+diff --git a/Thread-1/data/q1.in b/Thread-1/data/q1.in
+index a7e4563..f9a8604 100644
+--- a/Thread-1/data/q1.in
++++ b/Thread-1/data/q1.in
+@@ -1,20 +1,20 @@
+--0.9166718150866153,0.43829227278389205,-0.6129205231425989,0.7738693110376684,-0.04456069156634124,0.8807831166061564,-0.8206278700342509,0.5013513447020947,0.8570578529268591,0.3906799520892723,0.6558968505921785,0.0011654760044317314,0.3008835791217257,-0.15983430198414705,-0.0693333837225647,-0.6526558237637923
+-0.9210598583969818,0.42579710374854174,0.4036360259825613,0.030714658443632636,-0.885772459758438,-0.24727514094877123,0.7355606108008894,0.10546495518591437,-0.8023562184533268,-0.49625645997262624,-0.9207327565798142,-0.5815206606673406,0.9351907452001367,0.3172382122419557,0.003001769800845988,-0.922981014248552
+--0.5965568413505009,0.09650184318674637,0.6008404234282114,-0.36476902674868983,-0.010850908242431956,0.764068687448312,0.07574350440340671,0.17571450752937356,-0.8171966361630094,0.9651584811421219,-0.3418701780268467,0.9853471761319244,-0.12550940725520165,0.4589100006311786,0.43815748442548386,0.9705357673477955
+-0.993889214450193,-0.8189165981690414,0.04917164289121412,-0.7530365630876577,-0.5538830208217513,0.7583652630943165,0.5543977049957343,-0.6234411607408261,-0.2594219505869344,0.0167988118252671,-0.9217323318156883,-0.375213018259823,0.14784668217470842,-0.4692513166767862,0.46235112775477427,0.12296988932525932
+--0.8793341414217637,-0.6402283188497377,0.8392493288060314,0.023482332116210758,-0.5409383253499991,0.8026327950872136,-0.6065373556670386,0.6888084300076232,-0.6283940592555368,0.10147943389628145,0.4827634350786061,-0.13302981763357224,-0.8807152975057908,-0.6541439052369178,-0.7731928918072759,0.6164384986356892
+-0.9848390793791464,0.2336479492878787,-0.03581470862613423,-0.8796023192670523,0.5757823579359684,0.4491579106812056,-0.43149525961566915,0.14167627382710624,0.34228128171791594,-0.2656195346653807,0.7945511727589767,-0.7664247140996134,-0.5167707200070257,0.6757407501481238,-0.5685784054255085,-0.3597641456495462
+--0.013661589999800272,-0.3281489497763481,0.6389047534972294,0.1308792365227054,0.6332312852857147,-0.389048890374591,-0.3305466717642904,-0.5076957991101425,-0.15749182415532226,0.06288417881265196,0.253734952831729,0.8002038247377463,0.7459378274158079,0.14471765507189738,-0.23974711356596567,0.7190494207848193
+--0.6587322596474383,0.8188365658683667,0.42662072473113843,0.5901480016293985,0.6997960743722469,-0.5835849054098734,-0.0546100350906209,0.5148383481529748,-0.12147445994822359,-0.8878647172685175,0.1736021960155516,-0.9482031277658456,-0.6706006901814101,0.02039879794445243,0.17722047160627552,-0.5494459255600357
+-0.9944516034519038,-0.3667188868126192,0.8558822460007307,-0.11788994189674207,0.4133418160765052,0.6792171996618557,-0.39354826424460554,-0.6382183058167172,-0.01935460173085035,0.6440893996546722,0.3983825520058324,0.32435721973088016,0.8086605772838129,-0.9865423205310249,0.7685581047510504,0.3649709247610369
+-0.9645480139613929,0.007196954322446603,0.3849464304311927,-0.41534968585835896,0.6183302711548755,0.7512952065856064,0.977605872321677,-0.5219496942098161,-0.6065793782427835,0.6395091775321222,-0.7753491496848779,-0.31947902475201295,0.8310764785432989,-0.24086418179731117,0.6548171271848247,-0.7181518576226569
+-0.10392572926221488,-0.9960228458666913,0.24329774396832815,-0.007218902680639516,-0.46195227850059095,-0.22775292095809907,0.5170986426079844,-0.7688755830562746,0.6197879642909672,-0.717524054421105,-0.6467295750993614,-0.40342368981638144,-0.7557089006225057,-0.9128424548604341,0.06240545314310686,0.920623279292037
+-0.5322136506908903,0.23456943299825506,0.18432121230114462,-0.7046448159652592,0.023340437548953652,0.786530595546846,0.5679613131398791,-0.28283023164734433,-0.3681440982708415,-0.9011465943870665,0.473634360349672,-0.2639152637035911,-0.43369123809007704,-0.6889606734993332,-0.815371507078462,-0.9454666540836327
+-0.7652343420138252,-0.2013918947613924,-0.0005331899975180576,0.7748728133468059,0.458158934313285,-0.7951029735775395,-0.0008126921912403606,0.686312638422669,-0.3770741710608334,-0.5294596394231117,-0.005926822002298104,0.24279879316979835,0.9164519844007226,-0.5078482312789123,-0.36721418512784276,0.9432087887762335
+-0.7222771339189791,-0.005454696303068385,-0.2915134501204564,-0.7750734383650992,0.11723817845525897,0.5938360682630202,-0.010768256677477828,0.707408394316926,-0.5112327016133762,-0.7811099248727826,0.009951608581912241,-0.9732203623144933,0.5584545603101057,0.1105202142888062,-0.5694403298492954,-0.5994379771008778
+-0.16162361494760624,-0.38704335280463753,-0.24854788977398545,0.30634162979715196,-0.9589719891404087,-0.28267606687891167,0.3221538699420512,-0.14910428273091658,0.9826883395419368,0.8508936334056303,0.6357584934988769,-0.5769135998104313,0.09376796925103226,-0.7821970510219409,-0.4663891893964558,-0.831632538112201
+-0.6781753267827875,0.33905137367641647,0.8568353804544486,-0.8044271187219234,0.8877682037516639,-0.42203276645299903,0.3018591966647832,0.4258736457862886,0.2516337015828114,-0.07738276731259952,0.27310534966390354,0.7807176102748643,0.898884317161128,0.6441762343991813,0.6359073989739275,-0.11625956839410301
+--0.07355380841233794,-0.5991475894981364,0.48881631753298627,0.8946664818555352,-0.371995389237056,-0.8401918579894088,-0.591993878817975,0.15712232369874823,0.450549308287469,-0.8996673112741782,-0.8791981995418927,-0.03761206035791265,-0.5700742657864488,-0.9387493444567108,-0.8726216475381954,-0.7551117821103108
+-0.735759638534258,0.5266432943362018,-0.8262895940291652,0.6882150373152043,-0.7506471583585688,-0.04982341472396001,-0.7949918517940822,-0.44235127186122525,-0.9882223934879146,-0.4441028983344111,0.5519251325075518,0.6516444941449673,-0.3163693937495182,0.6633576579373552,-0.14305762257033017,-0.917498174903457
+-0.689026547247694,0.8862140749559642,-0.45937080150886866,-0.13100395155291333,0.3676584062185373,0.2613141202862099,-0.12666968197987072,-0.41039307001428993,0.5753567913599895,-0.5411831823678792,0.7960685297548984,-0.16290877512290147,-0.12264052078463594,0.8722752925535249,-0.5794202635727537,-0.5970693001492524
+--0.02170263409045292,0.697648704435414,-0.11226839738443095,-0.8622529689920502,0.7835929345134811,0.1860181129625269,0.4094767632543719,0.44077211442817377,-0.695785490796218,-0.6610229471283056,0.38672965984834384,-0.1503230719293971,0.09955025998329337,0.895028592696677,0.7080541552493977,-0.30929665194905875
++-0.9166718150866153,0.43829227278389205,-0.6129205231425989,0.7738693110376684,-0.04456069156634124,0.8807831166061564,-0.8206278700342509,0.5013513447020947,0.8570578529268591,0.3906799520892723,0.6558968505921785,0.0011654760044317314,0.3008835791217257,-0.15983430198414705,-0.0693333837225647,-0.6526558237637923
++0.9210598583969818,0.42579710374854174,0.4036360259825613,0.030714658443632636,-0.885772459758438,-0.24727514094877123,0.7355606108008894,0.10546495518591437,-0.8023562184533268,-0.49625645997262624,-0.9207327565798142,-0.5815206606673406,0.9351907452001367,0.3172382122419557,0.003001769800845988,-0.922981014248552
++-0.5965568413505009,0.09650184318674637,0.6008404234282114,-0.36476902674868983,-0.010850908242431956,0.764068687448312,0.07574350440340671,0.17571450752937356,-0.8171966361630094,0.9651584811421219,-0.3418701780268467,0.9853471761319244,-0.12550940725520165,0.4589100006311786,0.43815748442548386,0.9705357673477955
++0.993889214450193,-0.8189165981690414,0.04917164289121412,-0.7530365630876577,-0.5538830208217513,0.7583652630943165,0.5543977049957343,-0.6234411607408261,-0.2594219505869344,0.0167988118252671,-0.9217323318156883,-0.375213018259823,0.14784668217470842,-0.4692513166767862,0.46235112775477427,0.12296988932525932
++-0.8793341414217637,-0.6402283188497377,0.8392493288060314,0.023482332116210758,-0.5409383253499991,0.8026327950872136,-0.6065373556670386,0.6888084300076232,-0.6283940592555368,0.10147943389628145,0.4827634350786061,-0.13302981763357224,-0.8807152975057908,-0.6541439052369178,-0.7731928918072759,0.6164384986356892
++0.9848390793791464,0.2336479492878787,-0.03581470862613423,-0.8796023192670523,0.5757823579359684,0.4491579106812056,-0.43149525961566915,0.14167627382710624,0.34228128171791594,-0.2656195346653807,0.7945511727589767,-0.7664247140996134,-0.5167707200070257,0.6757407501481238,-0.5685784054255085,-0.3597641456495462
++-0.013661589999800272,-0.3281489497763481,0.6389047534972294,0.1308792365227054,0.6332312852857147,-0.389048890374591,-0.3305466717642904,-0.5076957991101425,-0.15749182415532226,0.06288417881265196,0.253734952831729,0.8002038247377463,0.7459378274158079,0.14471765507189738,-0.23974711356596567,0.7190494207848193
++-0.6587322596474383,0.8188365658683667,0.42662072473113843,0.5901480016293985,0.6997960743722469,-0.5835849054098734,-0.0546100350906209,0.5148383481529748,-0.12147445994822359,-0.8878647172685175,0.1736021960155516,-0.9482031277658456,-0.6706006901814101,0.02039879794445243,0.17722047160627552,-0.5494459255600357
++0.9944516034519038,-0.3667188868126192,0.8558822460007307,-0.11788994189674207,0.4133418160765052,0.6792171996618557,-0.39354826424460554,-0.6382183058167172,-0.01935460173085035,0.6440893996546722,0.3983825520058324,0.32435721973088016,0.8086605772838129,-0.9865423205310249,0.7685581047510504,0.3649709247610369
++0.9645480139613929,0.007196954322446603,0.3849464304311927,-0.41534968585835896,0.6183302711548755,0.7512952065856064,0.977605872321677,-0.5219496942098161,-0.6065793782427835,0.6395091775321222,-0.7753491496848779,-0.31947902475201295,0.8310764785432989,-0.24086418179731117,0.6548171271848247,-0.7181518576226569
++0.10392572926221488,-0.9960228458666913,0.24329774396832815,-0.007218902680639516,-0.46195227850059095,-0.22775292095809907,0.5170986426079844,-0.7688755830562746,0.6197879642909672,-0.717524054421105,-0.6467295750993614,-0.40342368981638144,-0.7557089006225057,-0.9128424548604341,0.06240545314310686,0.920623279292037
++0.5322136506908903,0.23456943299825506,0.18432121230114462,-0.7046448159652592,0.023340437548953652,0.786530595546846,0.5679613131398791,-0.28283023164734433,-0.3681440982708415,-0.9011465943870665,0.473634360349672,-0.2639152637035911,-0.43369123809007704,-0.6889606734993332,-0.815371507078462,-0.9454666540836327
++0.7652343420138252,-0.2013918947613924,-0.0005331899975180576,0.7748728133468059,0.458158934313285,-0.7951029735775395,-0.0008126921912403606,0.686312638422669,-0.3770741710608334,-0.5294596394231117,-0.005926822002298104,0.24279879316979835,0.9164519844007226,-0.5078482312789123,-0.36721418512784276,0.9432087887762335
++0.7222771339189791,-0.005454696303068385,-0.2915134501204564,-0.7750734383650992,0.11723817845525897,0.5938360682630202,-0.010768256677477828,0.707408394316926,-0.5112327016133762,-0.7811099248727826,0.009951608581912241,-0.9732203623144933,0.5584545603101057,0.1105202142888062,-0.5694403298492954,-0.5994379771008778
++0.16162361494760624,-0.38704335280463753,-0.24854788977398545,0.30634162979715196,-0.9589719891404087,-0.28267606687891167,0.3221538699420512,-0.14910428273091658,0.9826883395419368,0.8508936334056303,0.6357584934988769,-0.5769135998104313,0.09376796925103226,-0.7821970510219409,-0.4663891893964558,-0.831632538112201
++0.6781753267827875,0.33905137367641647,0.8568353804544486,-0.8044271187219234,0.8877682037516639,-0.42203276645299903,0.3018591966647832,0.4258736457862886,0.2516337015828114,-0.07738276731259952,0.27310534966390354,0.7807176102748643,0.898884317161128,0.6441762343991813,0.6359073989739275,-0.11625956839410301
++-0.07355380841233794,-0.5991475894981364,0.48881631753298627,0.8946664818555352,-0.371995389237056,-0.8401918579894088,-0.591993878817975,0.15712232369874823,0.450549308287469,-0.8996673112741782,-0.8791981995418927,-0.03761206035791265,-0.5700742657864488,-0.9387493444567108,-0.8726216475381954,-0.7551117821103108
++0.735759638534258,0.5266432943362018,-0.8262895940291652,0.6882150373152043,-0.7506471583585688,-0.04982341472396001,-0.7949918517940822,-0.44235127186122525,-0.9882223934879146,-0.4441028983344111,0.5519251325075518,0.6516444941449673,-0.3163693937495182,0.6633576579373552,-0.14305762257033017,-0.917498174903457
++0.689026547247694,0.8862140749559642,-0.45937080150886866,-0.13100395155291333,0.3676584062185373,0.2613141202862099,-0.12666968197987072,-0.41039307001428993,0.5753567913599895,-0.5411831823678792,0.7960685297548984,-0.16290877512290147,-0.12264052078463594,0.8722752925535249,-0.5794202635727537,-0.5970693001492524
++-0.02170263409045292,0.697648704435414,-0.11226839738443095,-0.8622529689920502,0.7835929345134811,0.1860181129625269,0.4094767632543719,0.44077211442817377,-0.695785490796218,-0.6610229471283056,0.38672965984834384,-0.1503230719293971,0.09955025998329337,0.895028592696677,0.7080541552493977,-0.30929665194905875
+diff --git a/Thread-1/data/q1_instruction.tsv b/Thread-1/data/q1_instruction.tsv
+index c1f5312..8caae94 100644
+--- a/Thread-1/data/q1_instruction.tsv
++++ b/Thread-1/data/q1_instruction.tsv
+@@ -1,11 +1,11 @@
+-0 0 1 2 3 4 5 6 7 8
+-0 7 3 5 9
+-1 1 3 0
+-0 8 4 2 0
+-1 7 3 1
+-1 4 5 1
+-1 3 6 0
+-1 9 7 0
+-0 5 6 2 9
+-0 1 2 3 5 7 8 9
++0 0 1 2 3 4 5 6 7 8
++0 7 3 5 9
++1 1 3 0
++0 8 4 2 0
++1 7 3 1
++1 4 5 1
++1 3 6 0
++1 9 7 0
++0 5 6 2 9
++0 1 2 3 5 7 8 9
+ 1 7 8 1
+\ No newline at end of file
+diff --git a/Thread-1/data/q2.in b/Thread-1/data/q2.in
+index a7e4563..f9a8604 100644
+--- a/Thread-1/data/q2.in
++++ b/Thread-1/data/q2.in
+@@ -1,20 +1,20 @@
+--0.9166718150866153,0.43829227278389205,-0.6129205231425989,0.7738693110376684,-0.04456069156634124,0.8807831166061564,-0.8206278700342509,0.5013513447020947,0.8570578529268591,0.3906799520892723,0.6558968505921785,0.0011654760044317314,0.3008835791217257,-0.15983430198414705,-0.0693333837225647,-0.6526558237637923
+-0.9210598583969818,0.42579710374854174,0.4036360259825613,0.030714658443632636,-0.885772459758438,-0.24727514094877123,0.7355606108008894,0.10546495518591437,-0.8023562184533268,-0.49625645997262624,-0.9207327565798142,-0.5815206606673406,0.9351907452001367,0.3172382122419557,0.003001769800845988,-0.922981014248552
+--0.5965568413505009,0.09650184318674637,0.6008404234282114,-0.36476902674868983,-0.010850908242431956,0.764068687448312,0.07574350440340671,0.17571450752937356,-0.8171966361630094,0.9651584811421219,-0.3418701780268467,0.9853471761319244,-0.12550940725520165,0.4589100006311786,0.43815748442548386,0.9705357673477955
+-0.993889214450193,-0.8189165981690414,0.04917164289121412,-0.7530365630876577,-0.5538830208217513,0.7583652630943165,0.5543977049957343,-0.6234411607408261,-0.2594219505869344,0.0167988118252671,-0.9217323318156883,-0.375213018259823,0.14784668217470842,-0.4692513166767862,0.46235112775477427,0.12296988932525932
+--0.8793341414217637,-0.6402283188497377,0.8392493288060314,0.023482332116210758,-0.5409383253499991,0.8026327950872136,-0.6065373556670386,0.6888084300076232,-0.6283940592555368,0.10147943389628145,0.4827634350786061,-0.13302981763357224,-0.8807152975057908,-0.6541439052369178,-0.7731928918072759,0.6164384986356892
+-0.9848390793791464,0.2336479492878787,-0.03581470862613423,-0.8796023192670523,0.5757823579359684,0.4491579106812056,-0.43149525961566915,0.14167627382710624,0.34228128171791594,-0.2656195346653807,0.7945511727589767,-0.7664247140996134,-0.5167707200070257,0.6757407501481238,-0.5685784054255085,-0.3597641456495462
+--0.013661589999800272,-0.3281489497763481,0.6389047534972294,0.1308792365227054,0.6332312852857147,-0.389048890374591,-0.3305466717642904,-0.5076957991101425,-0.15749182415532226,0.06288417881265196,0.253734952831729,0.8002038247377463,0.7459378274158079,0.14471765507189738,-0.23974711356596567,0.7190494207848193
+--0.6587322596474383,0.8188365658683667,0.42662072473113843,0.5901480016293985,0.6997960743722469,-0.5835849054098734,-0.0546100350906209,0.5148383481529748,-0.12147445994822359,-0.8878647172685175,0.1736021960155516,-0.9482031277658456,-0.6706006901814101,0.02039879794445243,0.17722047160627552,-0.5494459255600357
+-0.9944516034519038,-0.3667188868126192,0.8558822460007307,-0.11788994189674207,0.4133418160765052,0.6792171996618557,-0.39354826424460554,-0.6382183058167172,-0.01935460173085035,0.6440893996546722,0.3983825520058324,0.32435721973088016,0.8086605772838129,-0.9865423205310249,0.7685581047510504,0.3649709247610369
+-0.9645480139613929,0.007196954322446603,0.3849464304311927,-0.41534968585835896,0.6183302711548755,0.7512952065856064,0.977605872321677,-0.5219496942098161,-0.6065793782427835,0.6395091775321222,-0.7753491496848779,-0.31947902475201295,0.8310764785432989,-0.24086418179731117,0.6548171271848247,-0.7181518576226569
+-0.10392572926221488,-0.9960228458666913,0.24329774396832815,-0.007218902680639516,-0.46195227850059095,-0.22775292095809907,0.5170986426079844,-0.7688755830562746,0.6197879642909672,-0.717524054421105,-0.6467295750993614,-0.40342368981638144,-0.7557089006225057,-0.9128424548604341,0.06240545314310686,0.920623279292037
+-0.5322136506908903,0.23456943299825506,0.18432121230114462,-0.7046448159652592,0.023340437548953652,0.786530595546846,0.5679613131398791,-0.28283023164734433,-0.3681440982708415,-0.9011465943870665,0.473634360349672,-0.2639152637035911,-0.43369123809007704,-0.6889606734993332,-0.815371507078462,-0.9454666540836327
+-0.7652343420138252,-0.2013918947613924,-0.0005331899975180576,0.7748728133468059,0.458158934313285,-0.7951029735775395,-0.0008126921912403606,0.686312638422669,-0.3770741710608334,-0.5294596394231117,-0.005926822002298104,0.24279879316979835,0.9164519844007226,-0.5078482312789123,-0.36721418512784276,0.9432087887762335
+-0.7222771339189791,-0.005454696303068385,-0.2915134501204564,-0.7750734383650992,0.11723817845525897,0.5938360682630202,-0.010768256677477828,0.707408394316926,-0.5112327016133762,-0.7811099248727826,0.009951608581912241,-0.9732203623144933,0.5584545603101057,0.1105202142888062,-0.5694403298492954,-0.5994379771008778
+-0.16162361494760624,-0.38704335280463753,-0.24854788977398545,0.30634162979715196,-0.9589719891404087,-0.28267606687891167,0.3221538699420512,-0.14910428273091658,0.9826883395419368,0.8508936334056303,0.6357584934988769,-0.5769135998104313,0.09376796925103226,-0.7821970510219409,-0.4663891893964558,-0.831632538112201
+-0.6781753267827875,0.33905137367641647,0.8568353804544486,-0.8044271187219234,0.8877682037516639,-0.42203276645299903,0.3018591966647832,0.4258736457862886,0.2516337015828114,-0.07738276731259952,0.27310534966390354,0.7807176102748643,0.898884317161128,0.6441762343991813,0.6359073989739275,-0.11625956839410301
+--0.07355380841233794,-0.5991475894981364,0.48881631753298627,0.8946664818555352,-0.371995389237056,-0.8401918579894088,-0.591993878817975,0.15712232369874823,0.450549308287469,-0.8996673112741782,-0.8791981995418927,-0.03761206035791265,-0.5700742657864488,-0.9387493444567108,-0.8726216475381954,-0.7551117821103108
+-0.735759638534258,0.5266432943362018,-0.8262895940291652,0.6882150373152043,-0.7506471583585688,-0.04982341472396001,-0.7949918517940822,-0.44235127186122525,-0.9882223934879146,-0.4441028983344111,0.5519251325075518,0.6516444941449673,-0.3163693937495182,0.6633576579373552,-0.14305762257033017,-0.917498174903457
+-0.689026547247694,0.8862140749559642,-0.45937080150886866,-0.13100395155291333,0.3676584062185373,0.2613141202862099,-0.12666968197987072,-0.41039307001428993,0.5753567913599895,-0.5411831823678792,0.7960685297548984,-0.16290877512290147,-0.12264052078463594,0.8722752925535249,-0.5794202635727537,-0.5970693001492524
+--0.02170263409045292,0.697648704435414,-0.11226839738443095,-0.8622529689920502,0.7835929345134811,0.1860181129625269,0.4094767632543719,0.44077211442817377,-0.695785490796218,-0.6610229471283056,0.38672965984834384,-0.1503230719293971,0.09955025998329337,0.895028592696677,0.7080541552493977,-0.30929665194905875
++-0.9166718150866153,0.43829227278389205,-0.6129205231425989,0.7738693110376684,-0.04456069156634124,0.8807831166061564,-0.8206278700342509,0.5013513447020947,0.8570578529268591,0.3906799520892723,0.6558968505921785,0.0011654760044317314,0.3008835791217257,-0.15983430198414705,-0.0693333837225647,-0.6526558237637923
++0.9210598583969818,0.42579710374854174,0.4036360259825613,0.030714658443632636,-0.885772459758438,-0.24727514094877123,0.7355606108008894,0.10546495518591437,-0.8023562184533268,-0.49625645997262624,-0.9207327565798142,-0.5815206606673406,0.9351907452001367,0.3172382122419557,0.003001769800845988,-0.922981014248552
++-0.5965568413505009,0.09650184318674637,0.6008404234282114,-0.36476902674868983,-0.010850908242431956,0.764068687448312,0.07574350440340671,0.17571450752937356,-0.8171966361630094,0.9651584811421219,-0.3418701780268467,0.9853471761319244,-0.12550940725520165,0.4589100006311786,0.43815748442548386,0.9705357673477955
++0.993889214450193,-0.8189165981690414,0.04917164289121412,-0.7530365630876577,-0.5538830208217513,0.7583652630943165,0.5543977049957343,-0.6234411607408261,-0.2594219505869344,0.0167988118252671,-0.9217323318156883,-0.375213018259823,0.14784668217470842,-0.4692513166767862,0.46235112775477427,0.12296988932525932
++-0.8793341414217637,-0.6402283188497377,0.8392493288060314,0.023482332116210758,-0.5409383253499991,0.8026327950872136,-0.6065373556670386,0.6888084300076232,-0.6283940592555368,0.10147943389628145,0.4827634350786061,-0.13302981763357224,-0.8807152975057908,-0.6541439052369178,-0.7731928918072759,0.6164384986356892
++0.9848390793791464,0.2336479492878787,-0.03581470862613423,-0.8796023192670523,0.5757823579359684,0.4491579106812056,-0.43149525961566915,0.14167627382710624,0.34228128171791594,-0.2656195346653807,0.7945511727589767,-0.7664247140996134,-0.5167707200070257,0.6757407501481238,-0.5685784054255085,-0.3597641456495462
++-0.013661589999800272,-0.3281489497763481,0.6389047534972294,0.1308792365227054,0.6332312852857147,-0.389048890374591,-0.3305466717642904,-0.5076957991101425,-0.15749182415532226,0.06288417881265196,0.253734952831729,0.8002038247377463,0.7459378274158079,0.14471765507189738,-0.23974711356596567,0.7190494207848193
++-0.6587322596474383,0.8188365658683667,0.42662072473113843,0.5901480016293985,0.6997960743722469,-0.5835849054098734,-0.0546100350906209,0.5148383481529748,-0.12147445994822359,-0.8878647172685175,0.1736021960155516,-0.9482031277658456,-0.6706006901814101,0.02039879794445243,0.17722047160627552,-0.5494459255600357
++0.9944516034519038,-0.3667188868126192,0.8558822460007307,-0.11788994189674207,0.4133418160765052,0.6792171996618557,-0.39354826424460554,-0.6382183058167172,-0.01935460173085035,0.6440893996546722,0.3983825520058324,0.32435721973088016,0.8086605772838129,-0.9865423205310249,0.7685581047510504,0.3649709247610369
++0.9645480139613929,0.007196954322446603,0.3849464304311927,-0.41534968585835896,0.6183302711548755,0.7512952065856064,0.977605872321677,-0.5219496942098161,-0.6065793782427835,0.6395091775321222,-0.7753491496848779,-0.31947902475201295,0.8310764785432989,-0.24086418179731117,0.6548171271848247,-0.7181518576226569
++0.10392572926221488,-0.9960228458666913,0.24329774396832815,-0.007218902680639516,-0.46195227850059095,-0.22775292095809907,0.5170986426079844,-0.7688755830562746,0.6197879642909672,-0.717524054421105,-0.6467295750993614,-0.40342368981638144,-0.7557089006225057,-0.9128424548604341,0.06240545314310686,0.920623279292037
++0.5322136506908903,0.23456943299825506,0.18432121230114462,-0.7046448159652592,0.023340437548953652,0.786530595546846,0.5679613131398791,-0.28283023164734433,-0.3681440982708415,-0.9011465943870665,0.473634360349672,-0.2639152637035911,-0.43369123809007704,-0.6889606734993332,-0.815371507078462,-0.9454666540836327
++0.7652343420138252,-0.2013918947613924,-0.0005331899975180576,0.7748728133468059,0.458158934313285,-0.7951029735775395,-0.0008126921912403606,0.686312638422669,-0.3770741710608334,-0.5294596394231117,-0.005926822002298104,0.24279879316979835,0.9164519844007226,-0.5078482312789123,-0.36721418512784276,0.9432087887762335
++0.7222771339189791,-0.005454696303068385,-0.2915134501204564,-0.7750734383650992,0.11723817845525897,0.5938360682630202,-0.010768256677477828,0.707408394316926,-0.5112327016133762,-0.7811099248727826,0.009951608581912241,-0.9732203623144933,0.5584545603101057,0.1105202142888062,-0.5694403298492954,-0.5994379771008778
++0.16162361494760624,-0.38704335280463753,-0.24854788977398545,0.30634162979715196,-0.9589719891404087,-0.28267606687891167,0.3221538699420512,-0.14910428273091658,0.9826883395419368,0.8508936334056303,0.6357584934988769,-0.5769135998104313,0.09376796925103226,-0.7821970510219409,-0.4663891893964558,-0.831632538112201
++0.6781753267827875,0.33905137367641647,0.8568353804544486,-0.8044271187219234,0.8877682037516639,-0.42203276645299903,0.3018591966647832,0.4258736457862886,0.2516337015828114,-0.07738276731259952,0.27310534966390354,0.7807176102748643,0.898884317161128,0.6441762343991813,0.6359073989739275,-0.11625956839410301
++-0.07355380841233794,-0.5991475894981364,0.48881631753298627,0.8946664818555352,-0.371995389237056,-0.8401918579894088,-0.591993878817975,0.15712232369874823,0.450549308287469,-0.8996673112741782,-0.8791981995418927,-0.03761206035791265,-0.5700742657864488,-0.9387493444567108,-0.8726216475381954,-0.7551117821103108
++0.735759638534258,0.5266432943362018,-0.8262895940291652,0.6882150373152043,-0.7506471583585688,-0.04982341472396001,-0.7949918517940822,-0.44235127186122525,-0.9882223934879146,-0.4441028983344111,0.5519251325075518,0.6516444941449673,-0.3163693937495182,0.6633576579373552,-0.14305762257033017,-0.917498174903457
++0.689026547247694,0.8862140749559642,-0.45937080150886866,-0.13100395155291333,0.3676584062185373,0.2613141202862099,-0.12666968197987072,-0.41039307001428993,0.5753567913599895,-0.5411831823678792,0.7960685297548984,-0.16290877512290147,-0.12264052078463594,0.8722752925535249,-0.5794202635727537,-0.5970693001492524
++-0.02170263409045292,0.697648704435414,-0.11226839738443095,-0.8622529689920502,0.7835929345134811,0.1860181129625269,0.4094767632543719,0.44077211442817377,-0.695785490796218,-0.6610229471283056,0.38672965984834384,-0.1503230719293971,0.09955025998329337,0.895028592696677,0.7080541552493977,-0.30929665194905875
+diff --git a/Thread-1/data/q2_instruction.tsv b/Thread-1/data/q2_instruction.tsv
+index c1f5312..8caae94 100644
+--- a/Thread-1/data/q2_instruction.tsv
++++ b/Thread-1/data/q2_instruction.tsv
+@@ -1,11 +1,11 @@
+-0 0 1 2 3 4 5 6 7 8
+-0 7 3 5 9
+-1 1 3 0
+-0 8 4 2 0
+-1 7 3 1
+-1 4 5 1
+-1 3 6 0
+-1 9 7 0
+-0 5 6 2 9
+-0 1 2 3 5 7 8 9
++0 0 1 2 3 4 5 6 7 8
++0 7 3 5 9
++1 1 3 0
++0 8 4 2 0
++1 7 3 1
++1 4 5 1
++1 3 6 0
++1 9 7 0
++0 5 6 2 9
++0 1 2 3 5 7 8 9
+ 1 7 8 1
+\ No newline at end of file
+diff --git a/Thread-1/data/q3.in b/Thread-1/data/q3.in
+index a7e4563..f9a8604 100644
+--- a/Thread-1/data/q3.in
++++ b/Thread-1/data/q3.in
+@@ -1,20 +1,20 @@
+--0.9166718150866153,0.43829227278389205,-0.6129205231425989,0.7738693110376684,-0.04456069156634124,0.8807831166061564,-0.8206278700342509,0.5013513447020947,0.8570578529268591,0.3906799520892723,0.6558968505921785,0.0011654760044317314,0.3008835791217257,-0.15983430198414705,-0.0693333837225647,-0.6526558237637923
+-0.9210598583969818,0.42579710374854174,0.4036360259825613,0.030714658443632636,-0.885772459758438,-0.24727514094877123,0.7355606108008894,0.10546495518591437,-0.8023562184533268,-0.49625645997262624,-0.9207327565798142,-0.5815206606673406,0.9351907452001367,0.3172382122419557,0.003001769800845988,-0.922981014248552
+--0.5965568413505009,0.09650184318674637,0.6008404234282114,-0.36476902674868983,-0.010850908242431956,0.764068687448312,0.07574350440340671,0.17571450752937356,-0.8171966361630094,0.9651584811421219,-0.3418701780268467,0.9853471761319244,-0.12550940725520165,0.4589100006311786,0.43815748442548386,0.9705357673477955
+-0.993889214450193,-0.8189165981690414,0.04917164289121412,-0.7530365630876577,-0.5538830208217513,0.7583652630943165,0.5543977049957343,-0.6234411607408261,-0.2594219505869344,0.0167988118252671,-0.9217323318156883,-0.375213018259823,0.14784668217470842,-0.4692513166767862,0.46235112775477427,0.12296988932525932
+--0.8793341414217637,-0.6402283188497377,0.8392493288060314,0.023482332116210758,-0.5409383253499991,0.8026327950872136,-0.6065373556670386,0.6888084300076232,-0.6283940592555368,0.10147943389628145,0.4827634350786061,-0.13302981763357224,-0.8807152975057908,-0.6541439052369178,-0.7731928918072759,0.6164384986356892
+-0.9848390793791464,0.2336479492878787,-0.03581470862613423,-0.8796023192670523,0.5757823579359684,0.4491579106812056,-0.43149525961566915,0.14167627382710624,0.34228128171791594,-0.2656195346653807,0.7945511727589767,-0.7664247140996134,-0.5167707200070257,0.6757407501481238,-0.5685784054255085,-0.3597641456495462
+--0.013661589999800272,-0.3281489497763481,0.6389047534972294,0.1308792365227054,0.6332312852857147,-0.389048890374591,-0.3305466717642904,-0.5076957991101425,-0.15749182415532226,0.06288417881265196,0.253734952831729,0.8002038247377463,0.7459378274158079,0.14471765507189738,-0.23974711356596567,0.7190494207848193
+--0.6587322596474383,0.8188365658683667,0.42662072473113843,0.5901480016293985,0.6997960743722469,-0.5835849054098734,-0.0546100350906209,0.5148383481529748,-0.12147445994822359,-0.8878647172685175,0.1736021960155516,-0.9482031277658456,-0.6706006901814101,0.02039879794445243,0.17722047160627552,-0.5494459255600357
+-0.9944516034519038,-0.3667188868126192,0.8558822460007307,-0.11788994189674207,0.4133418160765052,0.6792171996618557,-0.39354826424460554,-0.6382183058167172,-0.01935460173085035,0.6440893996546722,0.3983825520058324,0.32435721973088016,0.8086605772838129,-0.9865423205310249,0.7685581047510504,0.3649709247610369
+-0.9645480139613929,0.007196954322446603,0.3849464304311927,-0.41534968585835896,0.6183302711548755,0.7512952065856064,0.977605872321677,-0.5219496942098161,-0.6065793782427835,0.6395091775321222,-0.7753491496848779,-0.31947902475201295,0.8310764785432989,-0.24086418179731117,0.6548171271848247,-0.7181518576226569
+-0.10392572926221488,-0.9960228458666913,0.24329774396832815,-0.007218902680639516,-0.46195227850059095,-0.22775292095809907,0.5170986426079844,-0.7688755830562746,0.6197879642909672,-0.717524054421105,-0.6467295750993614,-0.40342368981638144,-0.7557089006225057,-0.9128424548604341,0.06240545314310686,0.920623279292037
+-0.5322136506908903,0.23456943299825506,0.18432121230114462,-0.7046448159652592,0.023340437548953652,0.786530595546846,0.5679613131398791,-0.28283023164734433,-0.3681440982708415,-0.9011465943870665,0.473634360349672,-0.2639152637035911,-0.43369123809007704,-0.6889606734993332,-0.815371507078462,-0.9454666540836327
+-0.7652343420138252,-0.2013918947613924,-0.0005331899975180576,0.7748728133468059,0.458158934313285,-0.7951029735775395,-0.0008126921912403606,0.686312638422669,-0.3770741710608334,-0.5294596394231117,-0.005926822002298104,0.24279879316979835,0.9164519844007226,-0.5078482312789123,-0.36721418512784276,0.9432087887762335
+-0.7222771339189791,-0.005454696303068385,-0.2915134501204564,-0.7750734383650992,0.11723817845525897,0.5938360682630202,-0.010768256677477828,0.707408394316926,-0.5112327016133762,-0.7811099248727826,0.009951608581912241,-0.9732203623144933,0.5584545603101057,0.1105202142888062,-0.5694403298492954,-0.5994379771008778
+-0.16162361494760624,-0.38704335280463753,-0.24854788977398545,0.30634162979715196,-0.9589719891404087,-0.28267606687891167,0.3221538699420512,-0.14910428273091658,0.9826883395419368,0.8508936334056303,0.6357584934988769,-0.5769135998104313,0.09376796925103226,-0.7821970510219409,-0.4663891893964558,-0.831632538112201
+-0.6781753267827875,0.33905137367641647,0.8568353804544486,-0.8044271187219234,0.8877682037516639,-0.42203276645299903,0.3018591966647832,0.4258736457862886,0.2516337015828114,-0.07738276731259952,0.27310534966390354,0.7807176102748643,0.898884317161128,0.6441762343991813,0.6359073989739275,-0.11625956839410301
+--0.07355380841233794,-0.5991475894981364,0.48881631753298627,0.8946664818555352,-0.371995389237056,-0.8401918579894088,-0.591993878817975,0.15712232369874823,0.450549308287469,-0.8996673112741782,-0.8791981995418927,-0.03761206035791265,-0.5700742657864488,-0.9387493444567108,-0.8726216475381954,-0.7551117821103108
+-0.735759638534258,0.5266432943362018,-0.8262895940291652,0.6882150373152043,-0.7506471583585688,-0.04982341472396001,-0.7949918517940822,-0.44235127186122525,-0.9882223934879146,-0.4441028983344111,0.5519251325075518,0.6516444941449673,-0.3163693937495182,0.6633576579373552,-0.14305762257033017,-0.917498174903457
+-0.689026547247694,0.8862140749559642,-0.45937080150886866,-0.13100395155291333,0.3676584062185373,0.2613141202862099,-0.12666968197987072,-0.41039307001428993,0.5753567913599895,-0.5411831823678792,0.7960685297548984,-0.16290877512290147,-0.12264052078463594,0.8722752925535249,-0.5794202635727537,-0.5970693001492524
+--0.02170263409045292,0.697648704435414,-0.11226839738443095,-0.8622529689920502,0.7835929345134811,0.1860181129625269,0.4094767632543719,0.44077211442817377,-0.695785490796218,-0.6610229471283056,0.38672965984834384,-0.1503230719293971,0.09955025998329337,0.895028592696677,0.7080541552493977,-0.30929665194905875
++-0.9166718150866153,0.43829227278389205,-0.6129205231425989,0.7738693110376684,-0.04456069156634124,0.8807831166061564,-0.8206278700342509,0.5013513447020947,0.8570578529268591,0.3906799520892723,0.6558968505921785,0.0011654760044317314,0.3008835791217257,-0.15983430198414705,-0.0693333837225647,-0.6526558237637923
++0.9210598583969818,0.42579710374854174,0.4036360259825613,0.030714658443632636,-0.885772459758438,-0.24727514094877123,0.7355606108008894,0.10546495518591437,-0.8023562184533268,-0.49625645997262624,-0.9207327565798142,-0.5815206606673406,0.9351907452001367,0.3172382122419557,0.003001769800845988,-0.922981014248552
++-0.5965568413505009,0.09650184318674637,0.6008404234282114,-0.36476902674868983,-0.010850908242431956,0.764068687448312,0.07574350440340671,0.17571450752937356,-0.8171966361630094,0.9651584811421219,-0.3418701780268467,0.9853471761319244,-0.12550940725520165,0.4589100006311786,0.43815748442548386,0.9705357673477955
++0.993889214450193,-0.8189165981690414,0.04917164289121412,-0.7530365630876577,-0.5538830208217513,0.7583652630943165,0.5543977049957343,-0.6234411607408261,-0.2594219505869344,0.0167988118252671,-0.9217323318156883,-0.375213018259823,0.14784668217470842,-0.4692513166767862,0.46235112775477427,0.12296988932525932
++-0.8793341414217637,-0.6402283188497377,0.8392493288060314,0.023482332116210758,-0.5409383253499991,0.8026327950872136,-0.6065373556670386,0.6888084300076232,-0.6283940592555368,0.10147943389628145,0.4827634350786061,-0.13302981763357224,-0.8807152975057908,-0.6541439052369178,-0.7731928918072759,0.6164384986356892
++0.9848390793791464,0.2336479492878787,-0.03581470862613423,-0.8796023192670523,0.5757823579359684,0.4491579106812056,-0.43149525961566915,0.14167627382710624,0.34228128171791594,-0.2656195346653807,0.7945511727589767,-0.7664247140996134,-0.5167707200070257,0.6757407501481238,-0.5685784054255085,-0.3597641456495462
++-0.013661589999800272,-0.3281489497763481,0.6389047534972294,0.1308792365227054,0.6332312852857147,-0.389048890374591,-0.3305466717642904,-0.5076957991101425,-0.15749182415532226,0.06288417881265196,0.253734952831729,0.8002038247377463,0.7459378274158079,0.14471765507189738,-0.23974711356596567,0.7190494207848193
++-0.6587322596474383,0.8188365658683667,0.42662072473113843,0.5901480016293985,0.6997960743722469,-0.5835849054098734,-0.0546100350906209,0.5148383481529748,-0.12147445994822359,-0.8878647172685175,0.1736021960155516,-0.9482031277658456,-0.6706006901814101,0.02039879794445243,0.17722047160627552,-0.5494459255600357
++0.9944516034519038,-0.3667188868126192,0.8558822460007307,-0.11788994189674207,0.4133418160765052,0.6792171996618557,-0.39354826424460554,-0.6382183058167172,-0.01935460173085035,0.6440893996546722,0.3983825520058324,0.32435721973088016,0.8086605772838129,-0.9865423205310249,0.7685581047510504,0.3649709247610369
++0.9645480139613929,0.007196954322446603,0.3849464304311927,-0.41534968585835896,0.6183302711548755,0.7512952065856064,0.977605872321677,-0.5219496942098161,-0.6065793782427835,0.6395091775321222,-0.7753491496848779,-0.31947902475201295,0.8310764785432989,-0.24086418179731117,0.6548171271848247,-0.7181518576226569
++0.10392572926221488,-0.9960228458666913,0.24329774396832815,-0.007218902680639516,-0.46195227850059095,-0.22775292095809907,0.5170986426079844,-0.7688755830562746,0.6197879642909672,-0.717524054421105,-0.6467295750993614,-0.40342368981638144,-0.7557089006225057,-0.9128424548604341,0.06240545314310686,0.920623279292037
++0.5322136506908903,0.23456943299825506,0.18432121230114462,-0.7046448159652592,0.023340437548953652,0.786530595546846,0.5679613131398791,-0.28283023164734433,-0.3681440982708415,-0.9011465943870665,0.473634360349672,-0.2639152637035911,-0.43369123809007704,-0.6889606734993332,-0.815371507078462,-0.9454666540836327
++0.7652343420138252,-0.2013918947613924,-0.0005331899975180576,0.7748728133468059,0.458158934313285,-0.7951029735775395,-0.0008126921912403606,0.686312638422669,-0.3770741710608334,-0.5294596394231117,-0.005926822002298104,0.24279879316979835,0.9164519844007226,-0.5078482312789123,-0.36721418512784276,0.9432087887762335
++0.7222771339189791,-0.005454696303068385,-0.2915134501204564,-0.7750734383650992,0.11723817845525897,0.5938360682630202,-0.010768256677477828,0.707408394316926,-0.5112327016133762,-0.7811099248727826,0.009951608581912241,-0.9732203623144933,0.5584545603101057,0.1105202142888062,-0.5694403298492954,-0.5994379771008778
++0.16162361494760624,-0.38704335280463753,-0.24854788977398545,0.30634162979715196,-0.9589719891404087,-0.28267606687891167,0.3221538699420512,-0.14910428273091658,0.9826883395419368,0.8508936334056303,0.6357584934988769,-0.5769135998104313,0.09376796925103226,-0.7821970510219409,-0.4663891893964558,-0.831632538112201
++0.6781753267827875,0.33905137367641647,0.8568353804544486,-0.8044271187219234,0.8877682037516639,-0.42203276645299903,0.3018591966647832,0.4258736457862886,0.2516337015828114,-0.07738276731259952,0.27310534966390354,0.7807176102748643,0.898884317161128,0.6441762343991813,0.6359073989739275,-0.11625956839410301
++-0.07355380841233794,-0.5991475894981364,0.48881631753298627,0.8946664818555352,-0.371995389237056,-0.8401918579894088,-0.591993878817975,0.15712232369874823,0.450549308287469,-0.8996673112741782,-0.8791981995418927,-0.03761206035791265,-0.5700742657864488,-0.9387493444567108,-0.8726216475381954,-0.7551117821103108
++0.735759638534258,0.5266432943362018,-0.8262895940291652,0.6882150373152043,-0.7506471583585688,-0.04982341472396001,-0.7949918517940822,-0.44235127186122525,-0.9882223934879146,-0.4441028983344111,0.5519251325075518,0.6516444941449673,-0.3163693937495182,0.6633576579373552,-0.14305762257033017,-0.917498174903457
++0.689026547247694,0.8862140749559642,-0.45937080150886866,-0.13100395155291333,0.3676584062185373,0.2613141202862099,-0.12666968197987072,-0.41039307001428993,0.5753567913599895,-0.5411831823678792,0.7960685297548984,-0.16290877512290147,-0.12264052078463594,0.8722752925535249,-0.5794202635727537,-0.5970693001492524
++-0.02170263409045292,0.697648704435414,-0.11226839738443095,-0.8622529689920502,0.7835929345134811,0.1860181129625269,0.4094767632543719,0.44077211442817377,-0.695785490796218,-0.6610229471283056,0.38672965984834384,-0.1503230719293971,0.09955025998329337,0.895028592696677,0.7080541552493977,-0.30929665194905875
+diff --git a/Thread-1/data/q3_instruction.tsv b/Thread-1/data/q3_instruction.tsv
+index b2fcc3e..ba24d97 100644
+--- a/Thread-1/data/q3_instruction.tsv
++++ b/Thread-1/data/q3_instruction.tsv
+@@ -1,16 +1,16 @@
+-1 3 5 1 0
+-1 1 2 0 0
+-1 7 5 0 0
+-0 0 1 2 3 4 5 6 7 8
+-0 7 3 5 9
+-1 2 9 1 0
+-1 1 2 0 1
+-1 0 6 1 1
+-0 5 6 2 9
+-0 1 2 3 5 7 8 9
+-1 4 5 0 1
+-1 3 8 1 1
+-1 3 7 1 2
+-1 8 9 0 2
+-1 1 3 1 2
++1 3 5 1 0
++1 1 2 0 0
++1 7 5 0 0
++0 0 1 2 3 4 5 6 7 8
++0 7 3 5 9
++1 2 9 1 0
++1 1 2 0 1
++1 0 6 1 1
++0 5 6 2 9
++0 1 2 3 5 7 8 9
++1 4 5 0 1
++1 3 8 1 1
++1 3 7 1 2
++1 8 9 0 2
++1 1 3 1 2
+ 1 2 4 0 2
+\ No newline at end of file
+diff --git a/Thread-1/data/q4.in b/Thread-1/data/q4.in
+index a7e4563..f9a8604 100644
+--- a/Thread-1/data/q4.in
++++ b/Thread-1/data/q4.in
+@@ -1,20 +1,20 @@
+--0.9166718150866153,0.43829227278389205,-0.6129205231425989,0.7738693110376684,-0.04456069156634124,0.8807831166061564,-0.8206278700342509,0.5013513447020947,0.8570578529268591,0.3906799520892723,0.6558968505921785,0.0011654760044317314,0.3008835791217257,-0.15983430198414705,-0.0693333837225647,-0.6526558237637923
+-0.9210598583969818,0.42579710374854174,0.4036360259825613,0.030714658443632636,-0.885772459758438,-0.24727514094877123,0.7355606108008894,0.10546495518591437,-0.8023562184533268,-0.49625645997262624,-0.9207327565798142,-0.5815206606673406,0.9351907452001367,0.3172382122419557,0.003001769800845988,-0.922981014248552
+--0.5965568413505009,0.09650184318674637,0.6008404234282114,-0.36476902674868983,-0.010850908242431956,0.764068687448312,0.07574350440340671,0.17571450752937356,-0.8171966361630094,0.9651584811421219,-0.3418701780268467,0.9853471761319244,-0.12550940725520165,0.4589100006311786,0.43815748442548386,0.9705357673477955
+-0.993889214450193,-0.8189165981690414,0.04917164289121412,-0.7530365630876577,-0.5538830208217513,0.7583652630943165,0.5543977049957343,-0.6234411607408261,-0.2594219505869344,0.0167988118252671,-0.9217323318156883,-0.375213018259823,0.14784668217470842,-0.4692513166767862,0.46235112775477427,0.12296988932525932
+--0.8793341414217637,-0.6402283188497377,0.8392493288060314,0.023482332116210758,-0.5409383253499991,0.8026327950872136,-0.6065373556670386,0.6888084300076232,-0.6283940592555368,0.10147943389628145,0.4827634350786061,-0.13302981763357224,-0.8807152975057908,-0.6541439052369178,-0.7731928918072759,0.6164384986356892
+-0.9848390793791464,0.2336479492878787,-0.03581470862613423,-0.8796023192670523,0.5757823579359684,0.4491579106812056,-0.43149525961566915,0.14167627382710624,0.34228128171791594,-0.2656195346653807,0.7945511727589767,-0.7664247140996134,-0.5167707200070257,0.6757407501481238,-0.5685784054255085,-0.3597641456495462
+--0.013661589999800272,-0.3281489497763481,0.6389047534972294,0.1308792365227054,0.6332312852857147,-0.389048890374591,-0.3305466717642904,-0.5076957991101425,-0.15749182415532226,0.06288417881265196,0.253734952831729,0.8002038247377463,0.7459378274158079,0.14471765507189738,-0.23974711356596567,0.7190494207848193
+--0.6587322596474383,0.8188365658683667,0.42662072473113843,0.5901480016293985,0.6997960743722469,-0.5835849054098734,-0.0546100350906209,0.5148383481529748,-0.12147445994822359,-0.8878647172685175,0.1736021960155516,-0.9482031277658456,-0.6706006901814101,0.02039879794445243,0.17722047160627552,-0.5494459255600357
+-0.9944516034519038,-0.3667188868126192,0.8558822460007307,-0.11788994189674207,0.4133418160765052,0.6792171996618557,-0.39354826424460554,-0.6382183058167172,-0.01935460173085035,0.6440893996546722,0.3983825520058324,0.32435721973088016,0.8086605772838129,-0.9865423205310249,0.7685581047510504,0.3649709247610369
+-0.9645480139613929,0.007196954322446603,0.3849464304311927,-0.41534968585835896,0.6183302711548755,0.7512952065856064,0.977605872321677,-0.5219496942098161,-0.6065793782427835,0.6395091775321222,-0.7753491496848779,-0.31947902475201295,0.8310764785432989,-0.24086418179731117,0.6548171271848247,-0.7181518576226569
+-0.10392572926221488,-0.9960228458666913,0.24329774396832815,-0.007218902680639516,-0.46195227850059095,-0.22775292095809907,0.5170986426079844,-0.7688755830562746,0.6197879642909672,-0.717524054421105,-0.6467295750993614,-0.40342368981638144,-0.7557089006225057,-0.9128424548604341,0.06240545314310686,0.920623279292037
+-0.5322136506908903,0.23456943299825506,0.18432121230114462,-0.7046448159652592,0.023340437548953652,0.786530595546846,0.5679613131398791,-0.28283023164734433,-0.3681440982708415,-0.9011465943870665,0.473634360349672,-0.2639152637035911,-0.43369123809007704,-0.6889606734993332,-0.815371507078462,-0.9454666540836327
+-0.7652343420138252,-0.2013918947613924,-0.0005331899975180576,0.7748728133468059,0.458158934313285,-0.7951029735775395,-0.0008126921912403606,0.686312638422669,-0.3770741710608334,-0.5294596394231117,-0.005926822002298104,0.24279879316979835,0.9164519844007226,-0.5078482312789123,-0.36721418512784276,0.9432087887762335
+-0.7222771339189791,-0.005454696303068385,-0.2915134501204564,-0.7750734383650992,0.11723817845525897,0.5938360682630202,-0.010768256677477828,0.707408394316926,-0.5112327016133762,-0.7811099248727826,0.009951608581912241,-0.9732203623144933,0.5584545603101057,0.1105202142888062,-0.5694403298492954,-0.5994379771008778
+-0.16162361494760624,-0.38704335280463753,-0.24854788977398545,0.30634162979715196,-0.9589719891404087,-0.28267606687891167,0.3221538699420512,-0.14910428273091658,0.9826883395419368,0.8508936334056303,0.6357584934988769,-0.5769135998104313,0.09376796925103226,-0.7821970510219409,-0.4663891893964558,-0.831632538112201
+-0.6781753267827875,0.33905137367641647,0.8568353804544486,-0.8044271187219234,0.8877682037516639,-0.42203276645299903,0.3018591966647832,0.4258736457862886,0.2516337015828114,-0.07738276731259952,0.27310534966390354,0.7807176102748643,0.898884317161128,0.6441762343991813,0.6359073989739275,-0.11625956839410301
+--0.07355380841233794,-0.5991475894981364,0.48881631753298627,0.8946664818555352,-0.371995389237056,-0.8401918579894088,-0.591993878817975,0.15712232369874823,0.450549308287469,-0.8996673112741782,-0.8791981995418927,-0.03761206035791265,-0.5700742657864488,-0.9387493444567108,-0.8726216475381954,-0.7551117821103108
+-0.735759638534258,0.5266432943362018,-0.8262895940291652,0.6882150373152043,-0.7506471583585688,-0.04982341472396001,-0.7949918517940822,-0.44235127186122525,-0.9882223934879146,-0.4441028983344111,0.5519251325075518,0.6516444941449673,-0.3163693937495182,0.6633576579373552,-0.14305762257033017,-0.917498174903457
+-0.689026547247694,0.8862140749559642,-0.45937080150886866,-0.13100395155291333,0.3676584062185373,0.2613141202862099,-0.12666968197987072,-0.41039307001428993,0.5753567913599895,-0.5411831823678792,0.7960685297548984,-0.16290877512290147,-0.12264052078463594,0.8722752925535249,-0.5794202635727537,-0.5970693001492524
+--0.02170263409045292,0.697648704435414,-0.11226839738443095,-0.8622529689920502,0.7835929345134811,0.1860181129625269,0.4094767632543719,0.44077211442817377,-0.695785490796218,-0.6610229471283056,0.38672965984834384,-0.1503230719293971,0.09955025998329337,0.895028592696677,0.7080541552493977,-0.30929665194905875
++-0.9166718150866153,0.43829227278389205,-0.6129205231425989,0.7738693110376684,-0.04456069156634124,0.8807831166061564,-0.8206278700342509,0.5013513447020947,0.8570578529268591,0.3906799520892723,0.6558968505921785,0.0011654760044317314,0.3008835791217257,-0.15983430198414705,-0.0693333837225647,-0.6526558237637923
++0.9210598583969818,0.42579710374854174,0.4036360259825613,0.030714658443632636,-0.885772459758438,-0.24727514094877123,0.7355606108008894,0.10546495518591437,-0.8023562184533268,-0.49625645997262624,-0.9207327565798142,-0.5815206606673406,0.9351907452001367,0.3172382122419557,0.003001769800845988,-0.922981014248552
++-0.5965568413505009,0.09650184318674637,0.6008404234282114,-0.36476902674868983,-0.010850908242431956,0.764068687448312,0.07574350440340671,0.17571450752937356,-0.8171966361630094,0.9651584811421219,-0.3418701780268467,0.9853471761319244,-0.12550940725520165,0.4589100006311786,0.43815748442548386,0.9705357673477955
++0.993889214450193,-0.8189165981690414,0.04917164289121412,-0.7530365630876577,-0.5538830208217513,0.7583652630943165,0.5543977049957343,-0.6234411607408261,-0.2594219505869344,0.0167988118252671,-0.9217323318156883,-0.375213018259823,0.14784668217470842,-0.4692513166767862,0.46235112775477427,0.12296988932525932
++-0.8793341414217637,-0.6402283188497377,0.8392493288060314,0.023482332116210758,-0.5409383253499991,0.8026327950872136,-0.6065373556670386,0.6888084300076232,-0.6283940592555368,0.10147943389628145,0.4827634350786061,-0.13302981763357224,-0.8807152975057908,-0.6541439052369178,-0.7731928918072759,0.6164384986356892
++0.9848390793791464,0.2336479492878787,-0.03581470862613423,-0.8796023192670523,0.5757823579359684,0.4491579106812056,-0.43149525961566915,0.14167627382710624,0.34228128171791594,-0.2656195346653807,0.7945511727589767,-0.7664247140996134,-0.5167707200070257,0.6757407501481238,-0.5685784054255085,-0.3597641456495462
++-0.013661589999800272,-0.3281489497763481,0.6389047534972294,0.1308792365227054,0.6332312852857147,-0.389048890374591,-0.3305466717642904,-0.5076957991101425,-0.15749182415532226,0.06288417881265196,0.253734952831729,0.8002038247377463,0.7459378274158079,0.14471765507189738,-0.23974711356596567,0.7190494207848193
++-0.6587322596474383,0.8188365658683667,0.42662072473113843,0.5901480016293985,0.6997960743722469,-0.5835849054098734,-0.0546100350906209,0.5148383481529748,-0.12147445994822359,-0.8878647172685175,0.1736021960155516,-0.9482031277658456,-0.6706006901814101,0.02039879794445243,0.17722047160627552,-0.5494459255600357
++0.9944516034519038,-0.3667188868126192,0.8558822460007307,-0.11788994189674207,0.4133418160765052,0.6792171996618557,-0.39354826424460554,-0.6382183058167172,-0.01935460173085035,0.6440893996546722,0.3983825520058324,0.32435721973088016,0.8086605772838129,-0.9865423205310249,0.7685581047510504,0.3649709247610369
++0.9645480139613929,0.007196954322446603,0.3849464304311927,-0.41534968585835896,0.6183302711548755,0.7512952065856064,0.977605872321677,-0.5219496942098161,-0.6065793782427835,0.6395091775321222,-0.7753491496848779,-0.31947902475201295,0.8310764785432989,-0.24086418179731117,0.6548171271848247,-0.7181518576226569
++0.10392572926221488,-0.9960228458666913,0.24329774396832815,-0.007218902680639516,-0.46195227850059095,-0.22775292095809907,0.5170986426079844,-0.7688755830562746,0.6197879642909672,-0.717524054421105,-0.6467295750993614,-0.40342368981638144,-0.7557089006225057,-0.9128424548604341,0.06240545314310686,0.920623279292037
++0.5322136506908903,0.23456943299825506,0.18432121230114462,-0.7046448159652592,0.023340437548953652,0.786530595546846,0.5679613131398791,-0.28283023164734433,-0.3681440982708415,-0.9011465943870665,0.473634360349672,-0.2639152637035911,-0.43369123809007704,-0.6889606734993332,-0.815371507078462,-0.9454666540836327
++0.7652343420138252,-0.2013918947613924,-0.0005331899975180576,0.7748728133468059,0.458158934313285,-0.7951029735775395,-0.0008126921912403606,0.686312638422669,-0.3770741710608334,-0.5294596394231117,-0.005926822002298104,0.24279879316979835,0.9164519844007226,-0.5078482312789123,-0.36721418512784276,0.9432087887762335
++0.7222771339189791,-0.005454696303068385,-0.2915134501204564,-0.7750734383650992,0.11723817845525897,0.5938360682630202,-0.010768256677477828,0.707408394316926,-0.5112327016133762,-0.7811099248727826,0.009951608581912241,-0.9732203623144933,0.5584545603101057,0.1105202142888062,-0.5694403298492954,-0.5994379771008778
++0.16162361494760624,-0.38704335280463753,-0.24854788977398545,0.30634162979715196,-0.9589719891404087,-0.28267606687891167,0.3221538699420512,-0.14910428273091658,0.9826883395419368,0.8508936334056303,0.6357584934988769,-0.5769135998104313,0.09376796925103226,-0.7821970510219409,-0.4663891893964558,-0.831632538112201
++0.6781753267827875,0.33905137367641647,0.8568353804544486,-0.8044271187219234,0.8877682037516639,-0.42203276645299903,0.3018591966647832,0.4258736457862886,0.2516337015828114,-0.07738276731259952,0.27310534966390354,0.7807176102748643,0.898884317161128,0.6441762343991813,0.6359073989739275,-0.11625956839410301
++-0.07355380841233794,-0.5991475894981364,0.48881631753298627,0.8946664818555352,-0.371995389237056,-0.8401918579894088,-0.591993878817975,0.15712232369874823,0.450549308287469,-0.8996673112741782,-0.8791981995418927,-0.03761206035791265,-0.5700742657864488,-0.9387493444567108,-0.8726216475381954,-0.7551117821103108
++0.735759638534258,0.5266432943362018,-0.8262895940291652,0.6882150373152043,-0.7506471583585688,-0.04982341472396001,-0.7949918517940822,-0.44235127186122525,-0.9882223934879146,-0.4441028983344111,0.5519251325075518,0.6516444941449673,-0.3163693937495182,0.6633576579373552,-0.14305762257033017,-0.917498174903457
++0.689026547247694,0.8862140749559642,-0.45937080150886866,-0.13100395155291333,0.3676584062185373,0.2613141202862099,-0.12666968197987072,-0.41039307001428993,0.5753567913599895,-0.5411831823678792,0.7960685297548984,-0.16290877512290147,-0.12264052078463594,0.8722752925535249,-0.5794202635727537,-0.5970693001492524
++-0.02170263409045292,0.697648704435414,-0.11226839738443095,-0.8622529689920502,0.7835929345134811,0.1860181129625269,0.4094767632543719,0.44077211442817377,-0.695785490796218,-0.6610229471283056,0.38672965984834384,-0.1503230719293971,0.09955025998329337,0.895028592696677,0.7080541552493977,-0.30929665194905875
+diff --git a/Thread-1/data/q4_instruction.tsv b/Thread-1/data/q4_instruction.tsv
+index 57d9916..2dc12d6 100644
+--- a/Thread-1/data/q4_instruction.tsv
++++ b/Thread-1/data/q4_instruction.tsv
+@@ -1,20 +1,20 @@
+-1 3 5 1 0
+-1 1 2 0 0
+-1 7 5 0 0
+-1 2 9 1 0
+-0 0 1 2 3 4 5 6 7 8
+-0 7 3 5 9
+-1 1 2 0 1
+-1 0 6 1 1
+-2 7 0 0 1 5 6
+-1 4 5 0 1
+-1 3 8 1 1
+-0 5 6 2 9
+-0 1 2 3 5 7 8 9
+-1 3 7 1 2
+-1 8 9 0 2
+-2 8 1 0 3 2 4 6
+-2 3 2 1 7 8 9
+-1 1 3 1 2
+-1 2 4 0 2
++1 3 5 1 0
++1 1 2 0 0
++1 7 5 0 0
++1 2 9 1 0
++0 0 1 2 3 4 5 6 7 8
++0 7 3 5 9
++1 1 2 0 1
++1 0 6 1 1
++2 7 0 0 1 5 6
++1 4 5 0 1
++1 3 8 1 1
++0 5 6 2 9
++0 1 2 3 5 7 8 9
++1 3 7 1 2
++1 8 9 0 2
++2 8 1 0 3 2 4 6
++2 3 2 1 7 8 9
++1 1 3 1 2
++1 2 4 0 2
+ 2 2 -1 4 5 6 3 7 9
+\ No newline at end of file
+diff --git a/Thread-1/lib/BUILD b/Thread-1/lib/BUILD
+index 07eb930..c264255 100644
+--- a/Thread-1/lib/BUILD
++++ b/Thread-1/lib/BUILD
+@@ -1,100 +1,130 @@
+-##load("@rules_cc//cc:defs.bzl", "cc_test")  #load the test target
+-
+-cc_library(
+-    name = "utils_lib",
+-    srcs = [
+-        "utils.cc",
+-        ],
+-    hdrs = [
+-        "utils.h",
+-        ],
+-	visibility = [
+-		"//visibility:public",
+-	],
+-)
+-
+-cc_test(
+-  name = "utils_lib_test",
+-  size = "small",
+-  srcs = ["util_test.cc"],
+-  deps = [
+-      "@gtest//:gtest_main",
+-	  ":utils_lib",
+-      ],
+-)
+-
+-cc_library(
+-    name = "embedding_lib",
+-    srcs = [
+-        "embedding.cc",
+-        ],
+-    hdrs = [
+-        "embedding.h",
+-        ],
+-	deps = [
+-        ":utils_lib"
+-    ],
+-	visibility = [
+-		"//visibility:public",
+-	],
+-)
+-
+-cc_test(
+-  name = "embedding_lib_test",
+-  size = "small",
+-  srcs = ["embedding_test.cc"],
+-  deps = [
+-      "@gtest//:gtest_main",
+-	  ":embedding_lib",
+-      ],
+-)
+-
+-cc_library(
+-    name = "instruction_lib",
+-    srcs = [
+-        "instruction.cc",
+-        ],
+-    hdrs = [
+-        "instruction.h",
+-        ],
+-	visibility = [
+-		"//visibility:public",
+-	],
+-)
+-
+-cc_test(
+-  name = "instruction_lib_test",
+-  size = "small",
+-  srcs = ["instruction_test.cc"],
+-  deps = [
+-      "@gtest//:gtest_main",
+-	  ":instruction_lib",
+-      ],
+-)
+-
+-cc_library(
+-    name = "model_lib",
+-    srcs = [
+-        "model.cc",
+-        ],
+-    hdrs = [
+-        "model.h",
+-        ],
+-	deps = [
+-        ":embedding_lib",
+-		":utils_lib",
+-    ],
+-	visibility = [
+-		"//visibility:public",
+-	],
+-)
+-
+-cc_test(
+-  name = "model_lib_test",
+-  size = "large",
+-  srcs = ["model_test.cc"],
+-  deps = [
+-      "@gtest//:gtest_main",
+-	  ":model_lib",
+-      ],
++##load("@rules_cc//cc:defs.bzl", "cc_test")  #load the test target
++
++cc_library(
++    name = "server_lib",
++    srcs = [
++        "server.cc",
++        ],
++    hdrs = [
++        "server.h",
++        ],
++    deps = [
++        ":embedding_lib",
++		":instruction_lib",
++        ":model_lib",
++        ":utils_lib",
++    ],
++	visibility = [
++		"//visibility:public",
++	],
++)
++
++cc_test(
++  name = "server_lib_test",
++  size = "small",
++  srcs = ["server_test.cc"],
++  deps = [
++      "@gtest//:gtest_main",
++	  ":server_lib",
++      ":embedding_lib",
++      ],
++)
++
++cc_library(
++    name = "utils_lib",
++    srcs = [
++        "utils.cc",
++        ],
++    hdrs = [
++        "utils.h",
++        ],
++	visibility = [
++		"//visibility:public",
++	],
++)
++
++cc_test(
++  name = "utils_lib_test",
++  size = "small",
++  srcs = ["util_test.cc"],
++  deps = [
++      "@gtest//:gtest_main",
++	  ":utils_lib",
++      ],
++)
++
++cc_library(
++    name = "embedding_lib",
++    srcs = [
++        "embedding.cc",
++        ],
++    hdrs = [
++        "embedding.h",
++        ],
++	deps = [
++        ":utils_lib"
++    ],
++	visibility = [
++		"//visibility:public",
++	],
++)
++
++cc_test(
++  name = "embedding_lib_test",
++  size = "small",
++  srcs = ["embedding_test.cc"],
++  deps = [
++      "@gtest//:gtest_main",
++	  ":embedding_lib",
++      ],
++)
++
++cc_library(
++    name = "instruction_lib",
++    srcs = [
++        "instruction.cc",
++        ],
++    hdrs = [
++        "instruction.h",
++        ],
++	visibility = [
++		"//visibility:public",
++	],
++)
++
++cc_test(
++  name = "instruction_lib_test",
++  size = "small",
++  srcs = ["instruction_test.cc"],
++  deps = [
++      "@gtest//:gtest_main",
++	  ":instruction_lib",
++      ],
++)
++
++cc_library(
++    name = "model_lib",
++    srcs = [
++        "model.cc",
++        ],
++    hdrs = [
++        "model.h",
++        ],
++	deps = [
++        ":embedding_lib",
++		":utils_lib",
++    ],
++	visibility = [
++		"//visibility:public",
++	],
++)
++
++cc_test(
++  name = "model_lib_test",
++  size = "large",
++  srcs = ["model_test.cc"],
++  deps = [
++      "@gtest//:gtest_main",
++	  ":model_lib",
++      ],
+ )
+\ No newline at end of file
+diff --git a/Thread-1/lib/embedding.cc b/Thread-1/lib/embedding.cc
+index 966a76d..bf196df 100644
+--- a/Thread-1/lib/embedding.cc
++++ b/Thread-1/lib/embedding.cc
+@@ -1,7 +1,9 @@
++
+ #include <fstream>
+ #include <iostream>
+ #include <sstream>
+ #include <cmath>
++#include <mutex>
+ 
+ #include "utils.h"
+ #include "embedding.h"
+@@ -23,11 +25,23 @@ Embedding::Embedding(int length, double* data) {
+ }
+ 
+ Embedding::Embedding(Embedding* origin) {
++    std::lock_guard<std::mutex> lock(origin->mux);
+ 	int length = origin->get_length();
+     embbedingAssert(length > 0, "Non-positive length encountered!", NON_POSITIVE_LEN);
+     double* oldData = origin->get_data();
+     double* newData = new double[length];
+-    for(int i = 0; i<length; i++)newData[i] = oldData[i];
++    for(int i = 0; i<length; i++) newData[i] = oldData[i];
++    this->length = length;
++    this->data = newData;
++}
++
++Embedding::Embedding(Embedding& origin) {
++    std::lock_guard<std::mutex> lock(origin.mux);
++	int length = origin.get_length();
++    embbedingAssert(length > 0, "Non-positive length encountered!", NON_POSITIVE_LEN);
++    double* oldData = origin.get_data();
++    double* newData = new double[length];
++    for(int i = 0; i<length; i++) newData[i] = oldData[i];
+     this->length = length;
+     this->data = newData;
+ }
+@@ -58,6 +72,8 @@ void Embedding::update(Embedding* gradient, double stepsize) {
+ }
+ 
+ std::string Embedding::to_string() {
++    std::lock_guard<std::mutex> lock(this->mux);
++
+     std::string res;
+     for (int i = 0; i < this->length; ++i) {
+         if (i > 0) res += ',';
+@@ -71,7 +87,7 @@ void Embedding::write_to_stdout() {
+     std::cout << prefix << this->to_string() << '\n';
+ }
+ 
+-Embedding Embedding::operator+(const Embedding &another) {
++Embedding Embedding::operator+(Embedding &another) {
+     double* data = new double[this->length];
+     for (int i = 0; i < this->length; ++i) {
+         data[i] = this->data[i] + another.data[i];
+@@ -87,7 +103,7 @@ Embedding Embedding::operator+(const double value) {
+     return Embedding(this->length, data);
+ }
+ 
+-Embedding Embedding::operator-(const Embedding &another) {
++Embedding Embedding::operator-(Embedding &another) {
+     double* data = new double[this->length];
+     for (int i = 0; i < this->length; ++i) {
+         data[i] = this->data[i] - another.data[i];
+@@ -103,7 +119,7 @@ Embedding Embedding::operator-(const double value) {
+     return Embedding(this->length, data);
+ }
+ 
+-Embedding Embedding::operator*(const Embedding &another) {
++Embedding Embedding::operator*(Embedding &another) {
+     double* data = new double[this->length];
+     for (int i = 0; i < this->length; ++i) {
+         data[i] = this->data[i] * another.data[i];
+@@ -119,7 +135,7 @@ Embedding Embedding::operator*(const double value) {
+     return Embedding(this->length, data);
+ }
+ 
+-Embedding Embedding::operator/(const Embedding &another) {
++Embedding Embedding::operator/(Embedding &another) {
+     double* data = new double[this->length];
+     for (int i = 0; i < this->length; ++i) {
+         data[i] = this->data[i] / another.data[i];
+@@ -135,7 +151,7 @@ Embedding Embedding::operator/(const double value) {
+     return Embedding(this->length, data);
+ }
+ 
+-bool Embedding::operator==(const Embedding &another) {
++bool Embedding::operator==(Embedding &another) {
+     for (int i = 0; i < this->length; ++i) {
+         if(fabs(this->data[i]-another.data[i])>1.0e-6)return false;
+     }
+@@ -174,20 +190,26 @@ EmbeddingMatrix EmbeddingHolder::read(std::string filename) {
+ }
+ 
+ int EmbeddingHolder::append(Embedding* data) {
++    std::lock_guard<std::mutex> lock(this->mux);
++
+     int indx = this->emb_matx.size();
+     embbedingAssert(
+-        data->get_length() == this->emb_matx[0]->get_length(),
++        indx == 0 | data->get_length() == this->emb_matx[0]->get_length(),
+         "Embedding to append has a different length!", LEN_MISMATCH
+     );
+     this->emb_matx.push_back(data);
++
++    this->cv.notify_all();
+     return indx;
+ }
+ 
+ void EmbeddingHolder::write(std::string filename) {
++    std::lock_guard<std::mutex> lock(this->mux);
++
+     std::ofstream ofs(filename);
+     if (ofs.is_open()) {
+         for (Embedding* emb: this->emb_matx) {
+-            ofs << emb->to_string() << '\n';
++            ofs << emb->to_string() + '\n';
+         }
+         ofs.close();
+     } else {
+@@ -196,9 +218,11 @@ void EmbeddingHolder::write(std::string filename) {
+ }
+ 
+ void EmbeddingHolder::write_to_stdout() {
++    std::lock_guard<std::mutex> lock(this->mux);
++
+     std::string prefix("[OUTPUT]");
+     for (Embedding* emb: this->emb_matx) {
+-        std::cout << prefix << emb->to_string() << '\n';
++        std::cout << prefix + emb->to_string() + '\n';
+     }
+ }
+ 
+@@ -208,16 +232,45 @@ EmbeddingHolder::~EmbeddingHolder() {
+     }
+ }
+ 
+-void EmbeddingHolder::update_embedding(
+-        int idx, EmbeddingGradient* gradient, double stepsize) {
+-    this->emb_matx[idx]->update(gradient, stepsize);
++void EmbeddingHolder::update_embedding(int idx, EmbeddingGradient* gradient, double stepsize) {
++    Embedding* emb = this->get_embedding(idx);
++    emb->lock();
++    emb->update(gradient, stepsize);
++    emb->unlock();
+ }
+ 
+-bool EmbeddingHolder::operator==(const EmbeddingHolder &another) {
+-    if (this->get_n_embeddings() != another.emb_matx.size())
++Embedding* EmbeddingHolder::get_embedding(int idx) {
++    std::unique_lock<std::mutex> lock(this->mux);
++
++    while (idx >= this->emb_matx.size()) {
++        this->cv.wait(lock);
++    }
++    return this->emb_matx[idx];
++}
++
++unsigned int EmbeddingHolder::get_n_embeddings() {
++    std::lock_guard<std::mutex> lock(this->mux);
++
++    return this->emb_matx.size();
++}
++
++int EmbeddingHolder::get_emb_length() {
++    std::lock_guard<std::mutex> lock(this->mux);
++
++    return this->emb_matx.empty()? 0: this->emb_matx[0]->get_length();
++}
++
++bool EmbeddingHolder::operator==(EmbeddingHolder &another) {
++    std::lock_guard<std::mutex> lock(this->mux);
++    std::lock_guard<std::mutex> lock1(another.mux);
++
++    if (this->emb_matx.size() != another.emb_matx.size())
+         return false;
++
+     for (int i = 0; i < (int)this->emb_matx.size(); ++i) {
+-        if(!(*(this->emb_matx[i]) == *(another.get_embedding(i)))){
++        std::lock_guard<std::mutex> lock2(this->emb_matx[i]->mux);
++        std::lock_guard<std::mutex> lock3(another.emb_matx[i]->mux);
++        if(!(*(this->emb_matx[i]) == *(another.emb_matx[i]))){
+         	return false;
+ 		}
+     }
+diff --git a/Thread-1/lib/embedding.h b/Thread-1/lib/embedding.h
+index 6e13d14..d6b5b33 100644
+--- a/Thread-1/lib/embedding.h
++++ b/Thread-1/lib/embedding.h
+@@ -1,8 +1,16 @@
+ #ifndef THREAD_LIB_EMBEDDING_H_
+ #define THREAD_LIB_EMBEDDING_H_
+ 
++// Embedding:
++// Constructor and output method get lock automatically
++// get data, operaters will not get lock
++
++// EmbeddingHolder: all methods are safe
++
+ #include <string>
+ #include <vector>
++#include <mutex>
++#include <condition_variable>
+ 
+ namespace proj1 {
+ 
+@@ -18,6 +26,7 @@ public:
+     Embedding(int, double*);
+     Embedding(int, std::string);
+     Embedding(Embedding*);
++    Embedding(Embedding&);
+     ~Embedding() { delete []this->data; }
+     double* get_data() { return this->data; }
+     int get_length() { return this->length; }
+@@ -25,15 +34,20 @@ public:
+     std::string to_string();
+     void write_to_stdout();
+     // Operators
+-    Embedding operator+(const Embedding&);
++    Embedding operator+(Embedding&);
+     Embedding operator+(const double);
+-    Embedding operator-(const Embedding&);
++    Embedding operator-(Embedding&);
+     Embedding operator-(const double);
+-    Embedding operator*(const Embedding&);
++    Embedding operator*(Embedding&);
+     Embedding operator*(const double);
+-    Embedding operator/(const Embedding&);
++    Embedding operator/(Embedding&);
+     Embedding operator/(const double);
+-    bool operator==(const Embedding&);
++    bool operator==(Embedding&);
++    //lock&unlock
++    std::mutex mux;
++    void lock() {this->mux.lock();}
++    void unlock() {this->mux.unlock();}
++
+ private:
+     int length;
+     double* data;
+@@ -52,14 +66,18 @@ public:
+     void write(std::string filename);
+     int append(Embedding *data);
+     void update_embedding(int, EmbeddingGradient*, double);
+-    Embedding* get_embedding(int idx) const { return this->emb_matx[idx]; } 
+-    unsigned int get_n_embeddings() { return this->emb_matx.size(); }
+-    int get_emb_length() {
+-        return this->emb_matx.empty()? 0: this->get_embedding(0)->get_length();
+-    }
+-    bool operator==(const EmbeddingHolder&);
++    Embedding* get_embedding(int idx);
++    unsigned int get_n_embeddings();
++    int get_emb_length();
++    bool operator==(EmbeddingHolder&);
++
+ private:
+     EmbeddingMatrix emb_matx;
++    // lock&unlock
++    std::mutex mux;
++    // void lock() {this->mux.lock();}
++    // void unlock() {this->mux.unlock();}
++    std::condition_variable cv;
+ };
+ 
+ } // namespace proj1
+diff --git a/Thread-1/lib/embedding_test.cc b/Thread-1/lib/embedding_test.cc
+index 84fab0d..1f3a763 100644
+--- a/Thread-1/lib/embedding_test.cc
++++ b/Thread-1/lib/embedding_test.cc
+@@ -1,67 +1,67 @@
+-#include <gtest/gtest.h>
+-#include <vector>
+-#include "embedding.h"
+-
+-
+-double embA[20] = {-0.9166718150866153,0.43829227278389205,-0.6129205231425989,0.7738693110376684,-0.04456069156634124,0.8807831166061564,-0.8206278700342509,0.5013513447020947,0.8570578529268591,0.3906799520892723,0.6558968505921785,0.0011654760044317314,0.3008835791217257,-0.15983430198414705,-0.0693333837225647,-0.6526558237637923};
+-double embB[20] = {0.9210598583969818,0.42579710374854174,0.4036360259825613,0.030714658443632636,-0.885772459758438,-0.24727514094877123,0.7355606108008894,0.10546495518591437,-0.8023562184533268,-0.49625645997262624,-0.9207327565798142,-0.5815206606673406,0.9351907452001367,0.3172382122419557,0.003001769800845988,-0.922981014248552};
+-double embC[20] = {0.9210598583969818,0.42579710374854174,0.4036360259825613,0.030714658443632636,-0.885772459758438,-0.24727514094877123,0.7355606108008894,0.10546495518591437,-0.8023562184533268,-0.49625645997262624,-0.9207327565798142,-0.5815206606673406,0.9351907452001367,0.3172382122419557,0.003001769800845988,-0.922981014248552};
+-
+-namespace proj1 {
+-namespace testing{
+-
+-class EmbeddingTest : public ::testing::Test {
+- protected:
+-  void SetUp() override {
+-    
+-	//double embC[20] = {0.9210598583969818,0.42579710374854174,0.4036360259825613,0.030714658443632636,-0.885772459758438,-0.24727514094877123,0.7355606108008894,0.10546495518591437,-0.8023562184533268,-0.49625645997262624,-0.9207327565798142,-0.5815206606673406,0.9351907452001367,0.3172382122419557,0.003001769800845988,-0.922981014248552};	
+-	emb_testA = new Embedding(20, embA);  
+-	emb_testB = new Embedding(20, embB);   
+-	emb_testC = new Embedding(20, embC);   
+-	embhA.push_back(emb_testA);
+-	embhB.push_back(emb_testB);
+-	embhC.push_back(emb_testC);
+-	embh_testA = new EmbeddingHolder(embhA);
+-	embh_testB = new EmbeddingHolder(embhB);
+-	embh_testC = new EmbeddingHolder(embhC);
+-  }
+-  Embedding* emb_testA;
+-  Embedding* emb_testB;
+-  Embedding* emb_testC;
+-  std::vector<Embedding*>embhA;
+-  std::vector<Embedding*>embhB;
+-  std::vector<Embedding*>embhC;
+-  EmbeddingHolder* embh_testA;
+-  EmbeddingHolder* embh_testB;
+-  EmbeddingHolder* embh_testC;
+-};
+-
+-bool compare(Embedding* emb_test, double *data){
+-	double * tmp = emb_test->get_data();
+-	for(int i = 0; i<20; i++){
+-		if(tmp[i]!=data[i])return false;
+-	}
+-	return true;
+-}
+-
+-TEST_F(EmbeddingTest, test_embdedding){
+-	double emb[20] = {-0.9166718150866153,0.43829227278389205,-0.6129205231425989,0.7738693110376684,-0.04456069156634124,0.8807831166061564,-0.8206278700342509,0.5013513447020947,0.8570578529268591,0.3906799520892723,0.6558968505921785,0.0011654760044317314,0.3008835791217257,-0.15983430198414705,-0.0693333837225647,-0.6526558237637923};
+-	EXPECT_EQ(true, compare(emb_testA, emb));
+-	EXPECT_EQ((*emb_testB) == (*emb_testC), true);
+-	EXPECT_EQ((*emb_testB) == (*emb_testA), false);
+-	EXPECT_EQ((*emb_testC) == (*emb_testA), false);
+-}
+-
+-TEST_F(EmbeddingTest, test_embdeddingHolder){
+-	EXPECT_EQ((*embh_testB) == (*embh_testC), true);
+-	EXPECT_EQ((*embh_testB) == (*embh_testA), false);
+-	EXPECT_EQ((*embh_testC) == (*embh_testA), false);
+-}
+-
+-} // namespace testing
+-} // namespace proj1
+-
+-int main(int argc,char **argv){
+-  testing::InitGoogleTest(&argc,argv);
+-  return RUN_ALL_TESTS();
+-}
++#include <gtest/gtest.h>
++#include <vector>
++#include "embedding.h"
++
++
++double embA[20] = {-0.9166718150866153,0.43829227278389205,-0.6129205231425989,0.7738693110376684,-0.04456069156634124,0.8807831166061564,-0.8206278700342509,0.5013513447020947,0.8570578529268591,0.3906799520892723,0.6558968505921785,0.0011654760044317314,0.3008835791217257,-0.15983430198414705,-0.0693333837225647,-0.6526558237637923};
++double embB[20] = {0.9210598583969818,0.42579710374854174,0.4036360259825613,0.030714658443632636,-0.885772459758438,-0.24727514094877123,0.7355606108008894,0.10546495518591437,-0.8023562184533268,-0.49625645997262624,-0.9207327565798142,-0.5815206606673406,0.9351907452001367,0.3172382122419557,0.003001769800845988,-0.922981014248552};
++double embC[20] = {0.9210598583969818,0.42579710374854174,0.4036360259825613,0.030714658443632636,-0.885772459758438,-0.24727514094877123,0.7355606108008894,0.10546495518591437,-0.8023562184533268,-0.49625645997262624,-0.9207327565798142,-0.5815206606673406,0.9351907452001367,0.3172382122419557,0.003001769800845988,-0.922981014248552};
++
++namespace proj1 {
++namespace testing{
++
++class EmbeddingTest : public ::testing::Test {
++ protected:
++  void SetUp() override {
++    
++	//double embC[20] = {0.9210598583969818,0.42579710374854174,0.4036360259825613,0.030714658443632636,-0.885772459758438,-0.24727514094877123,0.7355606108008894,0.10546495518591437,-0.8023562184533268,-0.49625645997262624,-0.9207327565798142,-0.5815206606673406,0.9351907452001367,0.3172382122419557,0.003001769800845988,-0.922981014248552};	
++	emb_testA = new Embedding(20, embA);  
++	emb_testB = new Embedding(20, embB);   
++	emb_testC = new Embedding(20, embC);   
++	embhA.push_back(emb_testA);
++	embhB.push_back(emb_testB);
++	embhC.push_back(emb_testC);
++	embh_testA = new EmbeddingHolder(embhA);
++	embh_testB = new EmbeddingHolder(embhB);
++	embh_testC = new EmbeddingHolder(embhC);
++  }
++  Embedding* emb_testA;
++  Embedding* emb_testB;
++  Embedding* emb_testC;
++  std::vector<Embedding*>embhA;
++  std::vector<Embedding*>embhB;
++  std::vector<Embedding*>embhC;
++  EmbeddingHolder* embh_testA;
++  EmbeddingHolder* embh_testB;
++  EmbeddingHolder* embh_testC;
++};
++
++bool compare(Embedding* emb_test, double *data){
++	double * tmp = emb_test->get_data();
++	for(int i = 0; i<20; i++){
++		if(tmp[i]!=data[i])return false;
++	}
++	return true;
++}
++
++TEST_F(EmbeddingTest, test_embdedding){
++	double emb[20] = {-0.9166718150866153,0.43829227278389205,-0.6129205231425989,0.7738693110376684,-0.04456069156634124,0.8807831166061564,-0.8206278700342509,0.5013513447020947,0.8570578529268591,0.3906799520892723,0.6558968505921785,0.0011654760044317314,0.3008835791217257,-0.15983430198414705,-0.0693333837225647,-0.6526558237637923};
++	EXPECT_EQ(true, compare(emb_testA, emb));
++	EXPECT_EQ((*emb_testB) == (*emb_testC), true);
++	EXPECT_EQ((*emb_testB) == (*emb_testA), false);
++	EXPECT_EQ((*emb_testC) == (*emb_testA), false);
++}
++
++TEST_F(EmbeddingTest, test_embdeddingHolder){
++	EXPECT_EQ((*embh_testB) == (*embh_testC), true);
++	EXPECT_EQ((*embh_testB) == (*embh_testA), false);
++	EXPECT_EQ((*embh_testC) == (*embh_testA), false);
++}
++
++} // namespace testing
++} // namespace proj1
++
++int main(int argc,char **argv){
++  testing::InitGoogleTest(&argc,argv);
++  return RUN_ALL_TESTS();
++}
+diff --git a/Thread-1/lib/instruction.cc b/Thread-1/lib/instruction.cc
+index ddfc532..afddcf5 100644
+--- a/Thread-1/lib/instruction.cc
++++ b/Thread-1/lib/instruction.cc
+@@ -1,31 +1,31 @@
+-#include <string>
+-#include <sstream>
+-#include <fstream>
+-#include "instruction.h"
+-
+-namespace proj1 {
+-
+-Instruction::Instruction(std::string line) {
+-    std::stringstream ss(line);
+-    int data;
+-    ss >> data;
+-    this->order = (InstructionOrder) data;
+-    while (ss >> data) {
+-        this->payloads.push_back(data);
+-    }
+-}
+-
+-Instructions read_instructrions(std::string filename) {
+-    std::ifstream ifs(filename);
+-    std::string line;
+-    Instructions data;
+-    if (ifs.is_open()) {
+-        while(std::getline(ifs, line)) {
+-            data.push_back(Instruction(line));
+-        }
+-        ifs.close();
+-    }
+-    return data;
+-}
+-
++#include <string>
++#include <sstream>
++#include <fstream>
++#include "instruction.h"
++
++namespace proj1 {
++
++Instruction::Instruction(std::string line) {
++    std::stringstream ss(line);
++    int data;
++    ss >> data;
++    this->order = (InstructionOrder) data;
++    while (ss >> data) {
++        this->payloads.push_back(data);
++    }
++}
++
++Instructions read_instructrions(std::string filename) {
++    std::ifstream ifs(filename);
++    std::string line;
++    Instructions data;
++    if (ifs.is_open()) {
++        while(std::getline(ifs, line)) {
++            data.push_back(Instruction(line));
++        }
++        ifs.close();
++    }
++    return data;
++}
++
+ } // namespace proj1
+\ No newline at end of file
+diff --git a/Thread-1/lib/instruction.h b/Thread-1/lib/instruction.h
+index 4aa34ea..f2058a8 100644
+--- a/Thread-1/lib/instruction.h
++++ b/Thread-1/lib/instruction.h
+@@ -1,26 +1,26 @@
+-#ifndef THREAD_LIB_INSTRUCTION_H_
+-#define THREAD_LIB_INSTRUCTION_H_
+-
+-#include <string>
+-#include <vector>
+-
+-namespace proj1 {
+-
+-enum InstructionOrder {
+-    INIT_EMB = 0,
+-    UPDATE_EMB,
+-    RECOMMEND
+-};
+-
+-struct Instruction {
+-    Instruction(std::string);
+-    InstructionOrder order;
+-    std::vector<int> payloads;
+-};
+-
+-using Instructions = std::vector<Instruction>;
+-
+-Instructions read_instructrions(std::string);
+-
+-} // namespace proj1
++#ifndef THREAD_LIB_INSTRUCTION_H_
++#define THREAD_LIB_INSTRUCTION_H_
++
++#include <string>
++#include <vector>
++
++namespace proj1 {
++
++enum InstructionOrder {
++    INIT_EMB = 0,
++    UPDATE_EMB,
++    RECOMMEND
++};
++
++struct Instruction {
++    Instruction(std::string);
++    InstructionOrder order;
++    std::vector<int> payloads;
++};
++
++using Instructions = std::vector<Instruction>;
++
++Instructions read_instructrions(std::string);
++
++} // namespace proj1
+ #endif  // THREAD_LIB_INSTRUCTION_H_
+\ No newline at end of file
+diff --git a/Thread-1/lib/model.cc b/Thread-1/lib/model.cc
+index 77d19ae..d7caa33 100644
+--- a/Thread-1/lib/model.cc
++++ b/Thread-1/lib/model.cc
+@@ -1,58 +1,58 @@
+-#include "model.h"
+-#include "utils.h"
+-#include "embedding.h"
+-
+-namespace proj1 {
+-
+-const double inf = 9999999.0;
+-
+-double similarity(Embedding* embA, Embedding* embB) {
+-    double similarity = 0;
+-    double *vecA = embA->get_data();
+-    double *vecB = embB->get_data();
+-    for (int i = 0; i < embA->get_length(); ++i) {
+-        similarity += (vecA[i] - vecB[i]) * (vecA[i] - vecB[i]);
+-    }
+-    return similarity;
+-}
+-
+-// NOTE: do not rely on this exact implementation -- it may get modified.
+-EmbeddingGradient* calc_gradient(Embedding* embA, Embedding* embB, int label) {
+-    /* For simplicity, here we just simulate the gradient backprop for:
+-        1. a dot product between embeddings
+-        2. a sigmoid activation function
+-        3. a binary cross entropy loss
+-    */
+-    double distance = similarity(embA, embB);
+-    double pred = sigmoid(distance);
+-    double loss = binary_cross_entropy_backward((double) label, pred);
+-    loss *= sigmoid_backward(distance);
+-    EmbeddingGradient *gradA = new Embedding((*embB) * loss);
+-
+-    // Here we simulate a slow calculation
+-    a_slow_function(10);
+-    return gradA;
+-}
+-
+-EmbeddingGradient* cold_start(Embedding* user, Embedding* item) {
+-    // Do some downstream work, e.g. let the user watch this video
+-    a_slow_function(10);
+-    // Then we collect a label, e.g. whether the user finished watching the video
+-    int label = item->get_data()[0] > 1e-8? 0: 1;
+-    return calc_gradient(user, item, label);
+-}
+-
+-Embedding* recommend(Embedding* user, std::vector<Embedding*> items) {
+-    Embedding* maxItem;
+-    double sim, maxSim = -inf;
+-    for (auto item: items) {
+-        sim = similarity(user, item);
+-        if (sim > maxSim) {
+-            maxItem = item;
+-            maxSim = sim;
+-        }
+-    }
+-    return maxItem;
+-}
+-
++#include "model.h"
++#include "utils.h"
++#include "embedding.h"
++
++namespace proj1 {
++
++const double inf = 9999999.0;
++
++double similarity(Embedding* embA, Embedding* embB) {
++    double similarity = 0;
++    double *vecA = embA->get_data();
++    double *vecB = embB->get_data();
++    for (int i = 0; i < embA->get_length(); ++i) {
++        similarity += (vecA[i] - vecB[i]) * (vecA[i] - vecB[i]);
++    }
++    return similarity;
++}
++
++// NOTE: do not rely on this exact implementation -- it may get modified.
++EmbeddingGradient* calc_gradient(Embedding* embA, Embedding* embB, int label) {
++    /* For simplicity, here we just simulate the gradient backprop for:
++        1. a dot product between embeddings
++        2. a sigmoid activation function
++        3. a binary cross entropy loss
++    */
++    double distance = similarity(embA, embB);
++    double pred = sigmoid(distance);
++    double loss = binary_cross_entropy_backward((double) label, pred);
++    loss *= sigmoid_backward(distance);
++    EmbeddingGradient *gradA = new Embedding((*embB) * loss);
++
++    // Here we simulate a slow calculation
++    a_slow_function(10);
++    return gradA;
++}
++
++EmbeddingGradient* cold_start(Embedding* user, Embedding* item) {
++    // Do some downstream work, e.g. let the user watch this video
++    a_slow_function(10);
++    // Then we collect a label, e.g. whether the user finished watching the video
++    int label = item->get_data()[0] > 1e-8? 0: 1;
++    return calc_gradient(user, item, label);
++}
++
++Embedding* recommend(Embedding* user, std::vector<Embedding*> items) {
++    Embedding* maxItem;
++    double sim, maxSim = -inf;
++    for (auto item: items) {
++        sim = similarity(user, item);
++        if (sim > maxSim) {
++            maxItem = item;
++            maxSim = sim;
++        }
++    }
++    return maxItem;
++}
++
+ } // namespace proj1
+\ No newline at end of file
+diff --git a/Thread-1/lib/model.h b/Thread-1/lib/model.h
+index d3be366..2308442 100644
+--- a/Thread-1/lib/model.h
++++ b/Thread-1/lib/model.h
+@@ -1,22 +1,22 @@
+-#ifndef THREAD_LIB_MODEL_H_
+-#define THREAD_LIB_MODEL_H_
+-
+-#include <vector>
+-#include "embedding.h"
+-
+-namespace proj1 {
+-
+-/* NOTE: DO NOT rely on the implementation here. We may
+-         change the implemenation details.
+-*/
+-double similarity(Embedding* entityA, Embedding* entityB);
+-
+-EmbeddingGradient* calc_gradient(Embedding* entityA, Embedding* entityB, int label);
+-
+-EmbeddingGradient* cold_start(Embedding* newUser, Embedding* item);
+-
+-Embedding* recommend(Embedding* user, std::vector<Embedding*> items);
+-
+-} // namespace proj1
+-
++#ifndef THREAD_LIB_MODEL_H_
++#define THREAD_LIB_MODEL_H_
++
++#include <vector>
++#include "embedding.h"
++
++namespace proj1 {
++
++/* NOTE: DO NOT rely on the implementation here. We may
++         change the implemenation details.
++*/
++double similarity(Embedding* entityA, Embedding* entityB);
++
++EmbeddingGradient* calc_gradient(Embedding* entityA, Embedding* entityB, int label);
++
++EmbeddingGradient* cold_start(Embedding* newUser, Embedding* item);
++
++Embedding* recommend(Embedding* user, std::vector<Embedding*> items);
++
++} // namespace proj1
++
+ #endif // THREAD_LIB_MODEL_H_
+\ No newline at end of file
+diff --git a/Thread-1/lib/model_test.cc b/Thread-1/lib/model_test.cc
+index e1f9c8b..20f0e73 100644
+--- a/Thread-1/lib/model_test.cc
++++ b/Thread-1/lib/model_test.cc
+@@ -1,42 +1,42 @@
+-#include <gtest/gtest.h>
+-#include <chrono>
+-#include "model.h"
+-
+-namespace proj1 {
+-namespace testing{
+-
+-class ModelTest : public ::testing::Test {
+- protected:
+-  void SetUp() override {
+-    double embA[20] = {-0.9166718150866153,0.43829227278389205,-0.6129205231425989,0.7738693110376684,-0.04456069156634124,0.8807831166061564,-0.8206278700342509,0.5013513447020947,0.8570578529268591,0.3906799520892723,0.6558968505921785,0.0011654760044317314,0.3008835791217257,-0.15983430198414705,-0.0693333837225647,-0.6526558237637923};
+-    double embB[20] = {0.9210598583969818,0.42579710374854174,0.4036360259825613,0.030714658443632636,-0.885772459758438,-0.24727514094877123,0.7355606108008894,0.10546495518591437,-0.8023562184533268,-0.49625645997262624,-0.9207327565798142,-0.5815206606673406,0.9351907452001367,0.3172382122419557,0.003001769800845988,-0.922981014248552};
+-	emb_testA = new Embedding(20, embA);  
+-	emb_testB = new Embedding(20, embB);   
+-  }
+-  Embedding* emb_testA;
+-  Embedding* emb_testB;
+-};
+-
+-TEST_F(ModelTest, test_calc_gradient){
+-	auto start = std::chrono::high_resolution_clock::now();
+-	calc_gradient(emb_testA, emb_testB, 1);
+-    auto end = std::chrono::high_resolution_clock::now();
+-    auto time_ellapsed = end - start;
+-	EXPECT_LT(10*1000, time_ellapsed.count());
+-}
+-
+-TEST_F(ModelTest, test_cold_start){
+-	auto start = std::chrono::high_resolution_clock::now();
+-	cold_start(emb_testA, emb_testB);
+-    auto end = std::chrono::high_resolution_clock::now();
+-    auto time_ellapsed = end - start;
+-	EXPECT_LT(20*1000, time_ellapsed.count());
+-}
+-
+-} // namespace testing
+-} // namespace proj1
+-
+-int main(int argc,char **argv){
+-  testing::InitGoogleTest(&argc,argv);
+-  return RUN_ALL_TESTS();
+-}
++#include <gtest/gtest.h>
++#include <chrono>
++#include "model.h"
++
++namespace proj1 {
++namespace testing{
++
++class ModelTest : public ::testing::Test {
++ protected:
++  void SetUp() override {
++    double embA[20] = {-0.9166718150866153,0.43829227278389205,-0.6129205231425989,0.7738693110376684,-0.04456069156634124,0.8807831166061564,-0.8206278700342509,0.5013513447020947,0.8570578529268591,0.3906799520892723,0.6558968505921785,0.0011654760044317314,0.3008835791217257,-0.15983430198414705,-0.0693333837225647,-0.6526558237637923};
++    double embB[20] = {0.9210598583969818,0.42579710374854174,0.4036360259825613,0.030714658443632636,-0.885772459758438,-0.24727514094877123,0.7355606108008894,0.10546495518591437,-0.8023562184533268,-0.49625645997262624,-0.9207327565798142,-0.5815206606673406,0.9351907452001367,0.3172382122419557,0.003001769800845988,-0.922981014248552};
++	emb_testA = new Embedding(20, embA);  
++	emb_testB = new Embedding(20, embB);   
++  }
++  Embedding* emb_testA;
++  Embedding* emb_testB;
++};
++
++TEST_F(ModelTest, test_calc_gradient){
++	auto start = std::chrono::high_resolution_clock::now();
++	calc_gradient(emb_testA, emb_testB, 1);
++    auto end = std::chrono::high_resolution_clock::now();
++    auto time_ellapsed = end - start;
++	EXPECT_LT(10*1000, time_ellapsed.count());
++}
++
++TEST_F(ModelTest, test_cold_start){
++	auto start = std::chrono::high_resolution_clock::now();
++	cold_start(emb_testA, emb_testB);
++    auto end = std::chrono::high_resolution_clock::now();
++    auto time_ellapsed = end - start;
++	EXPECT_LT(20*1000, time_ellapsed.count());
++}
++
++} // namespace testing
++} // namespace proj1
++
++int main(int argc,char **argv){
++  testing::InitGoogleTest(&argc,argv);
++  return RUN_ALL_TESTS();
++}
+diff --git a/Thread-1/lib/server.cc b/Thread-1/lib/server.cc
+new file mode 100644
+index 0000000..3cb4c74
+--- /dev/null
++++ b/Thread-1/lib/server.cc
+@@ -0,0 +1,281 @@
++
++#include <vector>
++#include <thread>
++#include <iostream>
++#include <mutex>
++
++#include "server.h"
++#include "model.h"
++#include "utils.h"
++
++#define TIMER(s) // proj1::AutoTimer timer(s)
++
++namespace proj1 {
++
++void Server::write_to_stdout() {
++    users.write_to_stdout();
++    items.write_to_stdout();
++}
++
++void Server::do_instruction(Instruction inst) {
++    switch(inst.order) {
++        case INIT_EMB: {
++            if (!useLock) {
++                do_init(inst);
++            } else if (!initParall) {
++                do_init_safe(inst);
++            } else {
++                do_init_parall(inst);
++            }
++            break;
++        }
++        case UPDATE_EMB: {
++            if (!useLock) {
++                do_update(inst);
++            } else if (!useEpoch) {
++                do_update_safe(inst);
++            } else {
++                do_update_epoch(inst);
++            }
++            break;
++        }
++        case RECOMMEND: {
++            if (!useLock) {
++                Embedding* emb = do_recommend(inst);
++                emb->write_to_stdout();
++            } else if (!useEpoch) {
++                Embedding* emb = do_recommend_safe(inst);
++                emb->write_to_stdout();
++            } else {
++                Embedding* emb = do_recommend_epoch(inst);
++                emb->write_to_stdout();
++            }
++        }
++    }
++}
++
++void Server::do_init(Instruction inst) {
++    TIMER("do_init");
++
++    int length = users.get_emb_length();
++    Embedding* new_user = new Embedding(length);
++    int user_idx = users.append(new_user);
++
++    for (int item_index: inst.payloads) {
++        Embedding* item_emb = items.get_embedding(item_index);
++
++        EmbeddingGradient* gradient = cold_start(new_user, item_emb);
++        users.update_embedding(user_idx, gradient, 0.01);
++        delete gradient;
++    }
++}
++
++void Server::do_init_safe(Instruction inst) {
++    TIMER("do_init_safe");
++
++    int length = users.get_emb_length();
++    Embedding* new_user = new Embedding(length);
++    int user_idx = users.append(new_user);
++
++    for (int item_index: inst.payloads) {
++        Embedding* item_emb = items.get_embedding(item_index);
++
++        Embedding* user = new Embedding(new_user);
++        Embedding* item = new Embedding(item_emb);
++        EmbeddingGradient* gradient = cold_start(user, item);
++        delete user, item;
++
++        users.update_embedding(user_idx, gradient, 0.01);
++        delete gradient;
++    }
++}
++
++void Server::do_init_parall(Instruction inst) {
++    TIMER("do_init_parall");
++
++    int length = users.get_emb_length();
++    Embedding* new_user = new Embedding(length);
++    int user_idx = users.append(new_user);
++
++    std::vector<std::thread*> threads;
++    for (int item_index: inst.payloads) {
++        std::thread* t = new std::thread(
++            [&, item_index]() {
++                Embedding* item_emb = items.get_embedding(item_index);
++
++                Embedding* user = new Embedding(new_user);
++                Embedding* item = new Embedding(item_emb);
++                EmbeddingGradient* gradient = cold_start(user, item);
++                delete user, item;
++
++                users.update_embedding(user_idx, gradient, 0.01);
++                delete gradient;
++            }
++        );
++        threads.push_back(t);
++    }
++    for (std::thread* t: threads) {
++        t->join();
++        delete t;
++    }
++}
++
++void Server::do_update(Instruction inst) {
++    TIMER("do_update");
++
++    std::cout << "do_update" << std::endl;
++    int user_idx = inst.payloads[0];
++    int item_idx = inst.payloads[1];
++    int label = inst.payloads[2];
++
++    Embedding* user_emb = users.get_embedding(user_idx);
++    Embedding* item_emb = items.get_embedding(item_idx);
++
++    EmbeddingGradient* gradient = calc_gradient(user_emb, item_emb, label);
++    users.update_embedding(user_idx, gradient, 0.01);
++    delete gradient;
++
++    gradient = calc_gradient(item_emb, user_emb, label);
++    items.update_embedding(item_idx, gradient, 0.001);
++    delete gradient;
++}
++
++void Server::do_update_safe(Instruction inst) {
++    TIMER("do_update_safe");
++
++    int user_idx = inst.payloads[0];
++    int item_idx = inst.payloads[1];
++    int label = inst.payloads[2];
++
++    Embedding* user_emb = users.get_embedding(user_idx);
++    Embedding* item_emb = items.get_embedding(item_idx);
++
++    auto user = new Embedding(user_emb);
++    auto item = new Embedding(item_emb);
++    EmbeddingGradient* gradient = calc_gradient(user, item, label);
++    delete user, item;
++
++    users.update_embedding(user_idx, gradient, 0.01);
++    delete gradient;
++
++    user = new Embedding(user_emb);
++    item = new Embedding(item_emb);
++    gradient = calc_gradient(item, user, label);
++    delete user, item;
++
++    items.update_embedding(item_idx, gradient, 0.001);
++    delete gradient;
++}
++
++void Server::do_update_epoch(Instruction inst) {
++    int iter_idx = inst.payloads[3];
++{
++    std::unique_lock<std::mutex> lock(this->mux);
++    while (!(this->epoch >= iter_idx || (this->epoch == iter_idx - 1 && this->num_threads == 0))) {
++        this->cv.wait(lock);
++    }
++    if (this->epoch == iter_idx - 1 && this->num_threads == 0) {
++        this->epoch = iter_idx;
++    }
++    this->num_threads++;
++}
++
++    TIMER("do_update_inst");
++
++    int user_idx = inst.payloads[0];
++    int item_idx = inst.payloads[1];
++    int label = inst.payloads[2];
++
++    Embedding* user_emb = users.get_embedding(user_idx);
++    Embedding* item_emb = items.get_embedding(item_idx);
++
++    auto user = new Embedding(user_emb);
++    auto item = new Embedding(item_emb);
++    EmbeddingGradient* gradient = calc_gradient(user, item, label);
++    delete user, item;
++
++    users.update_embedding(user_idx, gradient, 0.01);
++    delete gradient;
++
++    user = new Embedding(user_emb);
++    item = new Embedding(item_emb);
++    gradient = calc_gradient(item, user, label);
++    delete user, item;
++
++    items.update_embedding(item_idx, gradient, 0.001);
++    delete gradient;
++
++{
++    std::unique_lock<std::mutex> lock(this->mux);
++    this->num_threads--;
++    this->cv.notify_all();
++}
++}
++
++Embedding* Server::do_recommend(Instruction inst) {
++    TIMER("do_recommend");
++
++    int user_idx = inst.payloads[0];
++    Embedding* user = users.get_embedding(user_idx);
++
++    std::vector<Embedding*> item_pool;
++    for (unsigned int i = 2; i < inst.payloads.size(); i++) {
++        int item_idx = inst.payloads[i];
++        item_pool.push_back(items.get_embedding(item_idx));
++    }
++
++    Embedding* recommendation = recommend(user, item_pool);
++    return recommendation;
++}
++
++Embedding* Server::do_recommend_safe(Instruction inst) {
++    TIMER("do_recommend_safe");
++
++    int user_idx = inst.payloads[0];
++    Embedding* user = users.get_embedding(user_idx);
++    std::lock_guard<std::mutex> lock(user->mux);
++
++    std::vector<Embedding*> item_pool;
++    for (unsigned int i = 2; i < inst.payloads.size(); i++) {
++        int item_idx = inst.payloads[i];
++        Embedding* item = items.get_embedding(item_idx);
++        std::lock_guard<std::mutex> lock(item->mux);
++        item_pool.push_back(item);
++    }
++
++    Embedding* recommendation = recommend(user, item_pool);
++    return recommendation;
++}
++
++Embedding* Server::do_recommend_epoch(Instruction inst) {
++    int iter_idx = inst.payloads[1];
++{
++    std::unique_lock<std::mutex> lock(this->mux);
++    while (!(this->epoch > iter_idx | (this->epoch == iter_idx && this->num_threads == 0))) {
++        this->cv.wait(lock);
++    }
++}
++
++    TIMER("do_recommend_epoch");
++
++    int user_idx = inst.payloads[0];
++    Embedding* user = users.get_embedding(user_idx);
++    std::lock_guard<std::mutex> lock(user->mux);
++
++    std::vector<Embedding*> item_pool;
++    for (unsigned int i = 2; i < inst.payloads.size(); i++) {
++        int item_idx = inst.payloads[i];
++        Embedding* item = items.get_embedding(item_idx);
++        std::lock_guard<std::mutex> lock(item->mux);
++        item_pool.push_back(item);
++    }
++
++    Embedding* recommendation = recommend(user, item_pool);
++    return recommendation;
++}
++
++bool Server::operator==(Server& svr) {
++    return this->users == svr.users && this->items == svr.items;
++}
++
++} // namespace proj1
+diff --git a/Thread-1/lib/server.h b/Thread-1/lib/server.h
+new file mode 100644
+index 0000000..c893a40
+--- /dev/null
++++ b/Thread-1/lib/server.h
+@@ -0,0 +1,48 @@
++#ifndef THREAD_LIB_SERVER_H_
++#define THREAD_LIB_SERVER_H_
++
++#include <mutex>
++#include <condition_variable>
++#include "instruction.h"
++#include "embedding.h"
++
++namespace proj1 {
++
++class Server {
++public:
++    Server(std::string user_filename, std::string item_filename) : users(user_filename), items(item_filename) {}
++    Server(std::string user_filename, std::string item_filename, bool initParall, bool useLock, bool useEpoch)
++        : users(user_filename), items(item_filename), initParall(initParall), useLock(useLock), useEpoch(useEpoch) {}
++    void do_instruction(Instruction);
++    void write_to_stdout();
++
++    void do_init(Instruction);
++    void do_init_safe(Instruction);
++    void do_init_parall(Instruction);
++
++    void do_update(Instruction);
++    void do_update_safe(Instruction);
++    void do_update_epoch(Instruction);
++
++    Embedding* do_recommend(Instruction);
++    Embedding* do_recommend_safe(Instruction);
++    Embedding* do_recommend_epoch(Instruction);
++
++    bool operator==(Server&);
++
++private:
++    bool initParall = false;
++    bool useLock = false;
++    bool useEpoch = false;
++
++    int epoch = -1;
++    int num_threads = 0; // number of update threads running in this epoch
++    std::mutex mux;
++    std::condition_variable cv;
++
++    EmbeddingHolder users;
++    EmbeddingHolder items;
++};
++
++} // namespace proj1
++#endif // THREAD_LIB_SERVER_H_
+diff --git a/Thread-1/lib/server_test.cc b/Thread-1/lib/server_test.cc
+new file mode 100644
+index 0000000..036212b
+--- /dev/null
++++ b/Thread-1/lib/server_test.cc
+@@ -0,0 +1,53 @@
++#include <gtest/gtest.h>
++#include <vector>
++
++#include "server.h"
++#include "embedding.h"
++
++namespace proj1 {
++namespace testing {
++
++class ServerTest : public ::testing::Test {
++protected:
++    void SetUp() {
++        server1 = new Server("data/q4.in", "data/q4.in");
++        server2 = new Server("data/q4.in", "data/q4.in");
++        server3 = new Server("data/q4.in", "data/q4.in");
++
++        inst_init = new Instruction("0 0 1 2 3 4 5 6 7 8");
++        inst_update = new Instruction("1 7 5 0 0");
++        inst_recommend = new Instruction("2 2 -1 4 5 6 3 7 9");
++    }
++    Server *server1, *server2, *server3;
++    Instruction *inst_init, *inst_update, *inst_recommend;
++};
++
++TEST_F(ServerTest, test_init) {
++    server1->do_init(*inst_init);
++    server2->do_init_safe(*inst_init);
++    EXPECT_EQ((*server1) == (*server2), true);
++}
++
++TEST_F(ServerTest, test_update) {
++    server1->do_update(*inst_update);
++    server2->do_update_safe(*inst_update);
++    server3->do_update_epoch(*inst_update);
++    EXPECT_EQ((*server1) == (*server2), true);
++    EXPECT_EQ((*server2) == (*server3), true);
++}
++
++TEST_F(ServerTest, test_recommend) {
++    Embedding* emb1 = server1->do_recommend(*inst_recommend);
++    Embedding* emb2 = server2->do_recommend_safe(*inst_recommend);
++    Embedding* emb3 = server3->do_recommend_epoch(*inst_recommend);
++    EXPECT_EQ((*emb1) == (*emb2), true);
++    EXPECT_EQ((*emb2) == (*emb3), true);
++}
++    
++} // namespace testing
++} // namespace proj1
++
++int main(int argc, char** argv) {
++    testing::InitGoogleTest(&argc, argv);
++    return RUN_ALL_TESTS();
++}
+diff --git a/Thread-1/lib/util_test.cc b/Thread-1/lib/util_test.cc
+index 77e08a7..f23579b 100644
+--- a/Thread-1/lib/util_test.cc
++++ b/Thread-1/lib/util_test.cc
+@@ -1,22 +1,22 @@
+-#include <gtest/gtest.h>
+-#include "utils.h"
+-
+-namespace proj1 {
+-namespace testing{
+-
+-
+-TEST(UtilTest, test_sigmoid) {
+-    EXPECT_NEAR(0.731059, sigmoid(1.0), 0.0001);   
+-}
+-
+-TEST(UtilTest, test_sigmoid_backward) {
+-    EXPECT_NEAR(0.196612, sigmoid_backward(1.0), 0.0001);   
+-}
+-
+-} // namespace testing
+-} // namespace proj1
+-
+-int main(int argc,char **argv){
+-  testing::InitGoogleTest(&argc,argv);
+-  return RUN_ALL_TESTS();
+-}
++#include <gtest/gtest.h>
++#include "utils.h"
++
++namespace proj1 {
++namespace testing{
++
++
++TEST(UtilTest, test_sigmoid) {
++    EXPECT_NEAR(0.731059, sigmoid(1.0), 0.0001);   
++}
++
++TEST(UtilTest, test_sigmoid_backward) {
++    EXPECT_NEAR(0.196612, sigmoid_backward(1.0), 0.0001);   
++}
++
++} // namespace testing
++} // namespace proj1
++
++int main(int argc,char **argv){
++  testing::InitGoogleTest(&argc,argv);
++  return RUN_ALL_TESTS();
++}
+diff --git a/Thread-1/lib/utils.cc b/Thread-1/lib/utils.cc
+index 3427314..465e117 100644
+--- a/Thread-1/lib/utils.cc
++++ b/Thread-1/lib/utils.cc
+@@ -1,45 +1,47 @@
+-#include <cmath>
+-#include <string>
+-#include <iostream>
+-#include <chrono>
+-#include <thread>
+-#include "utils.h"
+-
+-namespace proj1 {
+-
+-void a_slow_function(int seconds) {
+-    //std::this_thread::sleep_for(std::chrono::seconds(seconds));
+-}
+-
+-double sigmoid(double x) {
+-    return 1.0 / (1.0 + exp(-x));
+-}
+-
+-double sigmoid_backward(double x) {
+-    double y = sigmoid(x);
+-    return y * (1.0 - y);
+-}
+-
+-double binary_cross_entropy(double y_true, double y_pred) {
+-    double eps = 1e-8;
+-    return y_true * log(eps + y_pred) \
+-        + (1.0 - y_true) * log(1.0 - y_pred + eps);
+-}
+-
+-double binary_cross_entropy_backward(double y_true, double y_pred) {
+-    double eps = 1e-8;
+-    return (y_true - y_pred) / (eps + (1.0 - y_pred) * y_pred);
+-}
+-
+-AutoTimer::AutoTimer(std::string name) : 
+-        m_name(std::move(name)),
+-        m_beg(std::chrono::high_resolution_clock::now()) { 
+-    }
+-
+-AutoTimer::~AutoTimer() {
+-    auto end = std::chrono::high_resolution_clock::now();
+-    auto dur = std::chrono::duration_cast<std::chrono::microseconds>(end - m_beg);
+-    std::cout << m_name << " : " << dur.count() << " usec\n";
+-}
+-
+-} // namespace proj1
++#include <cmath>
++#include <string>
++#include <iostream>
++#include <chrono>
++#include <thread>
++#include "utils.h"
++
++namespace proj1 {
++
++void a_slow_function(int seconds) {
++    if (slow_function) {
++        std::this_thread::sleep_for(std::chrono::timescale(seconds));
++    }
++}
++
++double sigmoid(double x) {
++    return 1.0 / (1.0 + exp(-x));
++}
++
++double sigmoid_backward(double x) {
++    double y = sigmoid(x);
++    return y * (1.0 - y);
++}
++
++double binary_cross_entropy(double y_true, double y_pred) {
++    double eps = 1e-8;
++    return y_true * log(eps + y_pred) \
++        + (1.0 - y_true) * log(1.0 - y_pred + eps);
++}
++
++double binary_cross_entropy_backward(double y_true, double y_pred) {
++    double eps = 1e-8;
++    return (y_true - y_pred) / (eps + (1.0 - y_pred) * y_pred);
++}
++
++AutoTimer::AutoTimer(std::string name) : 
++        m_name(std::move(name)),
++        m_beg(std::chrono::high_resolution_clock::now()) { 
++    }
++
++AutoTimer::~AutoTimer() {
++    auto end = std::chrono::high_resolution_clock::now();
++    auto dur = std::chrono::duration_cast<std::chrono::microseconds>(end - m_beg);
++    std::cout << m_name + " : " + std::to_string(dur.count()) + " usec\n";
++}
++
++} // namespace proj1
+diff --git a/Thread-1/lib/utils.h b/Thread-1/lib/utils.h
+index 9f85001..55486c9 100644
+--- a/Thread-1/lib/utils.h
++++ b/Thread-1/lib/utils.h
+@@ -1,64 +1,68 @@
+-#ifndef THREAD_LIB_UTILS_H_
+-#define THREAD_LIB_UTILS_H_
+-
+-#include <string>
+-#include <vector>
+-#include <iostream>
+-#include <chrono>  // for AutoTimer function
+-
+-// For colored outputs in terminal
+-#define RST  "\x1B[0m"
+-#define KRED  "\x1B[31m"
+-#define KGRN  "\x1B[32m"
+-#define KYEL  "\x1B[33m"
+-#define KBLU  "\x1B[34m"
+-#define KMAG  "\x1B[35m"
+-#define KCYN  "\x1B[36m"
+-#define KWHT  "\x1B[37m"
+-
+-#define FRED(x) KRED x RST
+-#define FGRN(x) KGRN x RST
+-#define FYEL(x) KYEL x RST
+-#define FBLU(x) KBLU x RST
+-#define FMAG(x) KMAG x RST
+-#define FCYN(x) KCYN x RST
+-#define FWHT(x) KWHT x RST
+-
+-#define BOLD(x) "\x1B[1m" x RST
+-#define UNDL(x) "\x1B[4m" x RST
+-
+-namespace proj1 {
+-
+-// TODO(xuw): better to define this as a enum type
+-static const int kOrderInit = 0;
+-static const int kOrderUpdate = 1;
+-
+-template <class T>
+-inline void embbedingAssert(bool condition, char const *msg, T error) {
+-    if (!condition) {
+-        std::cerr << msg << std::endl;
+-        throw error;
+-    }
+-}
+-
+-void a_slow_function(int seconds);
+-
+-double sigmoid(double x);
+-
+-double sigmoid_backward(double x);
+-
+-double binary_cross_entropy(double y_true, double y_pred);
+-
+-double binary_cross_entropy_backward(double y_true, double y_pred);
+-
+-class AutoTimer {
+- public:
+-  AutoTimer(std::string name);
+-  ~AutoTimer(); 
+- private:
+-  std::string m_name;
+-  std::chrono::time_point<std::chrono::high_resolution_clock> m_beg;
+-};
+-
+-} // namespace proj1
+-#endif // THREAD_LIB_UTILS_H_
++#ifndef THREAD_LIB_UTILS_H_
++#define THREAD_LIB_UTILS_H_
++
++#include <string>
++#include <vector>
++#include <iostream>
++#include <chrono>  // for AutoTimer function
++
++// slow_function
++#define slow_function true
++#define timescale seconds
++
++// For colored outputs in terminal
++#define RST  "\x1B[0m"
++#define KRED  "\x1B[31m"
++#define KGRN  "\x1B[32m"
++#define KYEL  "\x1B[33m"
++#define KBLU  "\x1B[34m"
++#define KMAG  "\x1B[35m"
++#define KCYN  "\x1B[36m"
++#define KWHT  "\x1B[37m"
++
++#define FRED(x) KRED x RST
++#define FGRN(x) KGRN x RST
++#define FYEL(x) KYEL x RST
++#define FBLU(x) KBLU x RST
++#define FMAG(x) KMAG x RST
++#define FCYN(x) KCYN x RST
++#define FWHT(x) KWHT x RST
++
++#define BOLD(x) "\x1B[1m" x RST
++#define UNDL(x) "\x1B[4m" x RST
++
++namespace proj1 {
++
++// TODO(xuw): better to define this as a enum type
++static const int kOrderInit = 0;
++static const int kOrderUpdate = 1;
++
++template <class T>
++inline void embbedingAssert(bool condition, char const *msg, T error) {
++    if (!condition) {
++        std::cerr << msg << std::endl;
++        throw error;
++    }
++}
++
++void a_slow_function(int seconds);
++
++double sigmoid(double x);
++
++double sigmoid_backward(double x);
++
++double binary_cross_entropy(double y_true, double y_pred);
++
++double binary_cross_entropy_backward(double y_true, double y_pred);
++
++class AutoTimer {
++ public:
++  AutoTimer(std::string name);
++  ~AutoTimer(); 
++ private:
++  std::string m_name;
++  std::chrono::time_point<std::chrono::high_resolution_clock> m_beg;
++};
++
++} // namespace proj1
++#endif // THREAD_LIB_UTILS_H_
+diff --git a/Thread-1/q0.cc b/Thread-1/q0.cc
+index 7e51849..77525f5 100644
+--- a/Thread-1/q0.cc
++++ b/Thread-1/q0.cc
+@@ -1,92 +1,92 @@
+-#include <vector>
+-#include <tuple>
+-
+-#include <string>   // string
+-#include <chrono>   // timer
+-#include <iostream> // cout, endl
+-
+-#include "lib/utils.h"
+-#include "lib/model.h" 
+-#include "lib/embedding.h" 
+-#include "lib/instruction.h"
+-
+-namespace proj1 {
+-
+-void run_one_instruction(Instruction inst, EmbeddingHolder* users, EmbeddingHolder* items) {
+-    switch(inst.order) {
+-        case INIT_EMB: {
+-            // We need to init the embedding
+-            int length = users->get_emb_length();
+-            Embedding* new_user = new Embedding(length);
+-            int user_idx = users->append(new_user);
+-            for (int item_index: inst.payloads) {
+-                Embedding* item_emb = items->get_embedding(item_index);
+-                // Call cold start for downstream applications, slow
+-                EmbeddingGradient* gradient = cold_start(new_user, item_emb);
+-                users->update_embedding(user_idx, gradient, 0.01);
+-                delete gradient;
+-            }
+-            break;
+-        }
+-        case UPDATE_EMB: {
+-            int user_idx = inst.payloads[0];
+-            int item_idx = inst.payloads[1];
+-            int label = inst.payloads[2];
+-            // You might need to add this state in other questions.
+-            // Here we just show you this as an example
+-            // int epoch = -1;
+-            //if (inst.payloads.size() > 3) {
+-            //    epoch = inst.payloads[3];
+-            //}
+-            Embedding* user = users->get_embedding(user_idx);
+-            Embedding* item = items->get_embedding(item_idx);
+-            EmbeddingGradient* gradient = calc_gradient(user, item, label);
+-            users->update_embedding(user_idx, gradient, 0.01);
+-            delete gradient;
+-            gradient = calc_gradient(item, user, label);
+-            items->update_embedding(item_idx, gradient, 0.001);
+-            delete gradient;
+-            break;
+-        }
+-        case RECOMMEND: {
+-            int user_idx = inst.payloads[0];
+-            Embedding* user = users->get_embedding(user_idx);
+-            std::vector<Embedding*> item_pool;
+-            int iter_idx = inst.payloads[1];
+-            for (unsigned int i = 2; i < inst.payloads.size(); ++i) {
+-                int item_idx = inst.payloads[i];
+-                item_pool.push_back(items->get_embedding(item_idx));
+-            }
+-            Embedding* recommendation = recommend(user, item_pool);
+-            recommendation->write_to_stdout();
+-            break;
+-        }
+-    }
+-
+-}
+-} // namespace proj1
+-
+-int main(int argc, char *argv[]) {
+-
+-    proj1::EmbeddingHolder* users = new proj1::EmbeddingHolder("data/q0.in");
+-    proj1::EmbeddingHolder* items = new proj1::EmbeddingHolder("data/q0.in");
+-    proj1::Instructions instructions = proj1::read_instructrions("data/q0_instruction.tsv");
+-    {
+-    proj1::AutoTimer timer("q0");  // using this to print out timing of the block
+-    // Run all the instructions
+-    for (proj1::Instruction inst: instructions) {
+-        proj1::run_one_instruction(inst, users, items);
+-    }
+-    }
+-
+-    // Write the result
+-    users->write_to_stdout();
+-    items->write_to_stdout();
+-
+-    // We only need to delete the embedding holders, as the pointers are all
+-    // pointing at the emb_matx of the holders.
+-    delete users;
+-    delete items;
+-
+-    return 0;
+-}
++#include <vector>
++#include <tuple>
++
++#include <string>   // string
++#include <chrono>   // timer
++#include <iostream> // cout, endl
++
++#include "lib/utils.h"
++#include "lib/model.h" 
++#include "lib/embedding.h" 
++#include "lib/instruction.h"
++
++namespace proj1 {
++
++void run_one_instruction(Instruction inst, EmbeddingHolder* users, EmbeddingHolder* items) {
++    switch(inst.order) {
++        case INIT_EMB: {
++            // We need to init the embedding
++            int length = users->get_emb_length();
++            Embedding* new_user = new Embedding(length);
++            int user_idx = users->append(new_user);
++            for (int item_index: inst.payloads) {
++                Embedding* item_emb = items->get_embedding(item_index);
++                // Call cold start for downstream applications, slow
++                EmbeddingGradient* gradient = cold_start(new_user, item_emb);
++                users->update_embedding(user_idx, gradient, 0.01);
++                delete gradient;
++            }
++            break;
++        }
++        case UPDATE_EMB: {
++            int user_idx = inst.payloads[0];
++            int item_idx = inst.payloads[1];
++            int label = inst.payloads[2];
++            // You might need to add this state in other questions.
++            // Here we just show you this as an example
++            // int epoch = -1;
++            //if (inst.payloads.size() > 3) {
++            //    epoch = inst.payloads[3];
++            //}
++            Embedding* user = users->get_embedding(user_idx);
++            Embedding* item = items->get_embedding(item_idx);
++            EmbeddingGradient* gradient = calc_gradient(user, item, label);
++            users->update_embedding(user_idx, gradient, 0.01);
++            delete gradient;
++            gradient = calc_gradient(item, user, label);
++            items->update_embedding(item_idx, gradient, 0.001);
++            delete gradient;
++            break;
++        }
++        case RECOMMEND: {
++            int user_idx = inst.payloads[0];
++            Embedding* user = users->get_embedding(user_idx);
++            std::vector<Embedding*> item_pool;
++            int iter_idx = inst.payloads[1];
++            for (unsigned int i = 2; i < inst.payloads.size(); ++i) {
++                int item_idx = inst.payloads[i];
++                item_pool.push_back(items->get_embedding(item_idx));
++            }
++            Embedding* recommendation = recommend(user, item_pool);
++            recommendation->write_to_stdout();
++            break;
++        }
++    }
++
++}
++} // namespace proj1
++
++int main(int argc, char *argv[]) {
++
++    proj1::EmbeddingHolder* users = new proj1::EmbeddingHolder("data/q0.in");
++    proj1::EmbeddingHolder* items = new proj1::EmbeddingHolder("data/q0.in");
++    proj1::Instructions instructions = proj1::read_instructrions("data/q0_instruction.tsv");
++    {
++    proj1::AutoTimer timer("q0");  // using this to print out timing of the block
++    // Run all the instructions
++    for (proj1::Instruction inst: instructions) {
++        proj1::run_one_instruction(inst, users, items);
++    }
++    }
++
++    // Write the result
++    users->write_to_stdout();
++    items->write_to_stdout();
++
++    // We only need to delete the embedding holders, as the pointers are all
++    // pointing at the emb_matx of the holders.
++    delete users;
++    delete items;
++
++    return 0;
++}
+diff --git a/Thread-1/q0_my.cc b/Thread-1/q0_my.cc
+new file mode 100644
+index 0000000..f7f992a
+--- /dev/null
++++ b/Thread-1/q0_my.cc
+@@ -0,0 +1,29 @@
++#include <vector>
++#include <tuple>
++
++#include <string>   // string
++#include <chrono>   // timer
++
++#include "lib/utils.h"
++#include "lib/server.h"
++#include "lib/instruction.h"
++
++int main(int argc, char *argv[]) {
++
++    proj1::Server server("data/q0.in", "data/q0.in");
++
++    proj1::Instructions instructions = proj1::read_instructrions("data/q0_instruction.tsv");
++
++    {
++        proj1::AutoTimer timer("q0");  // using this to print out timing of the block
++        // Run all the instructions
++        for (proj1::Instruction inst: instructions) {
++            server.do_instruction(inst);
++        }
++    }
++
++    // Write the result
++    server.write_to_stdout();
++
++    return 0;
++}
+diff --git a/Thread-1/q1.cc b/Thread-1/q1.cc
+index 974ad23..0b3db25 100644
+--- a/Thread-1/q1.cc
++++ b/Thread-1/q1.cc
+@@ -1,5 +1,39 @@
+-#include <iostream> // cout, endl
+-int main(int argc, char *argv[]) {
+-    std::cout << "please implement this function\n";
+-    exit(1);
+-}
+\ No newline at end of file
++#include <vector>
++#include <tuple>
++
++#include <string>   // string
++#include <chrono>   // timer
++#include <thread>
++#include <vector>
++
++#include "lib/utils.h"
++#include "lib/server.h"
++#include "lib/instruction.h"
++
++int main(int argc, char *argv[]) {
++
++    proj1::Server server("data/q1.in", "data/q1.in", false, true, false);
++
++    proj1::Instructions instructions = proj1::read_instructrions("data/q1_instruction.tsv");
++
++    {
++        proj1::AutoTimer timer("q1");  // using this to print out timing of the block
++        // Run all the instructions
++
++        std::vector<std::thread*> threads;
++
++        for (proj1::Instruction inst: instructions) {
++            auto t = new std::thread([&server, inst](){server.do_instruction(inst);});
++            threads.push_back(t);
++        }
++        for (auto t: threads) {
++            t->join();
++            delete t;
++        }
++    }
++
++    // Write the result
++    server.write_to_stdout();
++
++    return 0;
++}
+diff --git a/Thread-1/q2.cc b/Thread-1/q2.cc
+index c4b7413..32e98a2 100644
+--- a/Thread-1/q2.cc
++++ b/Thread-1/q2.cc
+@@ -1,4 +1,37 @@
+-#include <iostream> // cout, endl
+-int main(int argc, char *argv[]) {
+-    exit(1);
+-}
+\ No newline at end of file
++#include <vector>
++#include <tuple>
++
++#include <string>   // string
++#include <chrono>   // timer
++
++#include "lib/utils.h"
++#include "lib/server.h"
++#include "lib/instruction.h"
++
++int main(int argc, char *argv[]) {
++
++    proj1::Server server("data/q2.in", "data/q2.in", true, true, false);
++
++    proj1::Instructions instructions = proj1::read_instructrions("data/q2_instruction.tsv");
++
++    {
++        proj1::AutoTimer timer("q2");  // using this to print out timing of the block
++        // Run all the instructions
++        
++        std::vector<std::thread*> threads;
++
++        for (proj1::Instruction inst: instructions) {
++            auto t = new std::thread([&server, inst](){server.do_instruction(inst);});
++            threads.push_back(t);
++        }
++        for (auto t: threads) {
++            t->join();
++            delete t;
++        }
++    }
++
++    // Write the result
++    server.write_to_stdout();
++
++    return 0;
++}
+diff --git a/Thread-1/q3.cc b/Thread-1/q3.cc
+index c4b7413..0d10f9c 100644
+--- a/Thread-1/q3.cc
++++ b/Thread-1/q3.cc
+@@ -1,4 +1,37 @@
+-#include <iostream> // cout, endl
+-int main(int argc, char *argv[]) {
+-    exit(1);
+-}
+\ No newline at end of file
++#include <vector>
++#include <tuple>
++
++#include <string>   // string
++#include <chrono>   // timer
++
++#include "lib/utils.h"
++#include "lib/server.h"
++#include "lib/instruction.h"
++
++int main(int argc, char *argv[]) {
++
++    proj1::Server server("data/q3.in", "data/q3.in", true, true, true);
++
++    proj1::Instructions instructions = proj1::read_instructrions("data/q3_instruction.tsv");
++
++    {
++        proj1::AutoTimer timer("q3");  // using this to print out timing of the block
++        // Run all the instructions
++        
++        std::vector<std::thread*> threads;
++
++        for (proj1::Instruction inst: instructions) {
++            auto t = new std::thread([&server, inst](){server.do_instruction(inst);});
++            threads.push_back(t);
++        }
++        for (auto t: threads) {
++            t->join();
++            delete t;
++        }
++    }
++
++    // Write the result
++    server.write_to_stdout();
++
++    return 0;
++}
+diff --git a/Thread-1/q4.cc b/Thread-1/q4.cc
+new file mode 100644
+index 0000000..b02c663
+--- /dev/null
++++ b/Thread-1/q4.cc
+@@ -0,0 +1,34 @@
++#include <vector>
++#include <tuple>
++
++#include <string>   // string
++#include <chrono>   // timer
++
++#include "lib/utils.h"
++#include "lib/server.h"
++#include "lib/instruction.h"
++
++int main(int argc, char *argv[]) {
++
++    proj1::Server server("data/q4.in", "data/q4.in", true, true, true);
++
++    proj1::Instructions instructions = proj1::read_instructrions("data/q4_instruction.tsv");
++
++    {
++        proj1::AutoTimer timer("q4");  // using this to print out timing of the block
++        // Run all the instructions
++        
++        std::vector<std::thread*> threads;
++
++        for (proj1::Instruction inst: instructions) {
++            auto t = new std::thread([&server, inst](){server.do_instruction(inst);});
++            threads.push_back(t);
++        }
++        for (auto t: threads) {
++            t->join();
++            delete t;
++        }
++    }
++
++    return 0;
++}
