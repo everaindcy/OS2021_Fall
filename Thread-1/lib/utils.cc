@@ -41,7 +41,7 @@ AutoTimer::AutoTimer(std::string name) :
 AutoTimer::~AutoTimer() {
     auto end = std::chrono::high_resolution_clock::now();
     auto dur = std::chrono::duration_cast<std::chrono::microseconds>(end - m_beg);
-    std::cout << m_name << " : " << dur.count() << " usec\n";
+    std::cout << m_name + " : " + std::to_string(dur.count()) + " usec\n";
 }
 
 } // namespace proj1

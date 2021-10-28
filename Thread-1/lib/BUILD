@@ -11,7 +11,8 @@ cc_library(
     deps = [
         ":embedding_lib",
 		":instruction_lib",
-        ":model_lib"
+        ":model_lib",
+        ":utils_lib",
     ],
 	visibility = [
 		"//visibility:public",

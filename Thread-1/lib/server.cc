@@ -1,8 +1,12 @@
 
 #include <vector>
 #include <thread>
+#include <iostream>
 #include "server.h"
 #include "model.h"
+
+#include "utils.h"
+#define TIMER(s) proj1::AutoTimer timer(s)
 
 namespace proj1 {
 
@@ -48,6 +52,8 @@ void Server::do_instruction(Instruction inst) {
 }
 
 void Server::do_init(Instruction inst) {
+    TIMER("do_init");
+
     int length = users.get_emb_length();
     Embedding* new_user = new Embedding(length);
     int user_idx = users.append(new_user);
@@ -62,6 +68,8 @@ void Server::do_init(Instruction inst) {
 }
 
 void Server::do_init_safe(Instruction inst) {
+    TIMER("do_init_safe");
+
     int length = users.get_emb_length();
     Embedding* new_user = new Embedding(length);
 
@@ -88,6 +96,8 @@ void Server::do_init_safe(Instruction inst) {
 }
 
 void Server::do_init_parall(Instruction inst) {
+    TIMER("do_init_parall");
+
     int length = users.get_emb_length();
     Embedding* new_user = new Embedding(length);
 
@@ -124,6 +134,9 @@ void Server::do_init_parall(Instruction inst) {
 }
 
 void Server::do_update(Instruction inst) {
+    TIMER("do_update");
+
+    std::cout << "do_update" << std::endl;
     int user_idx = inst.payloads[0];
     int item_idx = inst.payloads[1];
     int label = inst.payloads[2];
@@ -141,6 +154,8 @@ void Server::do_update(Instruction inst) {
 }
 
 void Server::do_update_safe(Instruction inst) {
+    TIMER("do_update_safe");
+
     int user_idx = inst.payloads[0];
     int item_idx = inst.payloads[1];
     int label = inst.payloads[2];
@@ -175,6 +190,8 @@ void Server::do_update_safe(Instruction inst) {
 }
 
 Embedding* Server::do_recommend(Instruction inst) {
+    TIMER("do_recommend");
+
     int user_idx = inst.payloads[0];
     Embedding* user = users.get_embedding(user_idx);
 
@@ -191,6 +208,8 @@ Embedding* Server::do_recommend(Instruction inst) {
 }
 
 Embedding* Server::do_recommend_safe(Instruction inst) {
+    TIMER("do_recommend_safe");
+
     int user_idx = inst.payloads[0];
     Embedding* user = users.get_embedding(user_idx);
     std::lock_guard<std::mutex> lock(user->mux);

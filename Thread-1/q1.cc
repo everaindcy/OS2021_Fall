@@ -3,6 +3,8 @@
 
 #include <string>   // string
 #include <chrono>   // timer
+#include <thread>
+#include <vector>
 
 #include "lib/utils.h"
 #include "lib/server.h"
@@ -17,8 +19,16 @@ int main(int argc, char *argv[]) {
     {
         proj1::AutoTimer timer("q1");  // using this to print out timing of the block
         // Run all the instructions
+
+        std::vector<std::thread*> threads;
+
         for (proj1::Instruction inst: instructions) {
-            server.do_instruction(inst);
+            auto t = new std::thread([&server, inst](){server.do_instruction(inst);});
+            threads.push_back(t);
+        }
+        for (auto t: threads) {
+            t->join();
+            delete t;
         }
     }
 
