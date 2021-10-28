@@ -12,7 +12,7 @@ class server {
 public:
     server(std::string user_filename, std::string item_filename) : users(user_filename), items(item_filename) {}
     server(std::string user_filename, std::string item_filename,
-            bool initParallilized, bool useLock, bool useEpoch) : users(user_filename), items(item_filename) {
+            bool initParallelized, bool useLock, bool useEpoch) : users(user_filename), items(item_filename) {
         this->initParallelized = initParallelized;
         this->useLock = useLock;
         this->useEpoch = useEpoch;
