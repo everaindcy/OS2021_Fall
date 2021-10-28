@@ -1,12 +1,16 @@
 #ifndef THREAD_LIB_EMBEDDING_H_
 #define THREAD_LIB_EMBEDDING_H_
 
+// Embedding:
 // Constructor and output method get lock automatically
-// get data, update, operaters will not get lock
+// get data, operaters will not get lock
+
+// EmbeddingHolder: all methods are safe
 
 #include <string>
 #include <vector>
 #include <mutex>
+#include <condition_variable>
 
 namespace proj1 {
 
@@ -62,19 +66,18 @@ public:
     void write(std::string filename);
     int append(Embedding *data);
     void update_embedding(int, EmbeddingGradient*, double);
-    Embedding* get_embedding(int idx) const { return this->emb_matx[idx]; } 
-    unsigned int get_n_embeddings() { return this->emb_matx.size(); }
-    int get_emb_length() {
-        return this->emb_matx.empty()? 0: this->get_embedding(0)->get_length();
-    }
+    Embedding* get_embedding(int idx);
+    unsigned int get_n_embeddings();
+    int get_emb_length();
     bool operator==(EmbeddingHolder&);
-    // lock&unlock
-    std::mutex mux;
-    void lock() {this->mux.lock();}
-    void unlock() {this->mux.unlock();}
 
 private:
     EmbeddingMatrix emb_matx;
+    // lock&unlock
+    std::mutex mux;
+    // void lock() {this->mux.lock();}
+    // void unlock() {this->mux.unlock();}
+    std::condition_variable cv;
 };
 
 } // namespace proj1

@@ -72,25 +72,17 @@ void Server::do_init_safe(Instruction inst) {
 
     int length = users.get_emb_length();
     Embedding* new_user = new Embedding(length);
-
-    users.lock();
     int user_idx = users.append(new_user);
-    users.unlock();
 
     for (int item_index: inst.payloads) {
-        items.lock();
         Embedding* item_emb = items.get_embedding(item_index);
-        items.unlock();
 
         Embedding* user = new Embedding(new_user);
         Embedding* item = new Embedding(item_emb);
         EmbeddingGradient* gradient = cold_start(user, item);
         delete user, item;
 
-        new_user->lock();
         users.update_embedding(user_idx, gradient, 0.01);
-        new_user->unlock();
-
         delete gradient;
     }
 }
@@ -100,28 +92,20 @@ void Server::do_init_parall(Instruction inst) {
 
     int length = users.get_emb_length();
     Embedding* new_user = new Embedding(length);
-
-    users.lock();
     int user_idx = users.append(new_user);
-    users.unlock();
 
     std::vector<std::thread*> threads;
     for (int item_index: inst.payloads) {
         std::thread* t = new std::thread(
-            [&]() {
-                items.lock();
+            [&, item_index]() {
                 Embedding* item_emb = items.get_embedding(item_index);
-                items.unlock();
 
                 Embedding* user = new Embedding(new_user);
                 Embedding* item = new Embedding(item_emb);
                 EmbeddingGradient* gradient = cold_start(user, item);
                 delete user, item;
 
-                new_user->lock();
                 users.update_embedding(user_idx, gradient, 0.01);
-                new_user->unlock();
-
                 delete gradient;
             }
         );
@@ -160,22 +144,15 @@ void Server::do_update_safe(Instruction inst) {
     int item_idx = inst.payloads[1];
     int label = inst.payloads[2];
 
-    users.lock();
     Embedding* user_emb = users.get_embedding(user_idx);
-    users.unlock();
-
-    items.lock();
     Embedding* item_emb = items.get_embedding(item_idx);
-    items.unlock();
 
     auto user = new Embedding(user_emb);
     auto item = new Embedding(item_emb);
     EmbeddingGradient* gradient = calc_gradient(user, item, label);
     delete user, item;
 
-    user_emb->lock();
     users.update_embedding(user_idx, gradient, 0.01);
-    user_emb->unlock();
     delete gradient;
 
     user = new Embedding(user_emb);
@@ -183,9 +160,7 @@ void Server::do_update_safe(Instruction inst) {
     gradient = calc_gradient(item, user, label);
     delete user, item;
 
-    item_emb->lock();
     items.update_embedding(item_idx, gradient, 0.001);
-    item_emb->unlock();
     delete gradient;
 }
 

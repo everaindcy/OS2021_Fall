@@ -1,10 +1,9 @@
-// Constructor and output method get lock automatically
-// get data, update, operaters will not get lock
 
 #include <fstream>
 #include <iostream>
 #include <sstream>
 #include <cmath>
+#include <mutex>
 
 #include "utils.h"
 #include "embedding.h"
@@ -74,6 +73,7 @@ void Embedding::update(Embedding* gradient, double stepsize) {
 
 std::string Embedding::to_string() {
     std::lock_guard<std::mutex> lock(this->mux);
+
     std::string res;
     for (int i = 0; i < this->length; ++i) {
         if (i > 0) res += ',';
@@ -190,21 +190,26 @@ EmbeddingMatrix EmbeddingHolder::read(std::string filename) {
 }
 
 int EmbeddingHolder::append(Embedding* data) {
+    std::lock_guard<std::mutex> lock(this->mux);
+
     int indx = this->emb_matx.size();
     embbedingAssert(
-        data->get_length() == this->emb_matx[0]->get_length(),
+        indx == 0 | data->get_length() == this->emb_matx[0]->get_length(),
         "Embedding to append has a different length!", LEN_MISMATCH
     );
     this->emb_matx.push_back(data);
+
+    this->cv.notify_all();
     return indx;
 }
 
 void EmbeddingHolder::write(std::string filename) {
     std::lock_guard<std::mutex> lock(this->mux);
+
     std::ofstream ofs(filename);
     if (ofs.is_open()) {
         for (Embedding* emb: this->emb_matx) {
-            ofs << emb->to_string() << '\n';
+            ofs << emb->to_string() + '\n';
         }
         ofs.close();
     } else {
@@ -214,9 +219,10 @@ void EmbeddingHolder::write(std::string filename) {
 
 void EmbeddingHolder::write_to_stdout() {
     std::lock_guard<std::mutex> lock(this->mux);
+
     std::string prefix("[OUTPUT]");
     for (Embedding* emb: this->emb_matx) {
-        std::cout << prefix << emb->to_string() << '\n';
+        std::cout << prefix + emb->to_string() + '\n';
     }
 }
 
@@ -226,16 +232,45 @@ EmbeddingHolder::~EmbeddingHolder() {
     }
 }
 
-void EmbeddingHolder::update_embedding(
-        int idx, EmbeddingGradient* gradient, double stepsize) {
-    this->emb_matx[idx]->update(gradient, stepsize);
+void EmbeddingHolder::update_embedding(int idx, EmbeddingGradient* gradient, double stepsize) {
+    Embedding* emb = this->get_embedding(idx);
+    emb->lock();
+    emb->update(gradient, stepsize);
+    emb->unlock();
+}
+
+Embedding* EmbeddingHolder::get_embedding(int idx) {
+    std::unique_lock<std::mutex> lock(this->mux);
+
+    while (idx >= this->emb_matx.size()) {
+        this->cv.wait(lock);
+    }
+    return this->emb_matx[idx];
+}
+
+unsigned int EmbeddingHolder::get_n_embeddings() {
+    std::lock_guard<std::mutex> lock(this->mux);
+
+    return this->emb_matx.size();
+}
+
+int EmbeddingHolder::get_emb_length() {
+    std::lock_guard<std::mutex> lock(this->mux);
+
+    return this->emb_matx.empty()? 0: this->emb_matx[0]->get_length();
 }
 
 bool EmbeddingHolder::operator==(EmbeddingHolder &another) {
-    if (this->get_n_embeddings() != another.emb_matx.size())
+    std::lock_guard<std::mutex> lock(this->mux);
+    std::lock_guard<std::mutex> lock1(another.mux);
+
+    if (this->emb_matx.size() != another.emb_matx.size())
         return false;
+
     for (int i = 0; i < (int)this->emb_matx.size(); ++i) {
-        if(!(*(this->emb_matx[i]) == *(another.get_embedding(i)))){
+        std::lock_guard<std::mutex> lock2(this->emb_matx[i]->mux);
+        std::lock_guard<std::mutex> lock3(another.emb_matx[i]->mux);
+        if(!(*(this->emb_matx[i]) == *(another.emb_matx[i]))){
         	return false;
 		}
     }
