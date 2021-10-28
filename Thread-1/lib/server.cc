@@ -2,10 +2,12 @@
 #include <vector>
 #include <thread>
 #include <iostream>
+#include <mutex>
+
 #include "server.h"
 #include "model.h"
-
 #include "utils.h"
+
 #define TIMER(s) proj1::AutoTimer timer(s)
 
 namespace proj1 {
@@ -33,7 +35,7 @@ void Server::do_instruction(Instruction inst) {
             } else if (!useEpoch) {
                 do_update_safe(inst);
             } else {
-
+                do_update_epoch(inst);
             }
             break;
         }
@@ -45,7 +47,8 @@ void Server::do_instruction(Instruction inst) {
                 Embedding* emb = do_recommend_safe(inst);
                 emb->write_to_stdout();
             } else {
-
+                Embedding* emb = do_recommend_epoch(inst);
+                emb->write_to_stdout();
             }
         }
     }
@@ -164,13 +167,56 @@ void Server::do_update_safe(Instruction inst) {
     delete gradient;
 }
 
+void Server::do_update_epoch(Instruction inst) {
+    int iter_idx = inst.payloads[3];
+{
+    std::unique_lock<std::mutex> lock(this->mux);
+    while (!(this->epoch >= iter_idx || (this->epoch == iter_idx - 1 && this->num_threads == 0))) {
+        this->cv.wait(lock);
+    }
+    if (this->epoch == iter_idx - 1 && this->num_threads == 0) {
+        this->epoch = iter_idx;
+    }
+    this->num_threads++;
+}
+
+    TIMER("do_update_inst");
+
+    int user_idx = inst.payloads[0];
+    int item_idx = inst.payloads[1];
+    int label = inst.payloads[2];
+
+    Embedding* user_emb = users.get_embedding(user_idx);
+    Embedding* item_emb = items.get_embedding(item_idx);
+
+    auto user = new Embedding(user_emb);
+    auto item = new Embedding(item_emb);
+    EmbeddingGradient* gradient = calc_gradient(user, item, label);
+    delete user, item;
+
+    users.update_embedding(user_idx, gradient, 0.01);
+    delete gradient;
+
+    user = new Embedding(user_emb);
+    item = new Embedding(item_emb);
+    gradient = calc_gradient(item, user, label);
+    delete user, item;
+
+    items.update_embedding(item_idx, gradient, 0.001);
+    delete gradient;
+
+{
+    std::unique_lock<std::mutex> lock(this->mux);
+    this->num_threads--;
+    this->cv.notify_all();
+}
+}
+
 Embedding* Server::do_recommend(Instruction inst) {
     TIMER("do_recommend");
 
     int user_idx = inst.payloads[0];
     Embedding* user = users.get_embedding(user_idx);
-
-    int iter_idx = inst.payloads[1];
 
     std::vector<Embedding*> item_pool;
     for (unsigned int i = 2; i < inst.payloads.size(); i++) {
@@ -189,7 +235,32 @@ Embedding* Server::do_recommend_safe(Instruction inst) {
     Embedding* user = users.get_embedding(user_idx);
     std::lock_guard<std::mutex> lock(user->mux);
 
+    std::vector<Embedding*> item_pool;
+    for (unsigned int i = 2; i < inst.payloads.size(); i++) {
+        int item_idx = inst.payloads[i];
+        Embedding* item = items.get_embedding(item_idx);
+        std::lock_guard<std::mutex> lock(item->mux);
+        item_pool.push_back(item);
+    }
+
+    Embedding* recommendation = recommend(user, item_pool);
+    return recommendation;
+}
+
+Embedding* Server::do_recommend_epoch(Instruction inst) {
     int iter_idx = inst.payloads[1];
+{
+    std::unique_lock<std::mutex> lock(this->mux);
+    while (!(this->epoch > iter_idx | (this->epoch == iter_idx && this->num_threads == 0))) {
+        this->cv.wait(lock);
+    }
+}
+
+    TIMER("do_recommend_epoch");
+
+    int user_idx = inst.payloads[0];
+    Embedding* user = users.get_embedding(user_idx);
+    std::lock_guard<std::mutex> lock(user->mux);
 
     std::vector<Embedding*> item_pool;
     for (unsigned int i = 2; i < inst.payloads.size(); i++) {

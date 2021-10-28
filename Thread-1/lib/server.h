@@ -22,9 +22,11 @@ public:
 
     void do_update(Instruction);
     void do_update_safe(Instruction);
+    void do_update_epoch(Instruction);
 
     Embedding* do_recommend(Instruction);
     Embedding* do_recommend_safe(Instruction);
+    Embedding* do_recommend_epoch(Instruction);
 
 private:
     bool initParall = false;
@@ -32,6 +34,7 @@ private:
     bool useEpoch = false;
 
     int epoch = -1;
+    int num_threads = 0; // number of update threads running in this epoch
     std::mutex mux;
     std::condition_variable cv;
 
