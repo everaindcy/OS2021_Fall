@@ -1,3 +1,6 @@
+// Constructor and output method get lock automatically
+// get data, update, operaters will not get lock
+
 #include <fstream>
 #include <iostream>
 #include <sstream>
@@ -62,7 +65,6 @@ Embedding::Embedding(int length, std::string raw) {
 }
 
 void Embedding::update(Embedding* gradient, double stepsize) {
-    std::lock_guard<std::mutex> lock(this->mux);
     embbedingAssert(gradient->length == this->length,
            "Gradient has different length from the embedding!", LEN_MISMATCH);
     for (int i = 0; i < this->length; ++i) {
@@ -86,8 +88,6 @@ void Embedding::write_to_stdout() {
 }
 
 Embedding Embedding::operator+(Embedding &another) {
-    std::lock_guard<std::mutex> lock(this->mux);
-    std::lock_guard<std::mutex> lock1(another.mux);
     double* data = new double[this->length];
     for (int i = 0; i < this->length; ++i) {
         data[i] = this->data[i] + another.data[i];
@@ -96,7 +96,6 @@ Embedding Embedding::operator+(Embedding &another) {
 }
 
 Embedding Embedding::operator+(const double value) {
-    std::lock_guard<std::mutex> lock(this->mux);
     double* data = new double[this->length];
     for (int i = 0; i < this->length; ++i) {
         data[i] = this->data[i] + value;
@@ -105,8 +104,6 @@ Embedding Embedding::operator+(const double value) {
 }
 
 Embedding Embedding::operator-(Embedding &another) {
-    std::lock_guard<std::mutex> lock(this->mux);
-    std::lock_guard<std::mutex> lock1(another.mux);
     double* data = new double[this->length];
     for (int i = 0; i < this->length; ++i) {
         data[i] = this->data[i] - another.data[i];
@@ -115,7 +112,6 @@ Embedding Embedding::operator-(Embedding &another) {
 }
 
 Embedding Embedding::operator-(const double value) {
-    std::lock_guard<std::mutex> lock(this->mux);
     double* data = new double[this->length];
     for (int i = 0; i < this->length; ++i) {
         data[i] = this->data[i] - value;
@@ -124,8 +120,6 @@ Embedding Embedding::operator-(const double value) {
 }
 
 Embedding Embedding::operator*(Embedding &another) {
-    std::lock_guard<std::mutex> lock(this->mux);
-    std::lock_guard<std::mutex> lock1(another.mux);
     double* data = new double[this->length];
     for (int i = 0; i < this->length; ++i) {
         data[i] = this->data[i] * another.data[i];
@@ -134,7 +128,6 @@ Embedding Embedding::operator*(Embedding &another) {
 }
 
 Embedding Embedding::operator*(const double value) {
-    std::lock_guard<std::mutex> lock(this->mux);
     double* data = new double[this->length];
     for (int i = 0; i < this->length; ++i) {
         data[i] = this->data[i] * value;
@@ -143,8 +136,6 @@ Embedding Embedding::operator*(const double value) {
 }
 
 Embedding Embedding::operator/(Embedding &another) {
-    std::lock_guard<std::mutex> lock(this->mux);
-    std::lock_guard<std::mutex> lock1(another.mux);
     double* data = new double[this->length];
     for (int i = 0; i < this->length; ++i) {
         data[i] = this->data[i] / another.data[i];
@@ -153,7 +144,6 @@ Embedding Embedding::operator/(Embedding &another) {
 }
 
 Embedding Embedding::operator/(const double value) {
-    std::lock_guard<std::mutex> lock(this->mux);
     double* data = new double[this->length];
     for (int i = 0; i < this->length; ++i) {
         data[i] = this->data[i] / value;
@@ -162,8 +152,6 @@ Embedding Embedding::operator/(const double value) {
 }
 
 bool Embedding::operator==(Embedding &another) {
-    std::lock_guard<std::mutex> lock(this->mux);
-    std::lock_guard<std::mutex> lock1(another.mux);
     for (int i = 0; i < this->length; ++i) {
         if(fabs(this->data[i]-another.data[i])>1.0e-6)return false;
     }
@@ -202,7 +190,6 @@ EmbeddingMatrix EmbeddingHolder::read(std::string filename) {
 }
 
 int EmbeddingHolder::append(Embedding* data) {
-    std::lock_guard<std::mutex> lock(this->mux);
     int indx = this->emb_matx.size();
     embbedingAssert(
         data->get_length() == this->emb_matx[0]->get_length(),
@@ -245,8 +232,6 @@ void EmbeddingHolder::update_embedding(
 }
 
 bool EmbeddingHolder::operator==(EmbeddingHolder &another) {
-    std::lock_guard<std::mutex> lock(this->mux);
-    std::lock_guard<std::mutex> lock1(another.mux);
     if (this->get_n_embeddings() != another.emb_matx.size())
         return false;
     for (int i = 0; i < (int)this->emb_matx.size(); ++i) {

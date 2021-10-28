@@ -1,6 +1,24 @@
 ##load("@rules_cc//cc:defs.bzl", "cc_test")  #load the test target
 
 cc_library(
+    name = "server_lib",
+    srcs = [
+        "server.cc",
+        ],
+    hdrs = [
+        "server.h",
+        ],
+    deps = [
+        ":embedding_lib",
+		":instruction_lib",
+        ":model_lib"
+    ],
+	visibility = [
+		"//visibility:public",
+	],
+)
+
+cc_library(
     name = "utils_lib",
     srcs = [
         "utils.cc",

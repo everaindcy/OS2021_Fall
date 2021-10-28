@@ -1,6 +1,9 @@
 #ifndef THREAD_LIB_EMBEDDING_H_
 #define THREAD_LIB_EMBEDDING_H_
 
+// Constructor and output method get lock automatically
+// get data, update, operaters will not get lock
+
 #include <string>
 #include <vector>
 #include <mutex>
@@ -37,13 +40,13 @@ public:
     Embedding operator/(const double);
     bool operator==(Embedding&);
     //lock&unlock
+    std::mutex mux;
     void lock() {this->mux.lock();}
     void unlock() {this->mux.unlock();}
 
 private:
     int length;
     double* data;
-    std::mutex mux;
 };
 
 using EmbeddingMatrix = std::vector<Embedding*>;
@@ -66,12 +69,12 @@ public:
     }
     bool operator==(EmbeddingHolder&);
     // lock&unlock
+    std::mutex mux;
     void lock() {this->mux.lock();}
     void unlock() {this->mux.unlock();}
 
 private:
     EmbeddingMatrix emb_matx;
-    std::mutex mux;
 };
 
 } // namespace proj1

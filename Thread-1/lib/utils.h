@@ -7,7 +7,7 @@
 #include <chrono>  // for AutoTimer function
 
 // slow_function
-#define slow_function true
+#define slow_function false
 #define timescale seconds
 
 // For colored outputs in terminal
