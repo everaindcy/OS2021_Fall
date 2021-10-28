@@ -19,6 +19,17 @@ cc_library(
 	],
 )
 
+cc_test(
+  name = "server_lib_test",
+  size = "small",
+  srcs = ["server_test.cc"],
+  deps = [
+      "@gtest//:gtest_main",
+	  ":server_lib",
+      ":embedding_lib",
+      ],
+)
+
 cc_library(
     name = "utils_lib",
     srcs = [

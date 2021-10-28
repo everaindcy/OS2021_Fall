@@ -28,6 +28,8 @@ public:
     Embedding* do_recommend_safe(Instruction);
     Embedding* do_recommend_epoch(Instruction);
 
+    bool operator==(Server&);
+
 private:
     bool initParall = false;
     bool useLock = false;

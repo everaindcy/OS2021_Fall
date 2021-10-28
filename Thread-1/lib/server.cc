@@ -274,4 +274,8 @@ Embedding* Server::do_recommend_epoch(Instruction inst) {
     return recommendation;
 }
 
+bool Server::operator==(Server& svr) {
+    return this->users == svr.users && this->items == svr.items;
+}
+
 } // namespace proj1
