@@ -109,7 +109,7 @@ We recommend you to use the standard C++11 Threading to implement multi-threadin
 You should create a `.diff` file of your latest commit from the latest commit of the main project on learn.tsinghua, as follows:
 
 ```bash
-git diff YOUR_COMMIT_SHA1 MAIN_REPO_COMMIT_SHA1 > ${STUDENT_ID_1}_${STUDENT_ID_2}.diff
+git diff MAIN_REPO_COMMIT_SHA1 YOUR_COMMIT_SHA1 > ${STUDENT_ID_1}_${STUDENT_ID_2}.diff
 ```
 
 To test whether your `.diff` works, clone a new repo and call `git apply ${STUDENT_ID_1}_${STUDENT_ID_2}.diff` and see if your code still works.
