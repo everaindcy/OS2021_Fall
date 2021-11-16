@@ -4,7 +4,8 @@
 #include<stdio.h>
 #include <thread>
 #include <mutex>
-#include <unistd.h>
+#include <semaphore>
+//#include <unistd.h>
 
 #include "boatGrader.h"
 
@@ -14,6 +15,8 @@ public:
 	Boat();
     ~Boat(){};
 	void begin(int, int, BoatGrader*);
+	static void ChildThread(BoatGrader*);
+	static void AdultThread(BoatGrader*);
 };
 }
 

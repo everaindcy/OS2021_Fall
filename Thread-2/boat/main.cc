@@ -9,7 +9,7 @@ int main(int argc, char *argv[]){
         printf("\nUsage %s [adult num] [children num] \n", argv[0]);
         exit(1);
     }
-    int adults = atoi(argv[1]);
+    int adults = atoi(argv[1]); // from string to int
     int children = atoi(argv[2]);
 	proj2::BoatGrader* bg = new proj2::BoatGrader(adults,children); 
 	proj2::Boat* boat = new proj2::Boat();

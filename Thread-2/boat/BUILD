@@ -8,6 +8,12 @@ cc_library(
     hdrs = [
         "boatGrader.h",
         ],
+    copts = [
+        "/std:c++20",
+        "/03",
+        "/std:c++20",
+        "-03"
+    ],
 	visibility = [
 		"//visibility:public",
 	],
@@ -24,6 +30,12 @@ cc_library(
 	deps = [
         ":boatGrader_lib"
     ],
+    copts = [
+        "/std:c++20",
+        "/03",
+        "/std:c++20",
+        "-03"
+    ],
 	visibility = [
 		"//visibility:public",
 	],
@@ -38,9 +50,11 @@ cc_binary(
         ":boatGrader_lib",
 		":boat_lib"
     ],
-	copts = [
-        "-O3",
-        "-std=c++11",
+    copts = [
+        "/std:c++20",
+        "/03",
+        "/std:c++20",
+        "-03"
     ],
 	linkopts = [
         "-pthread",
