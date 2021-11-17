@@ -3,6 +3,8 @@
 
 #include <string>   // string
 #include <chrono>   // timer
+#include <thread>
+#include <vector>
 
 #include "lib/utils.h"
 #include "lib/server.h"

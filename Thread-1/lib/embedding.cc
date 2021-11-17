@@ -35,11 +35,10 @@ Embedding::Embedding(Embedding* origin) {
     this->data = newData;
 }
 
-Embedding::Embedding(Embedding& origin) {
-    std::lock_guard<std::mutex> lock(origin.mux);
-	int length = origin.get_length();
+Embedding::Embedding(Embedding const& origin) {
+	int length = origin.length;
     embbedingAssert(length > 0, "Non-positive length encountered!", NON_POSITIVE_LEN);
-    double* oldData = origin.get_data();
+    double* oldData = origin.data;
     double* newData = new double[length];
     for(int i = 0; i<length; i++) newData[i] = oldData[i];
     this->length = length;

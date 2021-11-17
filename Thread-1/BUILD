@@ -53,6 +53,7 @@ cc_binary(
     copts = [
         "-std=c++11",
     ],
+    linkopts = ["-lpthread"],
     data = glob(["data/q1*"]),
 )
 
@@ -69,6 +70,7 @@ cc_binary(
     copts = [
         "-std=c++11",
     ],
+    linkopts = ["-lpthread"],
     data = glob(["data/q2*"]),
 )
 
@@ -85,6 +87,7 @@ cc_binary(
     copts = [
         "-std=c++11",
     ],
+    linkopts = ["-lpthread"],
     data = glob(["data/q3*"]),
 )
 
@@ -101,6 +104,7 @@ cc_binary(
     copts = [
         "-std=c++11",
     ],
+    linkopts = ["-lpthread"],
     data = glob(["data/q4*"]),
 )
 
