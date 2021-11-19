@@ -60,10 +60,12 @@ void ResourceManager::release(RESOURCE r, int amount) {
 bool ResourceManager::check_security(RESOURCE r, int amount) {
 
     std::map<RESOURCE, int> available;
+    std::map<std::thread::id, int*> cur_allocation;
     available = resource_amount;
+    cur_allocation = allocation;
 
     std::thread::id this_id = std::this_thread::get_id();
-    // printf("%7d check %d : %d (now available %d %d %d %d)\n", debug_thread_id[this_id], r, amount, available[GPU], available[MEMORY], available[DISK], available[NETWORK]);
+    printf("%7d check %d : %d (now available %d %d %d %d)\n", debug_thread_id[this_id], r, amount, available[GPU], available[MEMORY], available[DISK], available[NETWORK]);
     // for (int n = 0; n < threadList.size(); n++) {
     //     printf("%7d check (cur_alloc %d : %d %d %d %d)\n", (*(uint32_t*)&this_id), (*(uint32_t*)&threadList[n]), allocation[threadList[n]][GPU], allocation[threadList[n]][MEMORY], allocation[threadList[n]][DISK], allocation[threadList[n]][NETWORK]);
     // }
@@ -72,14 +74,14 @@ bool ResourceManager::check_security(RESOURCE r, int amount) {
         // printf("FAILED more than available\n");
         return false;
     }
-    if (allocation[this_id][r] + amount > max[this_id][r]) {
+    if (cur_allocation[this_id][r] + amount > max[this_id][r]) {
         // printf("FAILED more than max\n");
         return false;
     }
     // printf("\n");
 
     available[r] -= amount;
-    allocation[this_id][r] += amount;
+    cur_allocation[this_id][r] += amount;
 
 
     for (int i = 0; i < threadList.size(); i++)
@@ -93,7 +95,7 @@ bool ResourceManager::check_security(RESOURCE r, int amount) {
             bool is_available = true;
             for (int i = 0; i < 4; i++) {
                 // printf("%7d check (%d,%d) : max:%d, alloc:%d, avail:%d\n", (*(uint32_t*)&this_id), (*(uint32_t*)&threadList[n]), i, max[threadList[n]][i], allocation[threadList[n]][i], available[(proj2::RESOURCE)i]);
-                if (max[threadList[n]][i] - allocation[threadList[n]][i] > available[(proj2::RESOURCE)i]) {
+                if (max[threadList[n]][i] - cur_allocation[threadList[n]][i] > available[(proj2::RESOURCE)i]) {
                     is_available = false;
                     break;
                 }
@@ -102,7 +104,7 @@ bool ResourceManager::check_security(RESOURCE r, int amount) {
             if (is_available) {
                 done = false;
                 for (int i = 0; i < 4; i++) {
-                    available[(proj2::RESOURCE)i] += allocation[threadList[n]][i];
+                    available[(proj2::RESOURCE)i] += cur_allocation[threadList[n]][i];
                 }
                 unfinished[threadList[n]] = false;
             }
@@ -110,7 +112,7 @@ bool ResourceManager::check_security(RESOURCE r, int amount) {
     }
 
     available[r] += amount;
-    allocation[this_id][r] -= amount;
+    cur_allocation[this_id][r] -= amount;
 
     for (int n = 0; n < threadList.size(); n++) {
         if (unfinished[threadList[n]]) {
