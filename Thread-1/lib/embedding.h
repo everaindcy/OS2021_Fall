@@ -26,7 +26,7 @@ public:
     Embedding(int, double*);
     Embedding(int, std::string);
     Embedding(Embedding*);
-    Embedding(Embedding&);
+    Embedding(Embedding const&);
     ~Embedding() { delete []this->data; }
     double* get_data() { return this->data; }
     int get_length() { return this->length; }
