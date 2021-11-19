@@ -13,10 +13,10 @@ int ResourceManager::request(RESOURCE r, int amount) {
 
 
     std::thread::id this_id = std::this_thread::get_id();
-    printf("%7d request %d : %d\n", (*(uint32_t*)&this_id), r, amount);
+    printf("%7d request %d : %d\n", debug_thread_id[this_id], r, amount);
 
     if (amount <= 0)  {
-        printf("%7d request with WRONG parameter.\n",(*(uint32_t*)&this_id));
+        printf("%7d request with WRONG parameter.\n",debug_thread_id[this_id]);
         return 1;
     }
     
@@ -36,7 +36,7 @@ int ResourceManager::request(RESOURCE r, int amount) {
             }
         }
     }
-    printf("%7d get %d : %d\n", (*(uint32_t*)&this_id), r, amount);
+    printf("%7d get %d : %d\n", debug_thread_id[this_id], r, amount);
     this->resource_amount[r] -= amount;
     this->allocation[this_id][r] += amount;
     // this->available[r] -= amount;
@@ -48,7 +48,7 @@ int ResourceManager::request(RESOURCE r, int amount) {
 
 void ResourceManager::release(RESOURCE r, int amount) {
     std::thread::id this_id = std::this_thread::get_id();
-    printf("%7d release %d : %d\n", (*(uint32_t*)&this_id), r, amount);
+    printf("%7d release %d : %d\n", debug_thread_id[this_id], r, amount);
     if (amount <= 0)  return;
     // std::unique_lock<std::mutex> lk(this->resource_mutex[r]);
     std::unique_lock<std::mutex> lk(data_lock);
@@ -63,7 +63,7 @@ bool ResourceManager::check_security(RESOURCE r, int amount) {
     available = resource_amount;
 
     std::thread::id this_id = std::this_thread::get_id();
-    printf("%7d check %d : %d (now available %d %d %d %d)\n", (*(uint32_t*)&this_id), r, amount, available[GPU], available[MEMORY], available[DISK], available[NETWORK]);
+    // printf("%7d check %d : %d (now available %d %d %d %d)\n", debug_thread_id[this_id], r, amount, available[GPU], available[MEMORY], available[DISK], available[NETWORK]);
     // for (int n = 0; n < threadList.size(); n++) {
     //     printf("%7d check (cur_alloc %d : %d %d %d %d)\n", (*(uint32_t*)&this_id), (*(uint32_t*)&threadList[n]), allocation[threadList[n]][GPU], allocation[threadList[n]][MEMORY], allocation[threadList[n]][DISK], allocation[threadList[n]][NETWORK]);
     // }
@@ -102,7 +102,7 @@ bool ResourceManager::check_security(RESOURCE r, int amount) {
             if (is_available) {
                 done = false;
                 for (int i = 0; i < 4; i++) {
-                    available[(proj2::RESOURCE)i] += allocation[threadList[n]][i]; // 没有深拷贝
+                    available[(proj2::RESOURCE)i] += allocation[threadList[n]][i];
                 }
                 unfinished[threadList[n]] = false;
             }
@@ -119,7 +119,7 @@ bool ResourceManager::check_security(RESOURCE r, int amount) {
         }
     }
 
-    printf("%7d check PASS\n", (*(uint32_t*)&this_id));
+    // printf("%7d check PASS\n", debug_thread_id[this_id]);
     return true;
 }
 
@@ -132,7 +132,7 @@ void ResourceManager::budget_claim(std::map<RESOURCE, int> budget) {
 
     this->total_thread++;
     debug_thread_id[this_id] = total_thread;
-    printf("%7d Total thread: %d\n",(*(uint32_t*)&this_id), this->total_thread);
+    printf("%7d Total thread: %d\n",debug_thread_id[this_id], this->total_thread);
 
     this->threadList.push_back(this_id);
 
@@ -147,7 +147,7 @@ void ResourceManager::budget_claim(std::map<RESOURCE, int> budget) {
     std::map<RESOURCE, int>::iterator iter;
     for (iter = budget.begin(); iter != budget.end(); iter++) {
         this->max[this_id][iter->first] = iter->second;
-        printf("%7d claim %d : %d\n", (*(uint32_t*)&this_id), iter->first, iter->second);
+        // printf("%7d claim %d : %d\n", debug_thread_id[this_id], iter->first, iter->second);
     }
 }
 
