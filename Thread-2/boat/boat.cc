@@ -32,7 +32,7 @@ void Boat:: ChildThread(BoatGrader* bg){
             bg->ChildRowToMolokai();
             ChildToMolokai.release();
         } else {
-            if (Oahu_child_counter == 0 and Oahu_adult_counter == 0) isEnd = true;
+            if (Oahu_child_counter == 0 && Oahu_adult_counter == 0) isEnd = true;
 
             isPilot = true;
             bg->ChildRideToMolokai();
