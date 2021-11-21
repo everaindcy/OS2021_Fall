@@ -12,7 +12,7 @@
 
 int main(int argc, char *argv[]) {
 
-    proj1::Server server("data/q1.in", "data/q1.in", false, true, false);
+    proj1::Server server("data/q1.in", "data/q1.in", false, true, false, false);
 
     proj1::Instructions instructions = proj1::read_instructrions("data/q1_instruction.tsv");
 

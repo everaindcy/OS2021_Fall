@@ -11,8 +11,8 @@ namespace proj1 {
 class Server {
 public:
     Server(std::string user_filename, std::string item_filename) : users(user_filename), items(item_filename) {}
-    Server(std::string user_filename, std::string item_filename, bool initParall, bool useLock, bool useEpoch)
-        : users(user_filename), items(item_filename), initParall(initParall), useLock(useLock), useEpoch(useEpoch) {}
+    Server(std::string user_filename, std::string item_filename, bool initParall, bool useLock, bool useEpoch, bool changeInplace)
+        : users(user_filename), items(item_filename), initParall(initParall), useLock(useLock), useEpoch(useEpoch), changeInplace(changeInplace) {}
     void do_instruction(Instruction);
     void write_to_stdout();
 
@@ -23,10 +23,12 @@ public:
     void do_update(Instruction);
     void do_update_safe(Instruction);
     void do_update_epoch(Instruction);
+    void do_update_inplace(Instruction);
 
     Embedding* do_recommend(Instruction);
     Embedding* do_recommend_safe(Instruction);
     Embedding* do_recommend_epoch(Instruction);
+    Embedding* do_recommend_non_inplace(Instruction);
 
     bool operator==(Server&);
 
@@ -34,6 +36,7 @@ private:
     bool initParall = false;
     bool useLock = false;
     bool useEpoch = false;
+    bool changeInplace = false;
 
     int epoch = -1;
     int num_threads = 0; // number of update threads running in this epoch

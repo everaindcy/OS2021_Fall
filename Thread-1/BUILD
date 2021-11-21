@@ -108,6 +108,23 @@ cc_binary(
     data = glob(["data/q4*"]),
 )
 
+cc_binary(
+    name = "q5",
+    srcs = [
+        "q5.cc"
+            ],
+    deps = [
+        "//lib:instruction_lib",
+        "//lib:utils_lib",
+        "//lib:server_lib"
+    ],
+    copts = [
+        "-std=c++11",
+    ],
+    linkopts = ["-lpthread"],
+    data = glob(["data/q4*"]),
+)
+
 cc_test(
   name = "benchmark",
   size = "small",

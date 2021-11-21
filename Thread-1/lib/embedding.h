@@ -2,7 +2,7 @@
 #define THREAD_LIB_EMBEDDING_H_
 
 // Embedding:
-// Constructor and output method get lock automatically
+// Constructor and output method get lock automatically except copy constructor
 // get data, operaters will not get lock
 
 // EmbeddingHolder: all methods are safe

@@ -35,7 +35,11 @@ void Server::do_instruction(Instruction inst) {
             } else if (!useEpoch) {
                 do_update_safe(inst);
             } else {
-                do_update_epoch(inst);
+                if (!changeInplace) {
+                    do_update_epoch(inst);
+                } else {
+                    do_update_inplace(inst);
+                }
             }
             break;
         }
@@ -47,8 +51,13 @@ void Server::do_instruction(Instruction inst) {
                 Embedding* emb = do_recommend_safe(inst);
                 emb->write_to_stdout();
             } else {
-                Embedding* emb = do_recommend_epoch(inst);
-                emb->write_to_stdout();
+                if (!changeInplace) {
+                    Embedding* emb = do_recommend_epoch(inst);
+                    emb->write_to_stdout();
+                } else {
+                    Embedding* emb = do_recommend_non_inplace(inst);
+                    emb->write_to_stdout();
+                }
             }
         }
     }
@@ -180,7 +189,7 @@ void Server::do_update_epoch(Instruction inst) {
     this->num_threads++;
 }
 
-    TIMER("do_update_inst");
+    TIMER("do_update_epoch");
 
     int user_idx = inst.payloads[0];
     int item_idx = inst.payloads[1];
@@ -204,6 +213,47 @@ void Server::do_update_epoch(Instruction inst) {
 
     items.update_embedding(item_idx, gradient, 0.001);
     delete gradient;
+
+{
+    std::unique_lock<std::mutex> lock(this->mux);
+    this->num_threads--;
+    this->cv.notify_all();
+}
+}
+
+void Server::do_update_inplace(Instruction inst) {
+    int iter_idx = inst.payloads[3];
+{
+    std::unique_lock<std::mutex> lock(this->mux);
+    while (!(this->epoch >= iter_idx || (this->epoch == iter_idx - 1 && this->num_threads == 0))) {
+        this->cv.wait(lock);
+    }
+    if (this->epoch == iter_idx - 1 && this->num_threads == 0) {
+        this->epoch = iter_idx;
+    }
+    this->num_threads++;
+}
+
+    TIMER("do_update_inplace");
+
+    int user_idx = inst.payloads[0];
+    int item_idx = inst.payloads[1];
+    int label = inst.payloads[2];
+
+    Embedding* user_emb = users.get_embedding(user_idx);
+    Embedding* item_emb = items.get_embedding(item_idx);
+
+{
+    std::lock_guard<std::mutex> userlock(user_emb->mux);
+    std::lock_guard<std::mutex> itemlock(item_emb->mux);
+    EmbeddingGradient* gradient = calc_gradient(user_emb, item_emb, label);
+    user_emb->update(gradient, 0.01);
+    delete gradient;
+
+    gradient = calc_gradient(item_emb, user_emb, label);
+    item_emb->update(gradient, 0.001);
+    delete gradient;
+}
 
 {
     std::unique_lock<std::mutex> lock(this->mux);
@@ -271,6 +321,39 @@ Embedding* Server::do_recommend_epoch(Instruction inst) {
     }
 
     Embedding* recommendation = recommend(user, item_pool);
+    return recommendation;
+}
+
+Embedding* Server::do_recommend_non_inplace(Instruction inst) {
+    int iter_idx = inst.payloads[1];
+{
+    std::unique_lock<std::mutex> lock(this->mux);
+    while (!(this->epoch > iter_idx | (this->epoch == iter_idx && this->num_threads == 0))) {
+        this->cv.wait(lock);
+    }
+}
+
+    TIMER("do_recommend_non_inplace");
+
+    int user_idx = inst.payloads[0];
+    Embedding* user_emb = users.get_embedding(user_idx);
+    Embedding* user = new Embedding(user_emb);
+
+    std::vector<Embedding*> item_pool;
+    for (unsigned int i = 2; i < inst.payloads.size(); i++) {
+        int item_idx = inst.payloads[i];
+        Embedding* item_emb = items.get_embedding(item_idx);
+        Embedding* item = new Embedding(item_emb);
+        item_pool.push_back(item);
+    }
+
+    Embedding* recommendation = recommend(user, item_pool);
+
+    delete user;
+    for(auto item : item_pool) {
+        delete item;
+    }
+
     return recommendation;
 }
 
