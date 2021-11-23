@@ -5,6 +5,10 @@
 // Constructor and output method get lock automatically
 // get data, operaters will not get lock
 
+// only when do read-calc-write, should get wmux (then get mux when write),
+// so that thread only want to read also can read when calc,
+// thread also want to do read-calc-write cannot read
+
 // EmbeddingHolder: all methods are safe
 
 #include <string>
@@ -44,6 +48,7 @@ public:
     Embedding operator/(const double);
     bool operator==(Embedding&);
     //lock&unlock
+    mutable std::mutex wmux;
     mutable std::mutex mux;
     void lock() {this->mux.lock();}
     void unlock() {this->mux.unlock();}

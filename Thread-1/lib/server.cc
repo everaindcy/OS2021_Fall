@@ -244,14 +244,14 @@ void Server::do_update_inplace(Instruction inst) {
     Embedding* item_emb = items.get_embedding(item_idx);
 
 {
-    std::lock_guard<std::mutex> userlock(user_emb->mux);
-    std::lock_guard<std::mutex> itemlock(item_emb->mux);
+    std::lock_guard<std::mutex> userlock(user_emb->wmux);
+    std::lock_guard<std::mutex> itemlock(item_emb->wmux);
     EmbeddingGradient* gradient = calc_gradient(user_emb, item_emb, label);
-    user_emb->update(gradient, 0.01);
+    users.update_embedding(user_idx, gradient, 0.01);
     delete gradient;
 
     gradient = calc_gradient(item_emb, user_emb, label);
-    item_emb->update(gradient, 0.001);
+    items.update_embedding(item_idx, gradient, 0.001);
     delete gradient;
 }
 
