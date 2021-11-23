@@ -1,15 +1,17 @@
 #ifndef THREAD_LIB_EMBEDDING_H_
 #define THREAD_LIB_EMBEDDING_H_
 
-// Embedding:
-// Constructor and output method get lock automatically
-// get data, operaters will not get lock
-
-// only when do read-calc-write, should get wmux (then get mux when write),
-// so that thread only want to read also can read when calc,
-// thread also want to do read-calc-write cannot read
-
-// EmbeddingHolder: all methods are safe
+/**
+ * Embedding:
+ * Constructor and output method get lock automatically
+ * get data, operaters will not get lock
+ * 
+ * only when do read-calc-write, should get wmux (then get mux when write),
+ * so that thread only want to read also can read when calc,
+ * thread also want to do read-calc-write cannot read
+ * 
+ * EmbeddingHolder: all methods are safe
+*/
 
 #include <string>
 #include <vector>
