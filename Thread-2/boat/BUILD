@@ -9,10 +9,10 @@ cc_library(
         "boatGrader.h",
         ],
     copts = [
-        "/std:c++20",
-        "/03",
-        "/std:c++20",
-        "-03"
+        # "/std:c++20",
+        # "/03",
+        "-std=c++2a",
+        "-O3"
     ],
 	visibility = [
 		"//visibility:public",
@@ -31,10 +31,10 @@ cc_library(
         ":boatGrader_lib"
     ],
     copts = [
-        "/std:c++20",
-        "/03",
-        "/std:c++20",
-        "-03"
+        # "/std:c++20",
+        # "/03",
+        "-std=c++2a",
+        "-O3"
     ],
 	visibility = [
 		"//visibility:public",
@@ -51,10 +51,10 @@ cc_binary(
 		":boat_lib"
     ],
     copts = [
-        "/std:c++20",
-        "/03",
-        "/std:c++20",
-        "-03"
+        # "/std:c++20",
+        # "/03",
+        "-std=c++2a",
+        "-O3"
     ],
 	linkopts = [
         "-pthread",

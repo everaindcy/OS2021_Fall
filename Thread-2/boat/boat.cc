@@ -1,7 +1,7 @@
 #include <thread>
 #include <vector>
 #include <semaphore>
-//#include <unistd.h>
+#include <unistd.h>
 
 #include "boat.h"
 
@@ -10,7 +10,8 @@ int Oahu_child_counter = 0, Molokai_child_counter = 0, Oahu_adult_counter = 0;
 bool isPilot = true;
 bool isEnd = false;
 
-std::binary_semaphore ChildToMolokai(1);
+std::binary_semaphore ThreadStart(0);
+std::binary_semaphore ChildToMolokai(0);
 std::binary_semaphore AdultToMolokai(0);
 std::binary_semaphore ChildToOahu(0);
 std::binary_semaphore End(0);
@@ -21,6 +22,7 @@ Boat::Boat(){
 void Boat:: ChildThread(BoatGrader* bg){
     Oahu_child_counter++;
     bg->initializeChild();
+    ThreadStart.release();
 
     while(true){
         ChildToMolokai.acquire();
@@ -61,6 +63,7 @@ void Boat:: ChildThread(BoatGrader* bg){
 void Boat:: AdultThread(BoatGrader* bg){
     Oahu_adult_counter++;
     bg->initializeAdult();
+    ThreadStart.release();
 
     AdultToMolokai.acquire();
     Oahu_adult_counter--;
@@ -72,11 +75,15 @@ void Boat:: begin(int adults, int children, BoatGrader *bg){
     std::vector<std::thread> threadList;
     for (int i = 0; i < adults; i++) {
         threadList.push_back(std::thread(proj2::Boat::AdultThread, bg));
+        ThreadStart.acquire();
     }
     for (int i = 0; i < children; i++) {
         threadList.push_back(std::thread(proj2::Boat::ChildThread, bg));
+        ThreadStart.acquire();
     }
 
+    ChildToMolokai.release();
+    // ChildToMolokai.release();
     End.acquire();
 
     for (int i = 0; i < threadList.size(); i++) {
