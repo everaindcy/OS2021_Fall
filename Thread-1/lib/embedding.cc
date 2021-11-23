@@ -36,6 +36,7 @@ Embedding::Embedding(Embedding* origin) {
 }
 
 Embedding::Embedding(Embedding const& origin) {
+    std::lock_guard<std::mutex> lock(origin.mux);
 	int length = origin.length;
     embbedingAssert(length > 0, "Non-positive length encountered!", NON_POSITIVE_LEN);
     double* oldData = origin.data;

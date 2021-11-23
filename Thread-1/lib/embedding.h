@@ -2,7 +2,7 @@
 #define THREAD_LIB_EMBEDDING_H_
 
 // Embedding:
-// Constructor and output method get lock automatically except copy constructor
+// Constructor and output method get lock automatically
 // get data, operaters will not get lock
 
 // EmbeddingHolder: all methods are safe
@@ -44,7 +44,7 @@ public:
     Embedding operator/(const double);
     bool operator==(Embedding&);
     //lock&unlock
-    std::mutex mux;
+    mutable std::mutex mux;
     void lock() {this->mux.lock();}
     void unlock() {this->mux.unlock();}
 
@@ -74,10 +74,10 @@ public:
 private:
     EmbeddingMatrix emb_matx;
     // lock&unlock
-    std::mutex mux;
+    mutable std::mutex mux;
     // void lock() {this->mux.lock();}
     // void unlock() {this->mux.unlock();}
-    std::condition_variable cv;
+    mutable std::condition_variable cv;
 };
 
 } // namespace proj1
