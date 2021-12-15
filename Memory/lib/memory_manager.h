@@ -49,7 +49,7 @@ public:
 private:
     std::map<int, std::map<int, int>> page_map; // // mapping from ArrayList's virtual page # to physical page #
     PageFrame** mem; // physical pages, using 'PageFrame* mem' is also acceptable 
-    PageInfo* page_info; // physical page info
+    PageInfo** page_info; // physical page info
     unsigned int* free_list;  // use bitmap implementation to identify and search for free pages
     int next_array_id;
     size_t mma_sz;
