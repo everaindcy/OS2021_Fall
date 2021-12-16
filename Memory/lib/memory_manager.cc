@@ -134,14 +134,16 @@ namespace proj3 {
             page_map[old_holder][old_virtual_page_id] = -1;
             page_map[array_id][virtual_page_id] = phy_page_id;
             page_info[phy_page_id]->SetInfo(array_id, virtual_page_id);
+            PageOut(phy_page_id, old_holder, old_virtual_page_id);
+            PageIn(array_id, virtual_page_id, phy_page_id);
         }
         phy_page_id = page_map[array_id][virtual_page_id];
         page_info[phy_page_id]->used = 1;
         page_info[phy_page_id]->lock();
         mma_lock.unlock();
         if (need_replace){
-            PageOut(phy_page_id, old_holder, old_virtual_page_id);
-            PageIn(array_id, virtual_page_id, phy_page_id);
+            // PageOut(phy_page_id, old_holder, old_virtual_page_id);
+            // PageIn(array_id, virtual_page_id, phy_page_id);
         }
         PageFrame* page = mem[phy_page_id];
         int result = (*page)[offset];
@@ -190,7 +192,11 @@ namespace proj3 {
             }
         }
         fclose(fin);
-        if (phy_Page_idx != -1) { mem[phy_Page_idx]->Clear(); }
+        if (phy_Page_idx != -1) {
+            page_info[phy_Page_idx]->lock();
+            mem[phy_Page_idx]->Clear();
+            page_info[phy_Page_idx]->unlock();
+        }
     }
     ArrayList* MemoryManager::Allocate(size_t sz){
         // when an application requires for memory, create an ArrayList and record mappings from its virtual memory space to the physical memory space
