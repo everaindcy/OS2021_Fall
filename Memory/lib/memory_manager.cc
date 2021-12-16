@@ -13,7 +13,7 @@ namespace proj3 {
     }
     void PageFrame::WriteDisk(std::string filename) {
         // write page content into disk files
-        // printf("disk write : %s\n", filename);
+        // printf("disk write : %s, mem[1] = %d\n", filename, mem[1]);
         std::string path = ".\\disk\\";
         auto fin = fopen((path + filename + ".txt").c_str(), "w");
         for (int i = 0; i < PageSize; i++) {
@@ -87,16 +87,18 @@ namespace proj3 {
         delete[] mem;
         delete[] page_info;
     }
-    void MemoryManager::PageOut(int physical_page_id){
+    void MemoryManager::PageOut(int physical_page_id, int holder = -2, int virtual_page_id = -2){
         //swap out the physical page with the indx of 'physical_page_id out' into a disk file
         auto a_page = mem[physical_page_id];
         auto a_info = page_info[physical_page_id];
-        if(a_info->GetHolder() == -1) return;
-        page_map[a_info->GetHolder()][a_info->GetVid()] = -1;
-        auto filename = std::to_string(a_info->GetHolder()) + "-" + std::to_string(a_info->GetVid());
-        // printf("page out   : id %d, vid %d, phy %d\n", a_info->GetHolder(), a_info->GetVid(), physical_page_id);
+        int a_holder = (holder != -2) ? holder : a_info->GetHolder();
+        int a_vid = (virtual_page_id != -2) ? virtual_page_id : a_info->GetVid();
+        if(a_holder == -1) return;
+        // page_map[a_info->GetHolder()][a_info->GetVid()] = -1;
+        auto filename = std::to_string(a_holder) + "-" + std::to_string(a_vid);
+        // printf("page out   : id %d, vid %d, phy %d\n", a_holder, a_vid, physical_page_id);
         a_page->WriteDisk(filename);
-        a_info->ClearInfo();
+        // a_info->ClearInfo();
     }
     void MemoryManager::PageIn(int array_id, int virtual_page_id, int physical_page_id){
         //swap the target page from the disk file into a physical page with the index of 'physical_page_id out'
@@ -104,31 +106,43 @@ namespace proj3 {
         auto filename = std::to_string(array_id) + "-" + std::to_string(virtual_page_id);
         auto phy_Page = mem[physical_page_id];
         phy_Page->ReadDisk(filename);
-        page_info[physical_page_id]->SetInfo(array_id, virtual_page_id);
+        // page_info[physical_page_id]->SetInfo(array_id, virtual_page_id);
     }
-    void MemoryManager::PageReplace(int array_id, int virtual_page_id){
+    int MemoryManager::PageReplace(int array_id, int virtual_page_id){
         //implement your page replacement policy here
-        auto filename = std::to_string(array_id) + "-" + std::to_string(virtual_page_id);
-        int phy_page_id = ReplacementPolicyClock();
+        // int phy_page_id = ReplacementPolicyClock();
+        return ReplacementPolicyClock();
         // PageOut(phy_page_id);
         // PageIn(array_id, virtual_page_id, phy_page_id);
-        page_map[array_id][virtual_page_id] = phy_page_id;
-        page_info[phy_page_id]->SetInfo(array_id, virtual_page_id);
+
+        // page_map[page_info[phy_page_id]->GetHolder()][page_info[phy_page_id]->GetVid()] = -1;
+        // page_map[array_id][virtual_page_id] = phy_page_id;
+        // page_info[phy_page_id]->SetInfo(array_id, virtual_page_id);
     }
     int MemoryManager::ReadPage(int array_id, int virtual_page_id, int offset){
         // for arrayList of 'array_id', return the target value on its virtual space
         // if(offset==0) printf("read page  : id %d, vid %d, offset %d\n", array_id, virtual_page_id, offset);
         mma_lock.lock();
+        bool need_replace = false;
+        int old_holder, old_virtual_page_id;
         int phy_page_id = page_map[array_id][virtual_page_id];
         if (phy_page_id == -1) {
-            PageReplace(array_id, virtual_page_id);
+            need_replace = true;
+            phy_page_id = PageReplace(array_id, virtual_page_id);
+            old_holder = page_info[phy_page_id]->GetHolder();
+            old_virtual_page_id = page_info[phy_page_id]->GetVid();
+            page_map[old_holder][old_virtual_page_id] = -1;
+            page_map[array_id][virtual_page_id] = phy_page_id;
+            page_info[phy_page_id]->SetInfo(array_id, virtual_page_id);
         }
         phy_page_id = page_map[array_id][virtual_page_id];
         page_info[phy_page_id]->used = 1;
         page_info[phy_page_id]->lock();
         mma_lock.unlock();
-        PageOut(phy_page_id);
-        PageIn(array_id, virtual_page_id, phy_page_id);
+        if (need_replace){
+            PageOut(phy_page_id, old_holder, old_virtual_page_id);
+            PageIn(array_id, virtual_page_id, phy_page_id);
+        }
         PageFrame* page = mem[phy_page_id];
         int result = (*page)[offset];
         page_info[phy_page_id]->unlock();
@@ -138,16 +152,29 @@ namespace proj3 {
         // for arrayList of 'array_id', write 'value' into the target position on its virtual space
         // if(offset==0) printf("write page : id %d, vid %d, offset %d, value %d\n", array_id, virtual_page_id, offset, value);
         mma_lock.lock();
+        bool need_replace = false;
+        int old_holder, old_virtual_page_id;
         int phy_page_id = page_map[array_id][virtual_page_id];
         if (phy_page_id == -1) {
-            PageReplace(array_id, virtual_page_id);
+            need_replace = true;
+            // printf("write page need replace\n");
+            phy_page_id = PageReplace(array_id, virtual_page_id);
+            old_holder = page_info[phy_page_id]->GetHolder();
+            old_virtual_page_id = page_info[phy_page_id]->GetVid();
+            page_map[old_holder][old_virtual_page_id] = -1;
+            page_map[array_id][virtual_page_id] = phy_page_id;
+            page_info[phy_page_id]->SetInfo(array_id, virtual_page_id);
+            PageOut(phy_page_id, old_holder, old_virtual_page_id);
+            PageIn(array_id, virtual_page_id, phy_page_id);
         }
-        phy_page_id = page_map[array_id][virtual_page_id];
+        // phy_page_id = page_map[array_id][virtual_page_id];
         page_info[phy_page_id]->used = 1;
         page_info[phy_page_id]->lock();
         mma_lock.unlock();
-        PageOut(phy_page_id);
-        PageIn(array_id, virtual_page_id, phy_page_id);
+        if (need_replace){
+            // PageOut(phy_page_id, old_holder, old_virtual_page_id);
+            // PageIn(array_id, virtual_page_id, phy_page_id);
+        }
         PageFrame* page = mem[phy_page_id];
         (*page)[offset] = value;
         page_info[phy_page_id]->unlock();

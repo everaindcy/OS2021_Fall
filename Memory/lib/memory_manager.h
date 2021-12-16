@@ -65,8 +65,8 @@ private:
     /*add your extra states here freely for implementation*/
 
     void PageIn(int array_id, int virtual_page_id, int physical_page_id);
-    void PageOut(int physical_page_id);
-    void PageReplace(int array_id, int virtual_page_id);
+    void PageOut(int physical_page_id, int holder, int virtual_page_id);
+    int PageReplace(int array_id, int virtual_page_id);
 
     int get_empty_page();
     int ReplacementPolicyFIFO();
