@@ -30,6 +30,7 @@ public:
     void ClearInfo();
     int GetHolder();
     int GetVid();
+    int used;
 private:
     int holder; //page holder id (array_id)
     int virtual_page_id; // page virtual #
@@ -66,6 +67,8 @@ private:
     int ReplacementPolicyFIFO();
     int ReplacementPolicyClock();
     std::queue<int> Q_FIFO;
+    // std::map<int, int> M_CLOCK;
+    int CLOCK_HAND;
 };
 
 }  // namespce: proj3

@@ -43,6 +43,7 @@ namespace proj3 {
     PageInfo::PageInfo(){
         holder = -1;
         virtual_page_id = -1;
+        used = 0;
     }
     void PageInfo::SetInfo(int cur_holder, int cur_vid){
         //modify the page states
@@ -74,6 +75,8 @@ namespace proj3 {
             auto *a_pageinfo = new PageInfo();
             mem[i] = a_page;
             page_info[i] = a_pageinfo;
+            // M_CLOCK[i] = 0;
+            CLOCK_HAND = 0;
         }
     }
     MemoryManager::~MemoryManager(){
@@ -105,7 +108,7 @@ namespace proj3 {
     void MemoryManager::PageReplace(int array_id, int virtual_page_id){
         //implement your page replacement policy here
         auto filename = std::to_string(array_id) + "-" + std::to_string(virtual_page_id);
-        int phy_page_id = ReplacementPolicyFIFO();
+        int phy_page_id = ReplacementPolicyClock();
         PageIn(array_id, virtual_page_id, phy_page_id);
         page_map[array_id][virtual_page_id] = phy_page_id;
         page_info[phy_page_id]->SetInfo(array_id, virtual_page_id);
@@ -113,23 +116,25 @@ namespace proj3 {
     int MemoryManager::ReadPage(int array_id, int virtual_page_id, int offset){
         // for arrayList of 'array_id', return the target value on its virtual space
         // if(offset==0) printf("read page  : id %d, vid %d, offset %d\n", array_id, virtual_page_id, offset);
-        int phy_Pageidx = page_map[array_id][virtual_page_id];
-        if (phy_Pageidx == -1) {
+        int phy_page_id = page_map[array_id][virtual_page_id];
+        if (phy_page_id == -1) {
             PageReplace(array_id, virtual_page_id);
         }
-        phy_Pageidx = page_map[array_id][virtual_page_id];
-        PageFrame* page = mem[phy_Pageidx];
+        phy_page_id = page_map[array_id][virtual_page_id];
+        page_info[phy_page_id]->used = 1;
+        PageFrame* page = mem[phy_page_id];
         return (*page)[offset];
     }
     void MemoryManager::WritePage(int array_id, int virtual_page_id, int offset, int value){
         // for arrayList of 'array_id', write 'value' into the target position on its virtual space
         // if(offset==0) printf("write page : id %d, vid %d, offset %d, value %d\n", array_id, virtual_page_id, offset, value);
-        int phy_Page_idx = page_map[array_id][virtual_page_id];
-        if (phy_Page_idx == -1) {
+        int phy_page_id = page_map[array_id][virtual_page_id];
+        if (phy_page_id == -1) {
             PageReplace(array_id, virtual_page_id);
         }
-        phy_Page_idx = page_map[array_id][virtual_page_id];
-        PageFrame* page = mem[phy_Page_idx];
+        phy_page_id = page_map[array_id][virtual_page_id];
+        page_info[phy_page_id]->used = 1;
+        PageFrame* page = mem[phy_page_id];
         (*page)[offset] = value;
     }
     void MemoryManager::ClearPage(int array_id, int virtual_page_id){
@@ -181,16 +186,38 @@ namespace proj3 {
     }
 
     int MemoryManager::ReplacementPolicyFIFO(){
-        int empty_idx = get_empty_page();
+        int empty_id = get_empty_page();
         int phy_page_id = 0;
-        if(empty_idx != -1){
-            phy_page_id = empty_idx;
-            Q_FIFO.push(empty_idx);
+        if(empty_id != -1){
+            phy_page_id = empty_id;
+            Q_FIFO.push(empty_id);
         } else {
             phy_page_id = Q_FIFO.front();
             PageOut(phy_page_id);
             Q_FIFO.pop();
             Q_FIFO.push(phy_page_id);
+        }
+        return phy_page_id;
+    }
+
+    int MemoryManager::ReplacementPolicyClock(){
+        int empty_id = get_empty_page();
+        int phy_page_id = 0;
+        if(empty_id != -1){
+            phy_page_id = empty_id;
+        } else {
+            while(true){
+                CLOCK_HAND++;
+                if(CLOCK_HAND == mma_sz) CLOCK_HAND = 0;
+
+                if(page_info[CLOCK_HAND]->used == 0){
+                    phy_page_id = CLOCK_HAND;
+                    PageOut(phy_page_id);
+                    break;
+                } else {
+                    page_info[CLOCK_HAND]->used = 0;
+                }
+            }
         }
         return phy_page_id;
     }
