@@ -91,6 +91,7 @@ namespace proj3 {
         //swap out the physical page with the indx of 'physical_page_id out' into a disk file
         auto a_page = mem[physical_page_id];
         auto a_info = page_info[physical_page_id];
+        if(a_info->GetHolder() == -1) return;
         page_map[a_info->GetHolder()][a_info->GetVid()] = -1;
         auto filename = std::to_string(a_info->GetHolder()) + "-" + std::to_string(a_info->GetVid());
         // printf("page out   : id %d, vid %d, phy %d\n", a_info->GetHolder(), a_info->GetVid(), physical_page_id);
@@ -109,33 +110,47 @@ namespace proj3 {
         //implement your page replacement policy here
         auto filename = std::to_string(array_id) + "-" + std::to_string(virtual_page_id);
         int phy_page_id = ReplacementPolicyClock();
-        PageIn(array_id, virtual_page_id, phy_page_id);
+        // PageOut(phy_page_id);
+        // PageIn(array_id, virtual_page_id, phy_page_id);
         page_map[array_id][virtual_page_id] = phy_page_id;
         page_info[phy_page_id]->SetInfo(array_id, virtual_page_id);
     }
     int MemoryManager::ReadPage(int array_id, int virtual_page_id, int offset){
         // for arrayList of 'array_id', return the target value on its virtual space
         // if(offset==0) printf("read page  : id %d, vid %d, offset %d\n", array_id, virtual_page_id, offset);
+        mma_lock.lock();
         int phy_page_id = page_map[array_id][virtual_page_id];
         if (phy_page_id == -1) {
             PageReplace(array_id, virtual_page_id);
         }
         phy_page_id = page_map[array_id][virtual_page_id];
         page_info[phy_page_id]->used = 1;
+        page_info[phy_page_id]->lock();
+        mma_lock.unlock();
+        PageOut(phy_page_id);
+        PageIn(array_id, virtual_page_id, phy_page_id);
         PageFrame* page = mem[phy_page_id];
-        return (*page)[offset];
+        int result = (*page)[offset];
+        page_info[phy_page_id]->unlock();
+        return result;
     }
     void MemoryManager::WritePage(int array_id, int virtual_page_id, int offset, int value){
         // for arrayList of 'array_id', write 'value' into the target position on its virtual space
         // if(offset==0) printf("write page : id %d, vid %d, offset %d, value %d\n", array_id, virtual_page_id, offset, value);
+        mma_lock.lock();
         int phy_page_id = page_map[array_id][virtual_page_id];
         if (phy_page_id == -1) {
             PageReplace(array_id, virtual_page_id);
         }
         phy_page_id = page_map[array_id][virtual_page_id];
         page_info[phy_page_id]->used = 1;
+        page_info[phy_page_id]->lock();
+        mma_lock.unlock();
+        PageOut(phy_page_id);
+        PageIn(array_id, virtual_page_id, phy_page_id);
         PageFrame* page = mem[phy_page_id];
         (*page)[offset] = value;
+        page_info[phy_page_id]->unlock();
     }
     void MemoryManager::ClearPage(int array_id, int virtual_page_id){
         int phy_Page_idx = page_map[array_id][virtual_page_id];
@@ -152,6 +167,7 @@ namespace proj3 {
     }
     ArrayList* MemoryManager::Allocate(size_t sz){
         // when an application requires for memory, create an ArrayList and record mappings from its virtual memory space to the physical memory space
+        mma_lock.lock();
         int num_page = sz / PageSize;
         if (sz % PageSize != 0) num_page ++;
         ArrayList *a_ArrayList = new ArrayList(sz, this, next_array_id);
@@ -160,17 +176,20 @@ namespace proj3 {
         page_map[next_array_id] = a_trans_map;
         // printf("allocate : id %d : size %d\n", next_array_id, sz);
         next_array_id++;
+        mma_lock.unlock();
         return a_ArrayList;
 
     }
     void MemoryManager::Release(ArrayList* arr){
         // an application will call release() function when destroying its arrayList
         // release the virtual space of the arrayList and erase the corresponding mappings
+        mma_lock.lock();
         int array_id = arr->array_id;
         // printf("release : %d\n", arr->array_id);
         for (int i = 0; i < page_map[array_id].size(); i++) {
             ClearPage(array_id, i);
         }
+        mma_lock.unlock();
     }
 
     int MemoryManager::get_empty_page(){
@@ -193,7 +212,7 @@ namespace proj3 {
             Q_FIFO.push(empty_id);
         } else {
             phy_page_id = Q_FIFO.front();
-            PageOut(phy_page_id);
+            // PageOut(phy_page_id);
             Q_FIFO.pop();
             Q_FIFO.push(phy_page_id);
         }
@@ -212,7 +231,7 @@ namespace proj3 {
 
                 if(page_info[CLOCK_HAND]->used == 0){
                     phy_page_id = CLOCK_HAND;
-                    PageOut(phy_page_id);
+                    // PageOut(phy_page_id);
                     break;
                 } else {
                     page_info[CLOCK_HAND]->used = 0;

@@ -3,6 +3,7 @@
 
 #include <assert.h>
 #include <map>
+#include <mutex>
 #include <queue>
 #include <string>
 #include <cstdlib>
@@ -30,10 +31,14 @@ public:
     void ClearInfo();
     int GetHolder();
     int GetVid();
+    void lock() { page_lock.lock(); }
+    void unlock() { page_lock.unlock(); }
     int used;
+
 private:
     int holder; //page holder id (array_id)
     int virtual_page_id; // page virtual #
+    mutable std::mutex page_lock;
     /*add your extra states here freely for implementation*/
 
 };
@@ -67,8 +72,9 @@ private:
     int ReplacementPolicyFIFO();
     int ReplacementPolicyClock();
     std::queue<int> Q_FIFO;
-    // std::map<int, int> M_CLOCK;
     int CLOCK_HAND;
+
+    std::mutex mma_lock;
 };
 
 }  // namespce: proj3
