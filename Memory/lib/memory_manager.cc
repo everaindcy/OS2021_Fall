@@ -13,21 +13,31 @@ namespace proj3 {
     }
     void PageFrame::WriteDisk(std::string filename) {
         // write page content into disk files
-        std::string path = "disk/";
-        auto fin = fopen((path + filename).c_str(), "w");
-        for (int i; i < PageSize; i++) {
+        // printf("disk write : %s\n", filename);
+        std::string path = ".\\disk\\";
+        auto fin = fopen((path + filename + ".txt").c_str(), "w");
+        for (int i = 0; i < PageSize; i++) {
             fprintf(fin, "%d\n", mem[i]);
         }
         fclose(fin);
     }
     void PageFrame::ReadDisk(std::string filename) {
         // read page content from disk files
-        std::string path = "disk/";
-        auto fin = fopen((path + filename).c_str(), "r");
-        for (int i; i < PageSize; i++) {
-            fscanf(fin, "%d", &mem[i]);
+        // printf("disk read : %s\n", filename);
+        std::string path = ".\\disk\\";
+        auto fin = fopen((path + filename + ".txt").c_str(), "r");
+        if (fin==NULL) {
+            // printf("page not find. clear.\n");
+            Clear();
+        } else {
+            for (int i = 0; i < PageSize; i++) {
+                fscanf(fin, "%d", &mem[i]);
+            }
+            fclose(fin);
         }
-        fclose(fin);
+    }
+    void PageFrame::Clear(){
+        for (int i = 0; i < PageSize; i++) mem[i] = 0;
     }
 
     PageInfo::PageInfo(){
@@ -57,6 +67,8 @@ namespace proj3 {
         next_array_id = 0;
         mma_sz = sz;
         free_list = 0;
+        mem = new PageFrame*[sz];
+        page_info = new PageInfo*[sz];
         for (int i = 0; i < sz; i++){
             auto *a_page = new PageFrame();
             auto *a_pageinfo = new PageInfo();
@@ -65,18 +77,42 @@ namespace proj3 {
         }
     }
     MemoryManager::~MemoryManager(){
+        for (int i = 0; i < mma_sz; i++){
+            delete mem[i];
+            delete page_info[i];
+        }
+        delete[] mem;
+        delete[] page_info;
     }
     void MemoryManager::PageOut(int physical_page_id){
         //swap out the physical page with the indx of 'physical_page_id out' into a disk file
+        auto a_page = mem[physical_page_id];
+        auto a_info = page_info[physical_page_id];
+        page_map[a_info->GetHolder()][a_info->GetVid()] = -1;
+        auto filename = std::to_string(a_info->GetHolder()) + "-" + std::to_string(a_info->GetVid());
+        // printf("page out   : id %d, vid %d, phy %d\n", a_info->GetHolder(), a_info->GetVid(), physical_page_id);
+        a_page->WriteDisk(filename);
+        a_info->ClearInfo();
     }
     void MemoryManager::PageIn(int array_id, int virtual_page_id, int physical_page_id){
         //swap the target page from the disk file into a physical page with the index of 'physical_page_id out'
+        // printf("page in    : id %d, vid %d, phy %d\n", array_id, virtual_page_id, physical_page_id);
+        auto filename = std::to_string(array_id) + "-" + std::to_string(virtual_page_id);
+        auto phy_Page = mem[physical_page_id];
+        phy_Page->ReadDisk(filename);
+        page_info[physical_page_id]->SetInfo(array_id, virtual_page_id);
     }
     void MemoryManager::PageReplace(int array_id, int virtual_page_id){
         //implement your page replacement policy here
+        auto filename = std::to_string(array_id) + "-" + std::to_string(virtual_page_id);
+        int phy_page_id = ReplacementPolicyFIFO();
+        PageIn(array_id, virtual_page_id, phy_page_id);
+        page_map[array_id][virtual_page_id] = phy_page_id;
+        page_info[phy_page_id]->SetInfo(array_id, virtual_page_id);
     }
     int MemoryManager::ReadPage(int array_id, int virtual_page_id, int offset){
         // for arrayList of 'array_id', return the target value on its virtual space
+        // if(offset==0) printf("read page  : id %d, vid %d, offset %d\n", array_id, virtual_page_id, offset);
         int phy_Pageidx = page_map[array_id][virtual_page_id];
         if (phy_Pageidx == -1) {
             PageReplace(array_id, virtual_page_id);
@@ -87,6 +123,7 @@ namespace proj3 {
     }
     void MemoryManager::WritePage(int array_id, int virtual_page_id, int offset, int value){
         // for arrayList of 'array_id', write 'value' into the target position on its virtual space
+        // if(offset==0) printf("write page : id %d, vid %d, offset %d, value %d\n", array_id, virtual_page_id, offset, value);
         int phy_Page_idx = page_map[array_id][virtual_page_id];
         if (phy_Page_idx == -1) {
             PageReplace(array_id, virtual_page_id);
@@ -94,6 +131,19 @@ namespace proj3 {
         phy_Page_idx = page_map[array_id][virtual_page_id];
         PageFrame* page = mem[phy_Page_idx];
         (*page)[offset] = value;
+    }
+    void MemoryManager::ClearPage(int array_id, int virtual_page_id){
+        int phy_Page_idx = page_map[array_id][virtual_page_id];
+        auto filename = std::to_string(array_id) + "-" + std::to_string(virtual_page_id);
+        std::string path = ".\\disk\\";
+        auto fin = fopen((path + filename + ".txt").c_str(), "w");
+        if (fin != NULL) {
+            for (int i = 0; i < PageSize; i++) {
+                fprintf(fin, "%d\n", 0);
+            }
+        }
+        fclose(fin);
+        if (phy_Page_idx != -1) { mem[phy_Page_idx]->Clear(); }
     }
     ArrayList* MemoryManager::Allocate(size_t sz){
         // when an application requires for memory, create an ArrayList and record mappings from its virtual memory space to the physical memory space
@@ -103,6 +153,7 @@ namespace proj3 {
         std::map<int, int> a_trans_map;
         for (int i = 0; i < num_page; i++) a_trans_map[i] = -1;
         page_map[next_array_id] = a_trans_map;
+        // printf("allocate : id %d : size %d\n", next_array_id, sz);
         next_array_id++;
         return a_ArrayList;
 
@@ -110,6 +161,37 @@ namespace proj3 {
     void MemoryManager::Release(ArrayList* arr){
         // an application will call release() function when destroying its arrayList
         // release the virtual space of the arrayList and erase the corresponding mappings
+        int array_id = arr->array_id;
+        // printf("release : %d\n", arr->array_id);
+        for (int i = 0; i < page_map[array_id].size(); i++) {
+            ClearPage(array_id, i);
+        }
+    }
 
+    int MemoryManager::get_empty_page(){
+        int dict = free_list;
+        for (int i = 0; i < mma_sz; i++){
+            if(dict % 2 == 0) {
+                free_list += 1<<i;
+                return i;
+            }
+            dict >>= 1;
+        }
+        return -1;
+    }
+
+    int MemoryManager::ReplacementPolicyFIFO(){
+        int empty_idx = get_empty_page();
+        int phy_page_id = 0;
+        if(empty_idx != -1){
+            phy_page_id = empty_idx;
+            Q_FIFO.push(empty_idx);
+        } else {
+            phy_page_id = Q_FIFO.front();
+            PageOut(phy_page_id);
+            Q_FIFO.pop();
+            Q_FIFO.push(phy_page_id);
+        }
+        return phy_page_id;
     }
 } // namespce: proj3

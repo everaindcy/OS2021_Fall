@@ -1,0 +1,506 @@
+[==========] Running 4 tests from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 4 tests from MMATest
+[ RUN      ] MMATest.task1
+[       OK ] MMATest.task1 (0 ms)
+[ RUN      ] MMATest.task2
+[       OK ] MMATest.task2 (0 ms)
+[ RUN      ] MMATest.task3
+allocate : id 0 : size 10
+allocate : id 1 : size 10
+allocate : id 2 : size 10
+write page : id 0, vid 0, offset 0, value 0
+write page : id 1, vid 0, offset 0, value 0
+allocate : id 3 : size 10
+allocate : id 4 : size 10
+allocate : id 5 : size 10
+write page : id 3, vid 0, offset 0, value 10
+write page : id 4, vid 0, offset 0, value 10
+allocate : id 6 : size 10
+allocate : id 7 : size 10
+allocate : id 8 : size 10
+write page : id 6, vid 0, offset 0, value 20
+write page : id 7, vid 0, offset 0, value 20
+allocate : id 9 : size 10
+allocate : id 10 : size 10
+allocate : id 11 : size 10
+write page : id 9, vid 0, offset 0, value 30
+write page : id 10, vid 0, offset 0, value 30
+allocate : id 12 : size 10
+allocate : id 13 : size 10
+allocate : id 14 : size 10
+write page : id 12, vid 0, offset 0, value 40
+write page : id 13, vid 0, offset 0, value 40
+allocate : id 15 : size 10
+allocate : id 16 : size 10
+allocate : id 17 : size 10
+write page : id 15, vid 0, offset 0, value 50
+write page : id 16, vid 0, offset 0, value 50
+allocate : id 18 : size 10
+allocate : id 19 : size 10
+allocate : id 20 : size 10
+write page : id 18, vid 0, offset 0, value 60
+write page : id 19, vid 0, offset 0, value 60
+allocate : id 21 : size 10
+allocate : id 22 : size 10
+allocate : id 23 : size 10
+write page : id 21, vid 0, offset 0, value 70
+write page : id 22, vid 0, offset 0, value 70
+allocate : id 24 : size 10
+allocate : id 25 : size 10
+allocate : id 26 : size 10
+write page : id 24, vid 0, offset 0, value 80
+write page : id 25, vid 0, offset 0, value 80
+allocate : id 27 : size 10
+allocate : id 28 : size 10
+allocate : id 29 : size 10
+write page : id 27, vid 0, offset 0, value 90
+write page : id 28, vid 0, offset 0, value 90
+read page  : id 2, vid 0, offset 0
+read page  : id 0, vid 0, offset 0
+read page  : id 1, vid 0, offset 0
+write page : id 2, vid 0, offset 0, value 0
+read page  : id 2, vid 0, offset 0
+read page  : id 4, vid 0, offset 0
+write page : id 2, vid 0, offset 0, value 10
+read page  : id 2, vid 0, offset 0
+read page  : id 7, vid 0, offset 0
+write page : id 2, vid 0, offset 0, value 50
+read page  : id 2, vid 0, offset 0
+read page  : id 10, vid 0, offset 0
+write page : id 2, vid 0, offset 0, value 140
+read page  : id 2, vid 0, offset 0
+read page  : id 13, vid 0, offset 0
+write page : id 2, vid 0, offset 0, value 300
+read page  : id 2, vid 0, offset 0
+read page  : id 16, vid 0, offset 0
+write page : id 2, vid 0, offset 0, value 550
+read page  : id 2, vid 0, offset 0
+read page  : id 19, vid 0, offset 0
+write page : id 2, vid 0, offset 0, value 910
+read page  : id 2, vid 0, offset 0
+read page  : id 22, vid 0, offset 0
+write page : id 2, vid 0, offset 0, value 1400
+read page  : id 2, vid 0, offset 0
+read page  : id 25, vid 0, offset 0
+write page : id 2, vid 0, offset 0, value 2040
+read page  : id 2, vid 0, offset 0
+read page  : id 28, vid 0, offset 0
+write page : id 2, vid 0, offset 0, value 2850
+read page  : id 0, vid 0, offset 0
+read page  : id 0, vid 0, offset 0
+read page  : id 0, vid 0, offset 0
+read page  : id 0, vid 0, offset 0
+read page  : id 0, vid 0, offset 0
+read page  : id 0, vid 0, offset 0
+read page  : id 0, vid 0, offset 0
+read page  : id 0, vid 0, offset 0
+read page  : id 0, vid 0, offset 0
+read page  : id 5, vid 0, offset 0
+read page  : id 3, vid 0, offset 0
+read page  : id 1, vid 0, offset 0
+write page : id 5, vid 0, offset 0, value 0
+read page  : id 5, vid 0, offset 0
+read page  : id 4, vid 0, offset 0
+write page : id 5, vid 0, offset 0, value 110
+read page  : id 5, vid 0, offset 0
+read page  : id 7, vid 0, offset 0
+write page : id 5, vid 0, offset 0, value 350
+read page  : id 5, vid 0, offset 0
+read page  : id 10, vid 0, offset 0
+write page : id 5, vid 0, offset 0, value 740
+read page  : id 5, vid 0, offset 0
+read page  : id 13, vid 0, offset 0
+write page : id 5, vid 0, offset 0, value 1300
+read page  : id 5, vid 0, offset 0
+read page  : id 16, vid 0, offset 0
+write page : id 5, vid 0, offset 0, value 2050
+read page  : id 5, vid 0, offset 0
+read page  : id 19, vid 0, offset 0
+write page : id 5, vid 0, offset 0, value 3010
+read page  : id 5, vid 0, offset 0
+read page  : id 22, vid 0, offset 0
+write page : id 5, vid 0, offset 0, value 4200
+read page  : id 5, vid 0, offset 0
+read page  : id 25, vid 0, offset 0
+write page : id 5, vid 0, offset 0, value 5640
+read page  : id 5, vid 0, offset 0
+read page  : id 28, vid 0, offset 0
+write page : id 5, vid 0, offset 0, value 7350
+read page  : id 3, vid 0, offset 0
+read page  : id 3, vid 0, offset 0
+read page  : id 3, vid 0, offset 0
+read page  : id 3, vid 0, offset 0
+read page  : id 3, vid 0, offset 0
+read page  : id 3, vid 0, offset 0
+read page  : id 3, vid 0, offset 0
+read page  : id 3, vid 0, offset 0
+read page  : id 3, vid 0, offset 0
+read page  : id 8, vid 0, offset 0
+read page  : id 6, vid 0, offset 0
+read page  : id 1, vid 0, offset 0
+write page : id 8, vid 0, offset 0, value 0
+read page  : id 8, vid 0, offset 0
+read page  : id 4, vid 0, offset 0
+write page : id 8, vid 0, offset 0, value 210
+read page  : id 8, vid 0, offset 0
+read page  : id 7, vid 0, offset 0
+write page : id 8, vid 0, offset 0, value 650
+read page  : id 8, vid 0, offset 0
+read page  : id 10, vid 0, offset 0
+write page : id 8, vid 0, offset 0, value 1340
+read page  : id 8, vid 0, offset 0
+read page  : id 13, vid 0, offset 0
+write page : id 8, vid 0, offset 0, value 2300
+read page  : id 8, vid 0, offset 0
+read page  : id 16, vid 0, offset 0
+write page : id 8, vid 0, offset 0, value 3550
+read page  : id 8, vid 0, offset 0
+read page  : id 19, vid 0, offset 0
+write page : id 8, vid 0, offset 0, value 5110
+read page  : id 8, vid 0, offset 0
+read page  : id 22, vid 0, offset 0
+write page : id 8, vid 0, offset 0, value 7000
+read page  : id 8, vid 0, offset 0
+read page  : id 25, vid 0, offset 0
+write page : id 8, vid 0, offset 0, value 9240
+read page  : id 8, vid 0, offset 0
+read page  : id 28, vid 0, offset 0
+write page : id 8, vid 0, offset 0, value 11850
+read page  : id 6, vid 0, offset 0
+read page  : id 6, vid 0, offset 0
+read page  : id 6, vid 0, offset 0
+read page  : id 6, vid 0, offset 0
+read page  : id 6, vid 0, offset 0
+read page  : id 6, vid 0, offset 0
+read page  : id 6, vid 0, offset 0
+read page  : id 6, vid 0, offset 0
+read page  : id 6, vid 0, offset 0
+read page  : id 11, vid 0, offset 0
+read page  : id 9, vid 0, offset 0
+read page  : id 1, vid 0, offset 0
+write page : id 11, vid 0, offset 0, value 0
+read page  : id 11, vid 0, offset 0
+read page  : id 4, vid 0, offset 0
+write page : id 11, vid 0, offset 0, value 310
+read page  : id 11, vid 0, offset 0
+read page  : id 7, vid 0, offset 0
+write page : id 11, vid 0, offset 0, value 950
+read page  : id 11, vid 0, offset 0
+read page  : id 10, vid 0, offset 0
+write page : id 11, vid 0, offset 0, value 1940
+read page  : id 11, vid 0, offset 0
+read page  : id 13, vid 0, offset 0
+write page : id 11, vid 0, offset 0, value 3300
+read page  : id 11, vid 0, offset 0
+read page  : id 16, vid 0, offset 0
+write page : id 11, vid 0, offset 0, value 5050
+read page  : id 11, vid 0, offset 0
+read page  : id 19, vid 0, offset 0
+write page : id 11, vid 0, offset 0, value 7210
+read page  : id 11, vid 0, offset 0
+read page  : id 22, vid 0, offset 0
+write page : id 11, vid 0, offset 0, value 9800
+read page  : id 11, vid 0, offset 0
+read page  : id 25, vid 0, offset 0
+write page : id 11, vid 0, offset 0, value 12840
+read page  : id 11, vid 0, offset 0
+read page  : id 28, vid 0, offset 0
+write page : id 11, vid 0, offset 0, value 16350
+read page  : id 9, vid 0, offset 0
+read page  : id 9, vid 0, offset 0
+read page  : id 9, vid 0, offset 0
+read page  : id 9, vid 0, offset 0
+read page  : id 9, vid 0, offset 0
+read page  : id 9, vid 0, offset 0
+read page  : id 9, vid 0, offset 0
+read page  : id 9, vid 0, offset 0
+read page  : id 9, vid 0, offset 0
+read page  : id 14, vid 0, offset 0
+read page  : id 12, vid 0, offset 0
+read page  : id 1, vid 0, offset 0
+write page : id 14, vid 0, offset 0, value 0
+read page  : id 14, vid 0, offset 0
+read page  : id 4, vid 0, offset 0
+write page : id 14, vid 0, offset 0, value 410
+read page  : id 14, vid 0, offset 0
+read page  : id 7, vid 0, offset 0
+write page : id 14, vid 0, offset 0, value 1250
+read page  : id 14, vid 0, offset 0
+read page  : id 10, vid 0, offset 0
+write page : id 14, vid 0, offset 0, value 2540
+read page  : id 14, vid 0, offset 0
+read page  : id 13, vid 0, offset 0
+write page : id 14, vid 0, offset 0, value 4300
+read page  : id 14, vid 0, offset 0
+read page  : id 16, vid 0, offset 0
+write page : id 14, vid 0, offset 0, value 6550
+read page  : id 14, vid 0, offset 0
+read page  : id 19, vid 0, offset 0
+write page : id 14, vid 0, offset 0, value 9310
+read page  : id 14, vid 0, offset 0
+read page  : id 22, vid 0, offset 0
+write page : id 14, vid 0, offset 0, value 12600
+read page  : id 14, vid 0, offset 0
+read page  : id 25, vid 0, offset 0
+write page : id 14, vid 0, offset 0, value 16440
+read page  : id 14, vid 0, offset 0
+read page  : id 28, vid 0, offset 0
+write page : id 14, vid 0, offset 0, value 20850
+read page  : id 12, vid 0, offset 0
+read page  : id 12, vid 0, offset 0
+read page  : id 12, vid 0, offset 0
+read page  : id 12, vid 0, offset 0
+read page  : id 12, vid 0, offset 0
+read page  : id 12, vid 0, offset 0
+read page  : id 12, vid 0, offset 0
+read page  : id 12, vid 0, offset 0
+read page  : id 12, vid 0, offset 0
+read page  : id 17, vid 0, offset 0
+read page  : id 15, vid 0, offset 0
+read page  : id 1, vid 0, offset 0
+write page : id 17, vid 0, offset 0, value 0
+read page  : id 17, vid 0, offset 0
+read page  : id 4, vid 0, offset 0
+write page : id 17, vid 0, offset 0, value 510
+read page  : id 17, vid 0, offset 0
+read page  : id 7, vid 0, offset 0
+write page : id 17, vid 0, offset 0, value 1550
+read page  : id 17, vid 0, offset 0
+read page  : id 10, vid 0, offset 0
+write page : id 17, vid 0, offset 0, value 3140
+read page  : id 17, vid 0, offset 0
+read page  : id 13, vid 0, offset 0
+write page : id 17, vid 0, offset 0, value 5300
+read page  : id 17, vid 0, offset 0
+read page  : id 16, vid 0, offset 0
+write page : id 17, vid 0, offset 0, value 8050
+read page  : id 17, vid 0, offset 0
+read page  : id 19, vid 0, offset 0
+write page : id 17, vid 0, offset 0, value 11410
+read page  : id 17, vid 0, offset 0
+read page  : id 22, vid 0, offset 0
+write page : id 17, vid 0, offset 0, value 15400
+read page  : id 17, vid 0, offset 0
+read page  : id 25, vid 0, offset 0
+write page : id 17, vid 0, offset 0, value 20040
+read page  : id 17, vid 0, offset 0
+read page  : id 28, vid 0, offset 0
+write page : id 17, vid 0, offset 0, value 25350
+read page  : id 15, vid 0, offset 0
+read page  : id 15, vid 0, offset 0
+read page  : id 15, vid 0, offset 0
+read page  : id 15, vid 0, offset 0
+read page  : id 15, vid 0, offset 0
+read page  : id 15, vid 0, offset 0
+read page  : id 15, vid 0, offset 0
+read page  : id 15, vid 0, offset 0
+read page  : id 15, vid 0, offset 0
+read page  : id 20, vid 0, offset 0
+read page  : id 18, vid 0, offset 0
+read page  : id 1, vid 0, offset 0
+write page : id 20, vid 0, offset 0, value 0
+read page  : id 20, vid 0, offset 0
+read page  : id 4, vid 0, offset 0
+write page : id 20, vid 0, offset 0, value 610
+read page  : id 20, vid 0, offset 0
+read page  : id 7, vid 0, offset 0
+write page : id 20, vid 0, offset 0, value 1850
+read page  : id 20, vid 0, offset 0
+read page  : id 10, vid 0, offset 0
+write page : id 20, vid 0, offset 0, value 3740
+read page  : id 20, vid 0, offset 0
+read page  : id 13, vid 0, offset 0
+write page : id 20, vid 0, offset 0, value 6300
+read page  : id 20, vid 0, offset 0
+read page  : id 16, vid 0, offset 0
+write page : id 20, vid 0, offset 0, value 9550
+read page  : id 20, vid 0, offset 0
+read page  : id 19, vid 0, offset 0
+write page : id 20, vid 0, offset 0, value 13510
+read page  : id 20, vid 0, offset 0
+read page  : id 22, vid 0, offset 0
+write page : id 20, vid 0, offset 0, value 18200
+read page  : id 20, vid 0, offset 0
+read page  : id 25, vid 0, offset 0
+write page : id 20, vid 0, offset 0, value 23640
+read page  : id 20, vid 0, offset 0
+read page  : id 28, vid 0, offset 0
+write page : id 20, vid 0, offset 0, value 29850
+read page  : id 18, vid 0, offset 0
+read page  : id 18, vid 0, offset 0
+read page  : id 18, vid 0, offset 0
+read page  : id 18, vid 0, offset 0
+read page  : id 18, vid 0, offset 0
+read page  : id 18, vid 0, offset 0
+read page  : id 18, vid 0, offset 0
+read page  : id 18, vid 0, offset 0
+read page  : id 18, vid 0, offset 0
+read page  : id 23, vid 0, offset 0
+read page  : id 21, vid 0, offset 0
+read page  : id 1, vid 0, offset 0
+write page : id 23, vid 0, offset 0, value 0
+read page  : id 23, vid 0, offset 0
+read page  : id 4, vid 0, offset 0
+write page : id 23, vid 0, offset 0, value 710
+read page  : id 23, vid 0, offset 0
+read page  : id 7, vid 0, offset 0
+write page : id 23, vid 0, offset 0, value 2150
+read page  : id 23, vid 0, offset 0
+read page  : id 10, vid 0, offset 0
+write page : id 23, vid 0, offset 0, value 4340
+read page  : id 23, vid 0, offset 0
+read page  : id 13, vid 0, offset 0
+write page : id 23, vid 0, offset 0, value 7300
+read page  : id 23, vid 0, offset 0
+read page  : id 16, vid 0, offset 0
+write page : id 23, vid 0, offset 0, value 11050
+read page  : id 23, vid 0, offset 0
+read page  : id 19, vid 0, offset 0
+write page : id 23, vid 0, offset 0, value 15610
+read page  : id 23, vid 0, offset 0
+read page  : id 22, vid 0, offset 0
+write page : id 23, vid 0, offset 0, value 21000
+read page  : id 23, vid 0, offset 0
+read page  : id 25, vid 0, offset 0
+write page : id 23, vid 0, offset 0, value 27240
+read page  : id 23, vid 0, offset 0
+read page  : id 28, vid 0, offset 0
+write page : id 23, vid 0, offset 0, value 34350
+read page  : id 21, vid 0, offset 0
+read page  : id 21, vid 0, offset 0
+read page  : id 21, vid 0, offset 0
+read page  : id 21, vid 0, offset 0
+read page  : id 21, vid 0, offset 0
+read page  : id 21, vid 0, offset 0
+read page  : id 21, vid 0, offset 0
+read page  : id 21, vid 0, offset 0
+read page  : id 21, vid 0, offset 0
+read page  : id 26, vid 0, offset 0
+read page  : id 24, vid 0, offset 0
+read page  : id 1, vid 0, offset 0
+write page : id 26, vid 0, offset 0, value 0
+read page  : id 26, vid 0, offset 0
+read page  : id 4, vid 0, offset 0
+write page : id 26, vid 0, offset 0, value 810
+read page  : id 26, vid 0, offset 0
+read page  : id 7, vid 0, offset 0
+write page : id 26, vid 0, offset 0, value 2450
+read page  : id 26, vid 0, offset 0
+read page  : id 10, vid 0, offset 0
+write page : id 26, vid 0, offset 0, value 4940
+read page  : id 26, vid 0, offset 0
+read page  : id 13, vid 0, offset 0
+write page : id 26, vid 0, offset 0, value 8300
+read page  : id 26, vid 0, offset 0
+read page  : id 16, vid 0, offset 0
+write page : id 26, vid 0, offset 0, value 12550
+read page  : id 26, vid 0, offset 0
+read page  : id 19, vid 0, offset 0
+write page : id 26, vid 0, offset 0, value 17710
+read page  : id 26, vid 0, offset 0
+read page  : id 22, vid 0, offset 0
+write page : id 26, vid 0, offset 0, value 23800
+read page  : id 26, vid 0, offset 0
+read page  : id 25, vid 0, offset 0
+write page : id 26, vid 0, offset 0, value 30840
+read page  : id 26, vid 0, offset 0
+read page  : id 28, vid 0, offset 0
+write page : id 26, vid 0, offset 0, value 38850
+read page  : id 24, vid 0, offset 0
+read page  : id 24, vid 0, offset 0
+read page  : id 24, vid 0, offset 0
+read page  : id 24, vid 0, offset 0
+read page  : id 24, vid 0, offset 0
+read page  : id 24, vid 0, offset 0
+read page  : id 24, vid 0, offset 0
+read page  : id 24, vid 0, offset 0
+read page  : id 24, vid 0, offset 0
+read page  : id 29, vid 0, offset 0
+read page  : id 27, vid 0, offset 0
+read page  : id 1, vid 0, offset 0
+write page : id 29, vid 0, offset 0, value 0
+read page  : id 29, vid 0, offset 0
+read page  : id 4, vid 0, offset 0
+write page : id 29, vid 0, offset 0, value 910
+read page  : id 29, vid 0, offset 0
+read page  : id 7, vid 0, offset 0
+write page : id 29, vid 0, offset 0, value 2750
+read page  : id 29, vid 0, offset 0
+read page  : id 10, vid 0, offset 0
+write page : id 29, vid 0, offset 0, value 5540
+read page  : id 29, vid 0, offset 0
+read page  : id 13, vid 0, offset 0
+write page : id 29, vid 0, offset 0, value 9300
+read page  : id 29, vid 0, offset 0
+read page  : id 16, vid 0, offset 0
+write page : id 29, vid 0, offset 0, value 14050
+read page  : id 29, vid 0, offset 0
+read page  : id 19, vid 0, offset 0
+write page : id 29, vid 0, offset 0, value 19810
+read page  : id 29, vid 0, offset 0
+read page  : id 22, vid 0, offset 0
+write page : id 29, vid 0, offset 0, value 26600
+read page  : id 29, vid 0, offset 0
+read page  : id 25, vid 0, offset 0
+write page : id 29, vid 0, offset 0, value 34440
+read page  : id 29, vid 0, offset 0
+read page  : id 28, vid 0, offset 0
+write page : id 29, vid 0, offset 0, value 43350
+read page  : id 27, vid 0, offset 0
+read page  : id 27, vid 0, offset 0
+read page  : id 27, vid 0, offset 0
+read page  : id 27, vid 0, offset 0
+read page  : id 27, vid 0, offset 0
+read page  : id 27, vid 0, offset 0
+read page  : id 27, vid 0, offset 0
+read page  : id 27, vid 0, offset 0
+read page  : id 27, vid 0, offset 0
+read page  : id 2, vid 0, offset 0
+read page  : id 5, vid 0, offset 0
+read page  : id 8, vid 0, offset 0
+read page  : id 11, vid 0, offset 0
+read page  : id 14, vid 0, offset 0
+read page  : id 17, vid 0, offset 0
+read page  : id 20, vid 0, offset 0
+read page  : id 23, vid 0, offset 0
+read page  : id 26, vid 0, offset 0
+read page  : id 29, vid 0, offset 0
+release : 0
+release : 1
+release : 2
+release : 3
+release : 4
+release : 5
+release : 6
+release : 7
+release : 8
+release : 9
+release : 10
+release : 11
+release : 12
+release : 13
+release : 14
+release : 15
+release : 16
+release : 17
+release : 18
+release : 19
+release : 20
+release : 21
+release : 22
+release : 23
+release : 24
+release : 25
+release : 26
+release : 27
+release : 28
+release : 29
+[       OK ] MMATest.task3 (1037 ms)
+[ RUN      ] MMATest.task4
+[       OK ] MMATest.task4 (0 ms)
+[----------] 4 tests from MMATest (1037 ms total)
+
+[----------] Global test environment tear-down
+[==========] 4 tests from 1 test suite ran. (1037 ms total)
+[  PASSED  ] 4 tests.
