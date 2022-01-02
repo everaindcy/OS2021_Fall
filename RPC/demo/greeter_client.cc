@@ -23,7 +23,7 @@
 #include <grpcpp/grpcpp.h>
 
 #ifdef BAZEL_BUILD
-#include "proto/helloworld.grpc.pb.h"
+#include "demo/proto/helloworld.grpc.pb.h"
 #else
 #include "helloworld.grpc.pb.h"
 #endif

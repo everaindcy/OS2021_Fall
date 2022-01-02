@@ -5,7 +5,7 @@ cc_binary(
     deps = [
         "@com_github_grpc_grpc//:grpc++",
         "@com_github_grpc_grpc//:grpc++_reflection",
-        "//proto:hw_grpc",
+        "//demo/proto:hw_grpc",
     ],
 )
 
@@ -16,6 +16,6 @@ cc_binary(
     deps = [
         "@com_github_grpc_grpc//:grpc++",
         "@com_github_grpc_grpc//:grpc++_reflection",
-        "//proto:hw_grpc",
+        "//demo/proto:hw_grpc",
     ],
 )

@@ -5,3 +5,41 @@ option objc_class_prefix = "MMA";
 package mma;
 
 // define your service here
+
+service MemoryManager {
+    rpc Allocate  (AllocateArgs)  returns (AllocateReply)  {}
+    rpc Release   (ReleaseArgs)   returns (ReleaseReply)   {}
+    rpc ReadPage  (ReadPageArgs)  returns (ReadPageReply)  {}
+    rpc WritePage (WritePageArgs) returns (WritePageReply) {}
+}
+
+message AllocateArgs {
+    int32 size = 1;
+}
+
+message AllocateReply {
+    int32 arrayID = 1;
+}
+
+message ReleaseArgs {
+    int32 arrayID = 1;
+}
+
+message ReleaseReply {}
+
+message ReadPageArgs {
+    int32 arrayID = 1;
+    int32 index = 2;
+}
+
+message ReadPageReply {
+    int32 value = 1;
+}
+
+message WritePageArgs {
+    int32 arrayID = 1;
+    int32 index = 2;
+    int32 value = 3;
+}
+
+message WritePageReply {}
