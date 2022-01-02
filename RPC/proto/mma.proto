@@ -29,7 +29,8 @@ message ReleaseReply {}
 
 message ReadPageArgs {
     int32 arrayID = 1;
-    int32 index = 2;
+    int32 virtulPageID = 2;
+    int32 offset = 3;
 }
 
 message ReadPageReply {
@@ -38,8 +39,9 @@ message ReadPageReply {
 
 message WritePageArgs {
     int32 arrayID = 1;
-    int32 index = 2;
-    int32 value = 3;
+    int32 virtulPageID = 2;
+    int32 offset = 3;
+    int32 value = 4;
 }
 
 message WritePageReply {}

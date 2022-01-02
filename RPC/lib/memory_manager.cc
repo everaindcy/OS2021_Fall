@@ -1,6 +1,5 @@
 #include "memory_manager.h"
 
-#include "array_list.h"
 #include <iostream>
 #include <fstream>
 
@@ -214,12 +213,13 @@ namespace proj3 {
             page_info[phy_Page_idx]->unlock();
         }
     }
-    ArrayList* MemoryManager::Allocate(size_t sz){
+    int MemoryManager::Allocate(size_t sz){
         // when an application requires for memory, create an ArrayList and record mappings from its virtual memory space to the physical memory space
         mma_lock.lock();
         int num_page = sz / PageSize;
         if (sz % PageSize != 0) num_page ++;
-        ArrayList *a_ArrayList = new ArrayList(sz, this, next_array_id);
+        // ArrayList *a_ArrayList = new ArrayList(sz, this, next_array_id);
+        int ArrayID = next_array_id;
         std::map<int, int> a_trans_map;
         std::map<int, std::mutex*> a_page_mutex;
         for (int i = 0; i < num_page; i++) {
@@ -231,14 +231,14 @@ namespace proj3 {
         // printf("allocate : id %d : size %d\n", next_array_id, sz);
         next_array_id++;
         mma_lock.unlock();
-        return a_ArrayList;
+        return ArrayID;
 
     }
-    void MemoryManager::Release(ArrayList* arr){
+    void MemoryManager::Release(int ArrayID){
         // an application will call release() function when destroying its arrayList
         // release the virtual space of the arrayList and erase the corresponding mappings
         mma_lock.lock();
-        int array_id = arr->array_id;
+        int array_id = ArrayID;
         // printf("release : %d\n", arr->array_id);
         for (int i = 0; i < page_map[array_id].size(); i++) {
             ClearPage(array_id, i);

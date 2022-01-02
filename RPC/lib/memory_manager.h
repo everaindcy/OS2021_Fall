@@ -7,7 +7,7 @@
 #include <queue>
 #include <string>
 #include <cstdlib>
-#include<cstdio>
+#include <cstdio>
 
 #define PageSize 1024
 
@@ -43,8 +43,6 @@ private:
 
 };
 
-class ArrayList;
-
 class MemoryManager {
 public:
     // you should not modify the public interfaces used in tests
@@ -52,8 +50,8 @@ public:
     int ReadPage(int array_id, int virtual_page_id, int offset);
     void WritePage(int array_id, int virtual_page_id, int offset, int value);
     void ClearPage(int array_id, int virtual_page_id);
-    ArrayList* Allocate(size_t);
-    void Release(ArrayList*);
+    int Allocate(size_t);
+    void Release(int array_id);
     ~MemoryManager();
 private:
     std::map<int, std::map<int, int>> page_map; // // mapping from ArrayList's virtual page # to physical page #

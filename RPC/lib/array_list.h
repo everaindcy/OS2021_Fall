@@ -3,17 +3,19 @@
 
 #include <cstdlib>
 
+#define PageSize 1024
+
 namespace proj3 {
 
-    class MemoryManager;
+    class MmaClient;
 
     class ArrayList{
         private:
-        friend class MemoryManager;
+        friend class MmaClient;
         size_t size;
-        MemoryManager* mma;
+        MmaClient* mma;
         int array_id;
-        ArrayList(size_t, MemoryManager*, int);
+        ArrayList(size_t, MmaClient*, int);
         ~ArrayList();
         public:
         // you should not modify the public interfaces used in tests

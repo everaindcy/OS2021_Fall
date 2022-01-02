@@ -46,15 +46,3 @@ cc_library(
         ],
 )
 
-cc_library(
-    name = "memory_manager_lib",
-    srcs = [
-        "memory_manager.cc",
-        "array_list.cc",
-        ],
-    hdrs = [
-        "memory_manager.h",
-        "array_list.h",
-        ],
-)
-
