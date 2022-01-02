@@ -6,7 +6,7 @@ package mma;
 
 // define your service here
 
-service MemoryManager {
+service memoryManager {
     rpc Allocate  (AllocateArgs)  returns (AllocateReply)  {}
     rpc Release   (ReleaseArgs)   returns (ReleaseReply)   {}
     rpc ReadPage  (ReadPageArgs)  returns (ReadPageReply)  {}

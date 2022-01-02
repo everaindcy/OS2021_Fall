@@ -15,7 +15,7 @@
 using grpc::Channel;
 using grpc::ClientContext;
 using grpc::Status;
-using mma::MemoryManager;
+using mma::memoryManager;
 using mma::AllocateArgs;
 using mma::ReleaseArgs;
 using mma::ReadPageArgs;
@@ -32,15 +32,16 @@ class ArrayList;
 
 class MmaClient {
 public:
-    MmaClient(std::shared_ptr<Channel> channel) : stub_(MemoryManager::NewStub(channel)) {}
+    MmaClient(std::shared_ptr<Channel> channel) : stub_(memoryManager::NewStub(channel)) {}
+    
     int ReadPage(int array_id, int virtual_page_id, int offset);
     void WritePage(int array_id, int virtual_page_id, int offset, int value);
-    void ClearPage(int array_id, int virtual_page_id);
+
     ArrayList* Allocate(size_t);
-    void Release(ArrayList*);
+    void Free(ArrayList*);
 
 private:
-    std::unique_ptr<MemoryManager::Stub> stub_;
+    std::unique_ptr<memoryManager::Stub> stub_;
 };
 
 } //namespace proj4
