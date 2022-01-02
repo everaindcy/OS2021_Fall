@@ -3,7 +3,7 @@
 
 #include <chrono>
 
-namespace proj3 {
+namespace proj4 {
 
 void a_slow_function(int seconds);
 
@@ -16,6 +16,6 @@ class AutoTimer {
   std::chrono::time_point<std::chrono::high_resolution_clock> m_beg;
 };
 
-}  // namespce: proj3
+}  // namespce: proj4
 
 #endif

@@ -11,7 +11,7 @@
 
 #define PageSize 1024
 
-namespace proj3 {
+namespace proj4 {
 
 class PageFrame {
 public:
@@ -76,7 +76,7 @@ private:
     std::mutex mma_lock;
 };
 
-}  // namespce: proj3
+}  // namespce: proj4
 
 #endif
 

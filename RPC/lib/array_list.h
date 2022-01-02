@@ -5,7 +5,7 @@
 
 #define PageSize 1024
 
-namespace proj3 {
+namespace proj4 {
 
     class MmaClient;
 
@@ -23,5 +23,5 @@ namespace proj3 {
         void Write (unsigned long, int);
     };
 
-} // namespce: proj3
+} // namespce: proj4
 #endif

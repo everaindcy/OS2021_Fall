@@ -4,7 +4,7 @@
 #include <iostream>
 #include "utils.h"
 
-namespace proj3 {
+namespace proj4 {
 
 void a_slow_function(int seconds) {
     std::this_thread::sleep_for(std::chrono::seconds(seconds));
@@ -21,4 +21,4 @@ AutoTimer::~AutoTimer() {
     std::cout << m_name << " : " << dur.count() << " usec\n";
 }
 
-} // namespce: proj3
+} // namespce: proj4

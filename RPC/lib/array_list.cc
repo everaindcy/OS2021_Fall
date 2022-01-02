@@ -1,8 +1,8 @@
-#include "array_list.h"
 
+#include "array_list.h"
 #include "mma_client.h"
 
-namespace proj3 {
+namespace proj4 {
     ArrayList::ArrayList (size_t sz, MmaClient* Mma, int id) {
         size = sz;
         mma = Mma;
@@ -22,4 +22,4 @@ namespace proj3 {
     }
     ArrayList::~ArrayList(){
     }
-} // namespce: proj3
+} // namespce: proj4
