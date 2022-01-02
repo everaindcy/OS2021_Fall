@@ -242,6 +242,7 @@ namespace proj3 {
         // printf("release : %d\n", arr->array_id);
         for (int i = 0; i < page_map[array_id].size(); i++) {
             ClearPage(array_id, i);
+            delete page_mutex[array_id][i];
         }
         mma_lock.unlock();
     }
