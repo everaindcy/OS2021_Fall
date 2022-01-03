@@ -151,11 +151,11 @@ namespace proj3 {
             // printf("page in  lock %d-%d\n", array_id, virtual_page_id);
             page_mutex[array_id][virtual_page_id]->lock();
             mma_lock.unlock();
-            PageIn(array_id, virtual_page_id, phy_page_id);
             if (old_holder != -1) {
                 PageOut(phy_page_id, old_holder, old_virtual_page_id);
                 page_mutex[old_holder][old_virtual_page_id]->unlock();
             }
+            PageIn(array_id, virtual_page_id, phy_page_id);
             page_mutex[array_id][virtual_page_id]->unlock();
         } else {
             mma_lock.unlock();
@@ -198,11 +198,11 @@ namespace proj3 {
             // printf("page in  lock %d-%d\n", array_id, virtual_page_id);
             page_mutex[array_id][virtual_page_id]->lock();
             mma_lock.unlock();
-            PageIn(array_id, virtual_page_id, phy_page_id);
             if (old_holder != -1) {
                 PageOut(phy_page_id, old_holder, old_virtual_page_id);
                 page_mutex[old_holder][old_virtual_page_id]->unlock();
             }
+            PageIn(array_id, virtual_page_id, phy_page_id);
             page_mutex[array_id][virtual_page_id]->unlock();
         } else {
             mma_lock.unlock();
@@ -217,9 +217,11 @@ namespace proj3 {
         std::string path = ".\\disk\\";
         auto fin = fopen((path + filename + ".txt").c_str(), "w");
         if (fin != NULL) {
+            page_mutex[array_id][virtual_page_id]->lock();
             for (int i = 0; i < PageSize; i++) {
                 fprintf(fin, "%d\n", 0);
             }
+            page_mutex[array_id][virtual_page_id]->unlock();
         }
         fclose(fin);
         if (phy_Page_idx != -1) {
@@ -251,14 +253,14 @@ namespace proj3 {
     void MemoryManager::Release(ArrayList* arr){
         // an application will call release() function when destroying its arrayList
         // release the virtual space of the arrayList and erase the corresponding mappings
-        mma_lock.lock();
-        int array_id = arr->array_id;
-        // printf("release : %d\n", arr->array_id);
-        for (int i = 0; i < page_map[array_id].size(); i++) {
-            ClearPage(array_id, i);
-            delete page_mutex[array_id][i];
-        }
-        mma_lock.unlock();
+        // mma_lock.lock();
+        // int array_id = arr->array_id;
+        // // printf("release : %d\n", arr->array_id);
+        // for (int i = 0; i < page_map[array_id].size(); i++) {
+        //     ClearPage(array_id, i);
+        //     delete page_mutex[array_id][i];
+        // }
+        // mma_lock.unlock();
     }
 
     int MemoryManager::get_empty_page(){
