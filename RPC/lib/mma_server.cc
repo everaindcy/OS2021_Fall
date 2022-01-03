@@ -32,7 +32,7 @@ Status MmaServer::WritePage(ServerContext* context, const WritePageArgs* args, W
 std::unique_ptr<Server> server;
 
 void RunServerUL(size_t phy_page_num) {
-    std::string server_address("0.0.0.0:50051");
+    std::string server_address("localhost:50051");
     MmaServer service(phy_page_num);
 
     grpc::EnableDefaultHealthCheckService(true);
@@ -45,7 +45,7 @@ void RunServerUL(size_t phy_page_num) {
     builder.RegisterService(&service);
     // Finally assemble the server.
     server = std::unique_ptr<Server>(builder.BuildAndStart());
-    std::cout << "Server listening on " << server_address << std::endl;
+    // std::cout << "Server listening on " << server_address << std::endl;
 
     // Wait for the server to shutdown. Note that some other thread must be
     // responsible for shutting down the server for this call to ever return.
@@ -66,7 +66,7 @@ void RunServerL(size_t phy_page_num, size_t max_vir_page_num) {
     builder.RegisterService(&service);
     // Finally assemble the server.
     server = std::unique_ptr<Server>(builder.BuildAndStart());
-    std::cout << "Server listening on " << server_address << std::endl;
+    // std::cout << "Server listening on " << server_address << std::endl;
 
     // Wait for the server to shutdown. Note that some other thread must be
     // responsible for shutting down the server for this call to ever return.

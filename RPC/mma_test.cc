@@ -15,7 +15,8 @@ class MMATestA : public ::testing::Test {
   void SetUp() override {
     server_thread = new std::thread(&RunServerUL, 10);
     server_thread->detach();
-    sleep(1);
+    // sleep(1);
+    std::this_thread::sleep_for(std::chrono::milliseconds(1000));
 
     std::string target_str = "localhost:50051";
     mma = new MmaClient(
@@ -56,7 +57,8 @@ class MMATestB : public ::testing::Test {
   void SetUp() override {
     server_thread = new std::thread(&RunServerL, 10, 20);
     server_thread->detach();
-    sleep(1);
+    // sleep(1);
+    std::this_thread::sleep_for(std::chrono::milliseconds(1000));
 
     std::string target_str = "localhost:50051";
     mma = new MmaClient(
