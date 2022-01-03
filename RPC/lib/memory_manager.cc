@@ -150,11 +150,11 @@ namespace proj4 {
             // printf("page in  lock %d-%d\n", array_id, virtual_page_id);
             page_mutex[array_id][virtual_page_id]->lock();
             mma_lock.unlock();
-            PageIn(array_id, virtual_page_id, phy_page_id);
             if (old_holder != -1) {
                 PageOut(phy_page_id, old_holder, old_virtual_page_id);
                 page_mutex[old_holder][old_virtual_page_id]->unlock();
             }
+            PageIn(array_id, virtual_page_id, phy_page_id);
             page_mutex[array_id][virtual_page_id]->unlock();
         } else {
             mma_lock.unlock();
@@ -197,11 +197,11 @@ namespace proj4 {
             // printf("page in  lock %d-%d\n", array_id, virtual_page_id);
             page_mutex[array_id][virtual_page_id]->lock();
             mma_lock.unlock();
-            PageIn(array_id, virtual_page_id, phy_page_id);
             if (old_holder != -1) {
                 PageOut(phy_page_id, old_holder, old_virtual_page_id);
                 page_mutex[old_holder][old_virtual_page_id]->unlock();
             }
+            PageIn(array_id, virtual_page_id, phy_page_id);
             page_mutex[array_id][virtual_page_id]->unlock();
         } else {
             mma_lock.unlock();
@@ -255,10 +255,10 @@ namespace proj4 {
         int array_id = ArrayID;
         // printf("release : %d\n", arr->array_id);
         int pageNum = page_map[array_id].size();
-        for (int i = 0; i < pageNum; i++) {
-            ClearPage(array_id, i);
-            delete page_mutex[array_id][i];
-        }
+        // for (int i = 0; i < pageNum; i++) {
+        //     ClearPage(array_id, i);
+        //     delete page_mutex[array_id][i];
+        // }
         mma_lock.unlock();
         return pageNum;
     }

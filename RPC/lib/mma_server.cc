@@ -10,7 +10,7 @@ Status MmaServer::Allocate(ServerContext* context, const AllocateArgs* args, All
         return Status::CANCELLED;
     }
     total_vir_page_num += pageNeed;
-    std::cout << std::to_string(total_vir_page_num) + "/" + std::to_string(max_vir_page_num) + "\n";
+    // std::cout << std::to_string(total_vir_page_num) + "/" + std::to_string(max_vir_page_num) + "\n";
     this->mux.unlock();
     int ArrayID = mma->Allocate(args->size());
     reply->set_arrayid(ArrayID);
@@ -21,7 +21,7 @@ Status MmaServer::Release(ServerContext* context, const ReleaseArgs* args, Relea
     size_t release_page_num = mma->Release(args->arrayid());
     this->mux.lock();
     total_vir_page_num -= release_page_num;
-    std::cout << std::to_string(total_vir_page_num) + "/" + std::to_string(max_vir_page_num) + "\n";
+    // std::cout << std::to_string(total_vir_page_num) + "/" + std::to_string(max_vir_page_num) + "\n";
     this->mux.unlock();
     return Status::OK;
 }
@@ -41,7 +41,7 @@ std::unique_ptr<Server> server;
 
 void RunServerUL(size_t phy_page_num) {
     std::string server_address("0.0.0.0:50051");
-    MmaServer service(phy_page_num, 10);
+    MmaServer service(phy_page_num);
 
     grpc::EnableDefaultHealthCheckService(true);
     grpc::reflection::InitProtoReflectionServerBuilderPlugin();

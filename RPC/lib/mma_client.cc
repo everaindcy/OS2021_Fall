@@ -6,7 +6,7 @@
 namespace proj4 {
 
 ArrayList* MmaClient::Allocate(size_t size) {
-    std::cout << "Allocate " + std::to_string(size) + "\n";
+    // std::cout << "Allocate " + std::to_string(size) + "\n";
 
     for(;;) {
         ClientContext context;
@@ -17,11 +17,11 @@ ArrayList* MmaClient::Allocate(size_t size) {
         Status status = stub_->Allocate(&context, args, &reply);
 
         if (status.ok()) {
-            std::cout << "Allocate " + std::to_string(size) + " success, arrayID = " + std::to_string(reply.arrayid()) + "\n";
+            // std::cout << "Allocate " + std::to_string(size) + " success, arrayID = " + std::to_string(reply.arrayid()) + "\n";
 
             return new ArrayList(size, this, reply.arrayid());
         } else {
-            std::cout << "Allocate " + std::to_string(size) + " cancled\n";
+            // std::cout << "Allocate " + std::to_string(size) + " cancled\n";
 
             std::this_thread::sleep_for(std::chrono::milliseconds(1000));
         }
@@ -34,11 +34,11 @@ void MmaClient::Free(ArrayList* al) {
     ReleaseReply reply;
     args.set_arrayid(al->array_id);
 
-    std::cout << "Free " + std::to_string(al->array_id) + "\n";
+    // std::cout << "Free " + std::to_string(al->array_id) + "\n";
 
     Status status = stub_->Release(&context, args, &reply);
 
-    std::cout << "Free " + std::to_string(al->array_id) + " success\n";
+    // std::cout << "Free " + std::to_string(al->array_id) + " success\n";
 
     delete al;
 }
@@ -51,11 +51,11 @@ int MmaClient::ReadPage(int array_id, int virtual_page_id, int offset) {
     args.set_virtulpageid(virtual_page_id);
     args.set_offset(offset);
 
-    std::cout << "ReadPage " + std::to_string(array_id) + ", " + std::to_string(virtual_page_id) + ", " + std::to_string(offset) + "\n";
+    // std::cout << "ReadPage " + std::to_string(array_id) + ", " + std::to_string(virtual_page_id) + ", " + std::to_string(offset) + "\n";
 
     Status status = stub_->ReadPage(&context, args, &reply);
 
-    std::cout << "ReadPage " + std::to_string(array_id) + ", " + std::to_string(virtual_page_id) + ", " + std::to_string(offset) + " success, value = " + std::to_string(reply.value()) + "\n";
+    // std::cout << "ReadPage " + std::to_string(array_id) + ", " + std::to_string(virtual_page_id) + ", " + std::to_string(offset) + " success, value = " + std::to_string(reply.value()) + "\n";
 
     return reply.value();
 }
@@ -69,11 +69,11 @@ void MmaClient::WritePage(int array_id, int virtual_page_id, int offset, int val
     args.set_offset(offset);
     args.set_value(value);
 
-    std::cout << "WritePage " + std::to_string(array_id) + ", " + std::to_string(virtual_page_id) + ", " + std::to_string(offset) + ", " + std::to_string(value) + "\n";
+    // std::cout << "WritePage " + std::to_string(array_id) + ", " + std::to_string(virtual_page_id) + ", " + std::to_string(offset) + ", " + std::to_string(value) + "\n";
 
     Status status = stub_->WritePage(&context, args, &reply);
 
-    std::cout << "WritePage " + std::to_string(array_id) + ", " + std::to_string(virtual_page_id) + ", " + std::to_string(offset) + ", " + std::to_string(value) + " success\n";
+    // std::cout << "WritePage " + std::to_string(array_id) + ", " + std::to_string(virtual_page_id) + ", " + std::to_string(offset) + ", " + std::to_string(value) + " success\n";
 }
 
 } //namespace proj4
