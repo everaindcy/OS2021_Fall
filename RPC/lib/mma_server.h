@@ -51,7 +51,7 @@ public:
 
 private:
     MemoryManager* mma;
-    size_t max_vir_page_num;
+    size_t max_vir_page_num = 0;
     size_t total_vir_page_num = 0;
 };
 

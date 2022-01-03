@@ -234,17 +234,19 @@ namespace proj4 {
         return ArrayID;
 
     }
-    void MemoryManager::Release(int ArrayID){
+    int MemoryManager::Release(int ArrayID){
         // an application will call release() function when destroying its arrayList
         // release the virtual space of the arrayList and erase the corresponding mappings
         mma_lock.lock();
         int array_id = ArrayID;
         // printf("release : %d\n", arr->array_id);
-        for (int i = 0; i < page_map[array_id].size(); i++) {
+        int pageNum = page_map[array_id].size();
+        for (int i = 0; i < pageNum; i++) {
             ClearPage(array_id, i);
             delete page_mutex[array_id][i];
         }
         mma_lock.unlock();
+        return pageNum;
     }
 
     int MemoryManager::get_empty_page(){
