@@ -120,6 +120,26 @@ TEST_F(MMATest,task4){
     }
 }
 
+TEST_F(MMATest, task5) {
+    std::vector<std::thread*> pool1;
+    for(int i = 0; i<thread_num; i++) {
+        pool1.push_back(new std::thread(&workload, mma, workload_sz_4));
+    }
+
+    for (auto t: pool1) {
+        t->join();
+    }
+
+    std::vector<std::thread*> pool;
+    for(int i = 0; i<thread_num; i++) {
+        pool.push_back(new std::thread(&workload, mma, workload_sz_4));
+    }
+
+    for (auto t: pool) {
+        t->join();
+    }
+}
+
 } // namespace testing
 } // namespace proj3
 
