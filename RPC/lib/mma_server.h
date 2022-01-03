@@ -5,6 +5,7 @@
 #include <memory>
 #include <string>
 #include <cstdlib>
+#include <mutex>
 
 #include <grpc++/grpc++.h>
 #include <grpc++/ext/proto_server_reflection_plugin.h>
@@ -52,6 +53,7 @@ public:
 private:
     MemoryManager* mma;
     size_t max_vir_page_num = 0;
+    mutable std::mutex mux;
     size_t total_vir_page_num = 0;
 };
 

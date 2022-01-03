@@ -3,18 +3,26 @@
 namespace proj4 {
 
 Status MmaServer::Allocate(ServerContext* context, const AllocateArgs* args, AllocateReply* reply) {
-    int pageNeed = (args->size() + PageSize - 1)/PageSize;
-    if ((max_vir_page_num != 0) && (total_vir_page_num + pageNeed > max_vir_page_num)) {
+    size_t pageNeed = (args->size() + PageSize - 1) / PageSize;
+    this->mux.lock();
+    if ((max_vir_page_num != 0) && (total_vir_page_num >= max_vir_page_num)) {
+        this->mux.unlock();
         return Status::CANCELLED;
     }
     total_vir_page_num += pageNeed;
+    std::cout << std::to_string(total_vir_page_num) + "/" + std::to_string(max_vir_page_num) + "\n";
+    this->mux.unlock();
     int ArrayID = mma->Allocate(args->size());
     reply->set_arrayid(ArrayID);
     return Status::OK;
 }
 
 Status MmaServer::Release(ServerContext* context, const ReleaseArgs* args, ReleaseReply* reply) {
-    total_vir_page_num -= mma->Release(args->arrayid());
+    size_t release_page_num = mma->Release(args->arrayid());
+    this->mux.lock();
+    total_vir_page_num -= release_page_num;
+    std::cout << std::to_string(total_vir_page_num) + "/" + std::to_string(max_vir_page_num) + "\n";
+    this->mux.unlock();
     return Status::OK;
 }
 
@@ -32,8 +40,8 @@ Status MmaServer::WritePage(ServerContext* context, const WritePageArgs* args, W
 std::unique_ptr<Server> server;
 
 void RunServerUL(size_t phy_page_num) {
-    std::string server_address("localhost:50051");
-    MmaServer service(phy_page_num);
+    std::string server_address("0.0.0.0:50051");
+    MmaServer service(phy_page_num, 10);
 
     grpc::EnableDefaultHealthCheckService(true);
     grpc::reflection::InitProtoReflectionServerBuilderPlugin();
