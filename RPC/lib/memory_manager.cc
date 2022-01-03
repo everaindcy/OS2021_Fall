@@ -139,18 +139,25 @@ namespace proj4 {
         phy_page_id = page_map[array_id][virtual_page_id];
         page_info[phy_page_id]->used = 1;
         page_info[phy_page_id]->lock();
-        mma_lock.unlock();
+        // mma_lock.unlock();
         if (need_replace){
             // printf("page out lock %d-%d\n", old_holder, old_virtual_page_id);
             if (old_holder != -1) {
                 page_mutex[old_holder][old_virtual_page_id]->lock();
-                PageOut(phy_page_id, old_holder, old_virtual_page_id);
-                page_mutex[old_holder][old_virtual_page_id]->unlock();
+                // PageOut(phy_page_id, old_holder, old_virtual_page_id);
+                // page_mutex[old_holder][old_virtual_page_id]->unlock();
             }
             // printf("page in  lock %d-%d\n", array_id, virtual_page_id);
             page_mutex[array_id][virtual_page_id]->lock();
+            mma_lock.unlock();
             PageIn(array_id, virtual_page_id, phy_page_id);
+            if (old_holder != -1) {
+                PageOut(phy_page_id, old_holder, old_virtual_page_id);
+                page_mutex[old_holder][old_virtual_page_id]->unlock();
+            }
             page_mutex[array_id][virtual_page_id]->unlock();
+        } else {
+            mma_lock.unlock();
         }
         PageFrame* page = mem[phy_page_id];
         int result = (*page)[offset];
@@ -179,18 +186,25 @@ namespace proj4 {
         // phy_page_id = page_map[array_id][virtual_page_id];
         page_info[phy_page_id]->used = 1;
         page_info[phy_page_id]->lock();
-        mma_lock.unlock();
+        // mma_lock.unlock();
         if (need_replace){
             // printf("page out lock %d-%d\n", old_holder, old_virtual_page_id);
             if (old_holder != -1) {
                 page_mutex[old_holder][old_virtual_page_id]->lock();
-                PageOut(phy_page_id, old_holder, old_virtual_page_id);
-                page_mutex[old_holder][old_virtual_page_id]->unlock();
+                // PageOut(phy_page_id, old_holder, old_virtual_page_id);
+                // page_mutex[old_holder][old_virtual_page_id]->unlock();
             }
             // printf("page in  lock %d-%d\n", array_id, virtual_page_id);
             page_mutex[array_id][virtual_page_id]->lock();
+            mma_lock.unlock();
             PageIn(array_id, virtual_page_id, phy_page_id);
+            if (old_holder != -1) {
+                PageOut(phy_page_id, old_holder, old_virtual_page_id);
+                page_mutex[old_holder][old_virtual_page_id]->unlock();
+            }
             page_mutex[array_id][virtual_page_id]->unlock();
+        } else {
+            mma_lock.unlock();
         }
         PageFrame* page = mem[phy_page_id];
         (*page)[offset] = value;
