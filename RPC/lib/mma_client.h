@@ -34,11 +34,11 @@ class MmaClient {
 public:
     MmaClient(std::shared_ptr<Channel> channel) : stub_(memoryManager::NewStub(channel)) {}
     
-    int ReadPage(int array_id, int virtual_page_id, int offset);
-    void WritePage(int array_id, int virtual_page_id, int offset, int value);
-
     ArrayList* Allocate(size_t);
     void Free(ArrayList*);
+
+    int ReadPage(int array_id, int virtual_page_id, int offset);
+    void WritePage(int array_id, int virtual_page_id, int offset, int value);
 
 private:
     std::unique_ptr<memoryManager::Stub> stub_;

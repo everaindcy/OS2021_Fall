@@ -15,7 +15,7 @@ namespace proj4 {
         size_t size;
         MmaClient* mma;
         int array_id;
-        ArrayList(size_t, MmaClient*, int);
+        ArrayList(size_t sz, MmaClient* mma, int id);
         ~ArrayList();
         public:
         // you should not modify the public interfaces used in tests
