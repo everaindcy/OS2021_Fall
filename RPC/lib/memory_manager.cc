@@ -212,20 +212,25 @@ namespace proj4 {
     }
     void MemoryManager::ClearPage(int array_id, int virtual_page_id){
         int phy_Page_idx = page_map[array_id][virtual_page_id];
+        if (phy_Page_idx != -1) {
+            page_info[phy_Page_idx]->lock();
+            // mem[phy_Page_idx]->Clear();
+            page_info[phy_Page_idx]->ClearInfo();
+            PageOut(phy_Page_idx, array_id, virtual_page_id);
+            page_info[phy_Page_idx]->unlock();
+        }
+
         auto filename = std::to_string(array_id) + "-" + std::to_string(virtual_page_id);
-        std::string path = ".\\disk\\";
+        std::string path = "disk-";
         auto fin = fopen((path + filename + ".txt").c_str(), "w");
         if (fin != NULL) {
+            page_mutex[array_id][virtual_page_id]->lock();
             for (int i = 0; i < PageSize; i++) {
                 fprintf(fin, "%d\n", 0);
             }
+            page_mutex[array_id][virtual_page_id]->unlock();
         }
         fclose(fin);
-        if (phy_Page_idx != -1) {
-            page_info[phy_Page_idx]->lock();
-            mem[phy_Page_idx]->Clear();
-            page_info[phy_Page_idx]->unlock();
-        }
     }
     int MemoryManager::Allocate(size_t sz){
         // when an application requires for memory, create an ArrayList and record mappings from its virtual memory space to the physical memory space
@@ -255,10 +260,10 @@ namespace proj4 {
         int array_id = ArrayID;
         // printf("release : %d\n", arr->array_id);
         int pageNum = page_map[array_id].size();
-        // for (int i = 0; i < pageNum; i++) {
-        //     ClearPage(array_id, i);
-        //     delete page_mutex[array_id][i];
-        // }
+        for (int i = 0; i < pageNum; i++) {
+            ClearPage(array_id, i);
+            delete page_mutex[array_id][i];
+        }
         mma_lock.unlock();
         return pageNum;
     }

@@ -14,7 +14,7 @@ namespace proj3 {
     void PageFrame::WriteDisk(std::string filename) {
         // write page content into disk files
         // printf("disk write : %s, mem[1] = %d\n", filename, mem[1]);
-        std::string path = ".\\disk\\";
+        std::string path = "disk-";
         auto fin = fopen((path + filename + ".txt").c_str(), "w");
         for (int i = 0; i < PageSize; i++) {
             fprintf(fin, "%d\n", mem[i]);
@@ -24,7 +24,7 @@ namespace proj3 {
     void PageFrame::ReadDisk(std::string filename) {
         // read page content from disk files
         // printf("disk read : %s\n", filename);
-        std::string path = ".\\disk\\";
+        std::string path = "disk-";
         auto fin = fopen((path + filename + ".txt").c_str(), "r");
         if (fin==NULL) {
             // printf("page not find. clear.\n");
@@ -213,8 +213,16 @@ namespace proj3 {
     }
     void MemoryManager::ClearPage(int array_id, int virtual_page_id){
         int phy_Page_idx = page_map[array_id][virtual_page_id];
+        if (phy_Page_idx != -1) {
+            page_info[phy_Page_idx]->lock();
+            // mem[phy_Page_idx]->Clear();
+            page_info[phy_Page_idx]->ClearInfo();
+            PageOut(phy_Page_idx, array_id, virtual_page_id);
+            page_info[phy_Page_idx]->unlock();
+        }
+
         auto filename = std::to_string(array_id) + "-" + std::to_string(virtual_page_id);
-        std::string path = ".\\disk\\";
+        std::string path = "disk-";
         auto fin = fopen((path + filename + ".txt").c_str(), "w");
         if (fin != NULL) {
             page_mutex[array_id][virtual_page_id]->lock();
@@ -224,11 +232,6 @@ namespace proj3 {
             page_mutex[array_id][virtual_page_id]->unlock();
         }
         fclose(fin);
-        if (phy_Page_idx != -1) {
-            page_info[phy_Page_idx]->lock();
-            mem[phy_Page_idx]->Clear();
-            page_info[phy_Page_idx]->unlock();
-        }
     }
     ArrayList* MemoryManager::Allocate(size_t sz){
         // when an application requires for memory, create an ArrayList and record mappings from its virtual memory space to the physical memory space
@@ -253,14 +256,14 @@ namespace proj3 {
     void MemoryManager::Release(ArrayList* arr){
         // an application will call release() function when destroying its arrayList
         // release the virtual space of the arrayList and erase the corresponding mappings
-        // mma_lock.lock();
-        // int array_id = arr->array_id;
-        // // printf("release : %d\n", arr->array_id);
-        // for (int i = 0; i < page_map[array_id].size(); i++) {
-        //     ClearPage(array_id, i);
-        //     delete page_mutex[array_id][i];
-        // }
-        // mma_lock.unlock();
+        mma_lock.lock();
+        int array_id = arr->array_id;
+        // printf("release : %d\n", arr->array_id);
+        for (int i = 0; i < page_map[array_id].size(); i++) {
+            ClearPage(array_id, i);
+            delete page_mutex[array_id][i];
+        }
+        mma_lock.unlock();
     }
 
     int MemoryManager::get_empty_page(){
