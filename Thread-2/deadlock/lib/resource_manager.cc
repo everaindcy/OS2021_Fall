@@ -65,7 +65,7 @@ bool ResourceManager::check_security(RESOURCE r, int amount) {
     cur_allocation = allocation;
 
     std::thread::id this_id = std::this_thread::get_id();
-    printf("%7d check %d : %d (now available %d %d %d %d)\n", debug_thread_id[this_id], r, amount, available[GPU], available[MEMORY], available[DISK], available[NETWORK]);
+    // printf("%7d check %d : %d (now available %d %d %d %d)\n", debug_thread_id[this_id], r, amount, available[GPU], available[MEMORY], available[DISK], available[NETWORK]);
     // for (int n = 0; n < threadList.size(); n++) {
     //     printf("%7d check (cur_alloc %d : %d %d %d %d)\n", (*(uint32_t*)&this_id), (*(uint32_t*)&threadList[n]), allocation[threadList[n]][GPU], allocation[threadList[n]][MEMORY], allocation[threadList[n]][DISK], allocation[threadList[n]][NETWORK]);
     // }
@@ -132,6 +132,7 @@ void ResourceManager::budget_claim(std::map<RESOURCE, int> budget) {
     // The workload will eventually consume all resources it claimss
     std::thread::id this_id = std::this_thread::get_id();
 
+    std::unique_lock<std::mutex> lk(data_lock);
     this->total_thread++;
     debug_thread_id[this_id] = total_thread;
     printf("%7d Total thread: %d\n",debug_thread_id[this_id], this->total_thread);
