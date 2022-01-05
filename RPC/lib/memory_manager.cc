@@ -13,7 +13,7 @@ namespace proj4 {
     void PageFrame::WriteDisk(std::string filename) {
         // write page content into disk files
         // printf("disk write : %s, mem[1] = %d\n", filename, mem[1]);
-        std::string path = ".\\disk\\";
+        std::string path = "disk-";
         auto fin = fopen((path + filename + ".txt").c_str(), "w");
         for (int i = 0; i < PageSize; i++) {
             fprintf(fin, "%d\n", mem[i]);
@@ -23,7 +23,7 @@ namespace proj4 {
     void PageFrame::ReadDisk(std::string filename) {
         // read page content from disk files
         // printf("disk read : %s\n", filename);
-        std::string path = ".\\disk\\";
+        std::string path = "disk-";
         auto fin = fopen((path + filename + ".txt").c_str(), "r");
         if (fin==NULL) {
             // printf("page not find. clear.\n");
